@@ -2,7 +2,7 @@ import sq_connection from "./config"
 
 async function Sq_Start() : Promise<void> {
     try {
-        await sq_connection.authenticate()
+       await sq_connection.authenticate()
             .then(() => {
                 console.info('[sequelize] authenticate!')
             })

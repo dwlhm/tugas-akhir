@@ -1,5 +1,11 @@
-import { Sequelize, Dialect } from "sequelize";
+import { Sequelize } from "sequelize-typescript";
+import { Dialect } from "sequelize"
 import dotenv from 'dotenv'
+import { Device } from './models/device'
+import { Device_Value } from './models/Device_Value'
+import { User } from './models/user'
+import { Gateway } from './models/gateway'
+import { Gateway_Mqtt } from './models/gateway-mqtt'
 
 dotenv.config()
 
@@ -11,7 +17,8 @@ const db_driver = process.env.DB_DRIVER as Dialect
 
 const connection = new Sequelize(db_name, db_user, db_password, {
     host: db_host,
-    dialect: db_driver
+    dialect: db_driver,
+    models: [User, Device, Device_Value, Gateway_Mqtt, Gateway]
 })
 
 export default connection

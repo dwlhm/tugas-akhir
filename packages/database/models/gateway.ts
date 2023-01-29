@@ -1,5 +1,5 @@
 import {
-    Table, Column, Model, BelongsTo, Default
+    Table, Column, Model, BelongsTo, Default, ForeignKey
 } from 'sequelize-typescript'
 import { User} from './user'
 
@@ -12,9 +12,13 @@ export class Gateway extends Model {
     @Column
     address: string
 
-    @Column
     @Default(true)
+    @Column
     isOnline: boolean
+
+    @ForeignKey(() => User)
+    @Column
+    maintainer: number 
 
     @BelongsTo(() => User) user: User;
 

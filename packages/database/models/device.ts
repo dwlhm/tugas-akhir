@@ -1,5 +1,5 @@
 import { 
-    Table, Column, Model, BelongsTo
+    Table, Column, Model, BelongsTo, ForeignKey
 } from 'sequelize-typescript'
 import { User } from './user'
 
@@ -11,6 +11,10 @@ export class Device extends Model {
 
     @Column
     address: string
+
+    @ForeignKey(() => User)
+    @Column
+    maintainer: number
 
     @BelongsTo(() => User) user: User;
 

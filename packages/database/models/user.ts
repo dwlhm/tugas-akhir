@@ -6,9 +6,9 @@ import {
 @Table
 export class User extends Model {
     
-    @Column
     @IsEmail
     @Unique
+    @Column
     email: string   
     
     @Column
