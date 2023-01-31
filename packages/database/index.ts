@@ -9,7 +9,7 @@ async function Sq_Start() : Promise<void> {
             .finally(() => {
                 console.info('[sequelize] authenticated!')
             })
-        await sq_connection.sync()
+        await sq_connection.sync({ force: true })
             .then(() => {
                 console.info('[sequelize] sync!')
             })

@@ -1,5 +1,4 @@
 import { Sequelize } from "sequelize-typescript";
-import { Dialect } from "sequelize"
 import dotenv from 'dotenv'
 import { Device } from './models/device'
 import { Device_Value } from './models/Device_Value'
@@ -13,9 +12,6 @@ const db_name = process.env.DB_NAME as string
 const db_user = process.env.DB_USER as string
 const db_password = process.env.DB_PASSWORD as string
 const db_host = process.env.DB_HOST as string
-const db_driver = 'mariadb'
-
-console.log(db_name)
 
 const connection = new Sequelize(db_name, db_user, db_password, {
     host: db_host,
