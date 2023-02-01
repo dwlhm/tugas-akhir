@@ -1,4 +1,5 @@
 import { Router, Response, Request } from "express";
+import { login, register } from "./controller";
 
 const router: Router = Router()
 
@@ -12,7 +13,7 @@ router.get('/', (_,res: Response) => {
         })
 })
 
-router.post('/login', (req: Request, res: Response) => {
+/*router.post('/login', (req: Request, res: Response) => {
     
     let authorization = req.headers.authorization
     let [method,str] = authorization.split(" ")
@@ -48,5 +49,8 @@ router.post('/login', (req: Request, res: Response) => {
     }
 
 })
+*/
+router.post('/register', register)
+router.post('/login', login)
 
 export default router

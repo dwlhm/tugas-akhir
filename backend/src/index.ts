@@ -1,6 +1,6 @@
 import 
     express, 
-    { Express, Request, Response } 
+    { Express, Response } 
     from 'express'
 import dotenv from 'dotenv'
 
@@ -13,6 +13,8 @@ const app: Express = express()
 const port = process.env.PORT || 5123
 
 Sq_Start()
+
+app.use(express.json())
 
 app.use('/user', User)
 app.get('/', (_, res: Response) => {
