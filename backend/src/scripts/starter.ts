@@ -1,14 +1,17 @@
 import database from 'database'
 import { User } from 'database/models/user'
 import bcrypt from 'bcrypt'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 database()
 .then(() => {
-    let password = bcrypt.hashSync('password', 10)
+    let password = bcrypt.hashSync(process.env.ROOT_PASSWORD, 10)
     User.create({
         id: 1,
         name: 'admin',
-        email: 'admin@dwlhm.space',
+        email: process.env.ROOT_EMAIL,
         password: password,
         isAdmin: true
     })

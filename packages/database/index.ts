@@ -1,6 +1,6 @@
 import sq_connection from "./config"
 
-async function Sq_Start() : Promise<void> {
+async function Sq_Start(force: boolean = false) : Promise<void> {
     try {
        await sq_connection.authenticate()
             .then(() => {
@@ -9,7 +9,7 @@ async function Sq_Start() : Promise<void> {
             .finally(() => {
                 console.info('[sequelize] authenticated!')
             })
-        await sq_connection.sync({ force: false })
+        await sq_connection.sync({ force: force })
             .then(() => {
                 console.info('[sequelize] sync!')
             })

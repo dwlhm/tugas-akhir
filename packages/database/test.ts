@@ -1,3 +1,3 @@
 import Sq_Start from "./index"
 
-Sq_Start()
+Sq_Start(true)
