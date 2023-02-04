@@ -1,15 +1,17 @@
 import { Device } from 'database/models/device'
+import { Gateway_Mqtt } from 'database/models/gateway-mqtt'
 import {
     Request, Response, NextFunction
 } from 'express'
+import crypto from 'node:crypto'
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
         const device = await Device.create({
             ...req.body,
-            maintainer: req.user.id
-        }) 
+            maintainer: req.user.id,
+        })
         
         return res.status(200).json({
             code: 200,
@@ -33,6 +35,10 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
                     error: errors
                 })
 
+        }
+
+        if (error.message.lastIndexOf("foreign key constraint fails") > -1) {
+            return next(new Error("404#gateway"))
         }
 
         next(error)
@@ -92,7 +98,6 @@ const destroy = async (
         next(err)
     }
 }
-
 
 export {
     register,

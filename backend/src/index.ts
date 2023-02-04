@@ -8,6 +8,7 @@ import dotenv from 'dotenv'
 import User from './user'
 import Sq_Start from 'database'
 import Device from './device'
+import Gateway from './gateway'
 import { 
     middleware as ErrorMiddleware 
 } from './error_handler/middleware'
@@ -23,12 +24,19 @@ app.use(express.json())
 
 app.use('/device', Device)
 app.use('/user', User)
+app.use('/gateway', Gateway)
 app.get('/', (_, res: Response) => {
     res.status(200).json({
         code: 200,
         body: {
-            msg: 'success',
+            message: 'Hello, World!',
         },
+    })
+})
+app.get('*', (_, res: Response) => {
+    res.status(404).json({
+        code: 404,
+        error: ['api not found'],
     })
 })
 

@@ -18,6 +18,10 @@ const label = {
     '404#device': {
         code: 404,
         error: ['device not found']
+    },
+    '404#gateway': {
+        code:404,
+        error: ['gateway not found']
     }
 }
 
