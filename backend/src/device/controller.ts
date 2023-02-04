@@ -39,6 +39,63 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
+const profil = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+) => {
+    
+    try {
+       const device_id: number = req.params['id'] as unknown as number
+
+       const device = await Device.findByPk(device_id)
+
+       if (!device) throw new Error('404#device')
+
+       return res.status(200).json({
+           code: 200,
+           body: device
+       })
+    } catch(err) {
+        console.log('[Device Profil] ', err.message)
+
+        next(err)
+    }
+}
+
+const destroy = async (
+    req: Request, 
+    res: Response,
+    next: NextFunction
+) => {
+    
+    try {
+        const device_id = req.params['id']
+
+        const destroying = await Device.destroy({
+            where: {
+                id: device_id
+            }
+        })
+
+        if (!destroying) throw new Error('404#device')
+
+        return res.status(200).json({
+            code: 200,
+            body: {
+                status: 'success'
+            }
+        })
+    } catch(err) {
+        console.log('[Device Delete] ',err.message)
+
+        next(err)
+    }
+}
+
+
 export {
-    register
+    register,
+    profil,
+    destroy
 }

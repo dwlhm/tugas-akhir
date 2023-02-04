@@ -14,6 +14,10 @@ const label = {
     '401#notbasic': {
         code: 401,
         error: ['wrong authentication method']
+    },
+    '404#device': {
+        code: 404,
+        error: ['device not found']
     }
 }
 
