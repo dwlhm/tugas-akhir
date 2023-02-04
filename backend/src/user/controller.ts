@@ -1,5 +1,5 @@
 import { User } from "database/models/user";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import { readFileSync } from "fs";
 import { sign, verify } from 'jsonwebtoken';
@@ -40,14 +40,14 @@ const register = async (req: Request, res: Response) => {
     
 }
 
-const login = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response, next: NextFunction) => {
     
     try {
         let authorization = req.headers.authorization
         let [method,str] = authorization.split(" ")
 
         if (method === 'Basic') authorization = str
-        else throw new Error('401')
+        else throw new Error('401#notbasic')
 
         const extract_str = Buffer.from(authorization, 'base64')
         let [username, password] = extract_str.toString().split(":")
@@ -56,17 +56,17 @@ const login = async (req: Request, res: Response) => {
             email: username
         }})
 
-        if (user == null) throw new Error('404')
+        if (user == null) throw new Error('400#email')
 
         const find_session = await User_Session.findOne({ where: {
             user_id: user.dataValues.id
         }})
 
-        if (find_session) throw new Error('409#1')
+        if (find_session) throw new Error('409#login')
 
         const compare_password = bcrypt.compareSync(password, user.dataValues.password)
 
-        if (!compare_password) throw new Error('404#1')
+        if (!compare_password) throw new Error('400#password')
 
         const private_key = readFileSync(path.join(__dirname, '../../secret/private.pem'), 'utf8')
 
@@ -106,7 +106,7 @@ const login = async (req: Request, res: Response) => {
     } catch(error) {
         console.log('[login]', error)
 
-        let errors: string[] = []
+        /*let errors: string[] = []
         
         if (error.message === '401') errors.push('authorization token not found')
         
@@ -118,6 +118,8 @@ const login = async (req: Request, res: Response) => {
                 code: 400,
                 error: errors
             })
+        */
+       next(error)
     }
 }
 

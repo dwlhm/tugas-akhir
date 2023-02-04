@@ -1,14 +1,16 @@
 import { 
-    Table, Column, Model, BelongsTo, ForeignKey
+    Table, Column, Model, BelongsTo, ForeignKey, AllowNull
 } from 'sequelize-typescript'
 import { User } from './user'
 
 @Table
 export class Device extends Model {
 
+    @AllowNull(false)
     @Column
     name: string
 
+    @AllowNull(false)
     @Column
     address: string
 

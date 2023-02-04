@@ -6,6 +6,8 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
+    "build:watch": "tsc --watch",
+    "start:watch": "nodemon dist/index.js",
     "start": "node dist/index.js",
     "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\"",
     "starter": "node dist/scripts/starter.js",
@@ -28,7 +30,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.16",
+    "@types/express": "^4.17.17",
     "@types/node": "^18.11.18",
     "concurrently": "^7.6.0",
     "nodemon": "^2.0.20",

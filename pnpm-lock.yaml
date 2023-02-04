@@ -7,7 +7,7 @@ importers:
 
   backend:
     specifiers:
-      '@types/express': ^4.17.16
+      '@types/express': ^4.17.17
       '@types/node': ^18.11.18
       bcrypt: ^5.1.0
       body-parser: ^1.20.1
@@ -36,7 +36,7 @@ importers:
       jsonwebtoken: 9.0.0
       uuid: 9.0.0
     devDependencies:
-      '@types/express': 4.17.16
+      '@types/express': 4.17.17
       '@types/node': 18.11.18
       concurrently: 7.6.0
       nodemon: 2.0.20
@@ -127,8 +127,8 @@ packages:
       '@types/range-parser': 1.2.4
     dev: true
 
-  /@types/express/4.17.16:
-    resolution: {integrity: sha512-LkKpqRZ7zqXJuvoELakaFYuETHjZkSol8EV6cNnyishutDBCCdv6+dsKPbKkCcIk57qRphOLY5sEgClw1bO3gA==}
+  /@types/express/4.17.17:
+    resolution: {integrity: sha512-Q4FmmuLGBG58btUnfS1c1r/NQdlp3DMfGDGig8WhfpA2YRUtEkxAjkZb0yvplJGYdF1fsQ81iMDcH24sSCNC/Q==}
     dependencies:
       '@types/body-parser': 1.19.2
       '@types/express-serve-static-core': 4.17.33
