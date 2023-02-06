@@ -1,22 +1,32 @@
 import {
-    Table, Column, Model, BelongsTo, Default, ForeignKey
+    Table, Column, Model, BelongsTo, Default, ForeignKey, AllowNull, PrimaryKey, Unique
 } from 'sequelize-typescript'
 import { User} from './user'
 
 @Table
 export class Gateway extends Model {
 
+    @PrimaryKey
+    @AllowNull(false)
+    @Unique(true)
+    @Column
+    id: string
+
+    @AllowNull(false)
     @Column 
     name: string
 
+    @AllowNull(false)
     @Column
     address: string
 
-    @Default(true)
+    @Default(false)
+    @AllowNull(false)
     @Column
     isOnline: boolean
 
     @ForeignKey(() => User)
+    @AllowNull(false)
     @Column
     maintainer: number 
 

@@ -1,5 +1,4 @@
 import { Device } from 'database/models/device'
-import { Gateway_Mqtt } from 'database/models/gateway-mqtt'
 import {
     Request, Response, NextFunction
 } from 'express'
@@ -8,16 +7,17 @@ import crypto from 'node:crypto'
 const register = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
+        const device_id: string = crypto.randomBytes(4).toString('hex')
         const device = await Device.create({
             ...req.body,
             maintainer: req.user.id,
+            id: device_id
         })
         
         return res.status(200).json({
             code: 200,
             body: {
                 ...device.dataValues,
-                id: undefined,
                 updatedAt: undefined
             }
         })

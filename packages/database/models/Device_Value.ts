@@ -18,7 +18,7 @@ export class Device_Value extends Model {
 
     @ForeignKey(() => Device)
     @Column 
-    device_id: number
+    device_id: string
 
     @BelongsTo(() => Device) device: Device
 
