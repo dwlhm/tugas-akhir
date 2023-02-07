@@ -87,7 +87,6 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
             issuer: 'dwlhm',
             subject: 'report@dwlhm.space',
             audience: 'localhost',
-            expiresIn: '1d',
             algorithm: 'RS256'
         }
 
@@ -106,20 +105,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     } catch(error) {
         console.log('[login]', error)
 
-        /*let errors: string[] = []
-        
-        if (error.message === '401') errors.push('authorization token not found')
-        
-        if (error.message === '404') errors.push('email not registered')
-        if (error.message === '404#1') errors.push('wrong password')
-        if (error.message === '409#1') errors.push('duplicate login action')
-        return res.status(400)
-            .json({
-                code: 400,
-                error: errors
-            })
-        */
-       next(error)
+        next(error)
     }
 }
 

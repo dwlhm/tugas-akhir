@@ -115,8 +115,34 @@ const destroy = async (
         next(err)
     }
 }
+
+const get_all_gateway = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+
+    try {
+        const gateways = await Gateway.findAll({
+            where: {
+                maintainer: req.user.id
+            }
+        })
+
+        res.status(200).json({
+            code: 200,
+            body: gateways
+        })
+    } catch(err) {
+        console.error('[get_all_gateway] ', err.message)
+
+        next(err)
+    }
+}
+
 export {
     register,
     profil,
-    destroy
+    destroy,
+    get_all_gateway
 }
