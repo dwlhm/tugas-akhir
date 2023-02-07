@@ -99,8 +99,33 @@ const destroy = async (
     }
 }
 
+const get_all_devices = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+
+    try {
+        const devices = await Device.findAll({
+            where: {
+                maintainer: req.user.id
+            }
+        })
+
+        res.status(200).json({
+            code: 200,
+            body: devices
+        })
+    } catch(err) {
+        console.error('[get_all_devices] ', err.message)
+
+        next(err)
+    }
+}
+
 export {
     register,
     profil,
-    destroy
+    destroy,
+    get_all_devices
 }
