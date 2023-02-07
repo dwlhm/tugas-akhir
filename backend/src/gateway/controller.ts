@@ -1,4 +1,7 @@
 import { Gateway } from 'database/models/gateway'
+import { User } from 'database/models/user'
+import { User_Session } from 'database/models/user_session'
+import bcrypt from 'bcrypt'
 import { Gateway_Mqtt } from 'database/models/gateway-mqtt'
 import {
     Request,
@@ -15,6 +18,17 @@ const register = async (
 
     try {
 
+        if (!req.body.name) return res.status(400).json({
+            code: 400,
+            error: ['Field name not completed']
+        })
+        const findGateway = await Gateway.findOne({
+            where: {
+                maintainer: req.user.id,
+                name: req.body.name
+            }
+        })
+        if (findGateway) throw new Error('409#gateway')
         const client_id: string = crypto.randomBytes(4).toString('hex')
         const client_username: string = crypto.randomBytes(4).toString('hex')
         const client_password: string = crypto.randomBytes(8).toString('hex')
@@ -22,6 +36,7 @@ const register = async (
         const gateway = await Gateway.create({
             ...req.body,
             id: client_id,
+            maintainer: req.user.id
         })
 
         await Gateway_Mqtt.create({
@@ -140,9 +155,66 @@ const get_all_gateway = async (
     }
 }
 
+const get_gateway_mqtt = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    
+    try {
+        let authorization = req.headers.authorization
+        let [method,str] = authorization.split(" ")
+
+        if (method === 'Basic') authorization = str
+        else throw new Error('401#notbasic')
+
+        const extract_str = Buffer.from(authorization, 'base64')
+        let [username, password] = extract_str.toString().split(":")
+
+        let user = await User.findOne({ where: {
+            email: username
+        }})
+
+        if (user == null) throw new Error('400#email')
+
+        const compare_password = bcrypt.compareSync(password, user.dataValues.password)
+
+        if (!compare_password) throw new Error('400#password')
+
+        const gateway_id = req.params['id']
+
+        const mqtt_detail = await Gateway_Mqtt.findOne({
+            where: {
+                gateway_id: gateway_id
+            }
+        })
+
+        if (!mqtt_detail) throw new Error('404#gateway')
+
+        res.status(200).json({
+            code: 200,
+            body: {
+                ...mqtt_detail.dataValues,
+                id: undefined,
+                credential: Buffer.from(mqtt_detail.dataValues.credential, 'base64')
+                    .toString()
+                    .split(":")
+            }
+        })
+    } catch(err) {
+        console.error('[get_gateway_mqtt] ',err.message)
+
+        if (err.message.lastIndexOf("reading 'split'") > -1) {
+            return next(new Error('401#notbasic'))
+        }
+        next(err)
+    }
+}
+
 export {
     register,
     profil,
     destroy,
-    get_all_gateway
+    get_all_gateway,
+    get_gateway_mqtt
 }

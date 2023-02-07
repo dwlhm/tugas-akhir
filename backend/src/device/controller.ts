@@ -7,6 +7,20 @@ import crypto from 'node:crypto'
 const register = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
+        let errors = []
+        if (!req.body.name) errors.push('Field name not completed')
+        if (!req.body.gateway_id) errors.push('Field gateway_id not completed')
+        if (errors.length > 0) return res.status(400).json({
+            code: 400,
+            error: errors
+        })
+        const findDevice = await Device.findOne({
+            where: {
+                name: req.body.name,
+                gateway_id: req.body.gateway_id
+            }
+        })
+        if (findDevice) throw new Error("409#device")
         const device_id: string = crypto.randomBytes(4).toString('hex')
         const device = await Device.create({
             ...req.body,

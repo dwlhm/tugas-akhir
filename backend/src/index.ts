@@ -16,7 +16,7 @@ import {
 dotenv.config()
 
 const app: Express = express()
-const port = process.env.PORT || 5123
+const port = process.env.PORT || 5423
 
 Sq_Start()
 
