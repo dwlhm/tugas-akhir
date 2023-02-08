@@ -8,8 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "start": "node index.js",
-    "start:watch": "nodemon index.js"
+    "start": "node dist/index.js",
+    "start:watch": "nodemon dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
   "dependencies": {
     "aedes": "^0.48.1",
     "aedes-server-factory": "^0.2.1",
+    "database": "workspace:1.0.0",
     "dotenv": "^16.0.3",
     "duplexify": "^4.1.2"
   },

@@ -14,7 +14,6 @@ export class Device extends Model {
     id: string
 
     @AllowNull(false)
-    @Unique(true)
     @Column
     name: string
 
