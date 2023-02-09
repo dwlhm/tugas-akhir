@@ -1,4 +1,5 @@
 import { Device } from 'database/models/device'
+import { Device_Value } from 'database/models/Device_Value'
 import {
     Request, Response, NextFunction
 } from 'express'
@@ -137,9 +138,73 @@ const get_all_devices = async (
     }
 }
 
+const get_values = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const device_id = req.params['id']
+        const values = await Device_Value.findAll({
+            where: {
+                device_id: device_id
+            },
+            limit: 100,
+            attributes: {
+                exclude: ['id','updatedAt']
+            }
+        })
+
+        if (!values) throw new Error('404#devicevalue')
+
+        res.status(200).json({
+            code: 200,
+            body: values
+        })
+    } catch(err) {
+        console.error('[get_values] ', err.message)
+
+        next(err)
+    }
+}
+
+const get_latest_value = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const device_id = req.params['id']
+        const value = await Device_Value.findOne({
+            where: {
+                device_id: device_id
+            },
+            order: [
+                ['createdAt','DESC']
+            ],
+            attributes: {
+                exclude: ['id','updatedAt']
+            }
+        })
+
+        if (!value) throw new Error('404#devicevalue')
+
+        res.status(200).json({
+            code: 200,
+            body: value
+        })
+    } catch(err) {
+        console.error('[get_latest_value] ', err.message)
+
+        next(err)
+    }
+}
+
 export {
     register,
     profil,
     destroy,
-    get_all_devices
+    get_all_devices,
+    get_values,
+    get_latest_value
 }
