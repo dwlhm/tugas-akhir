@@ -1,18 +1,22 @@
 import {
-    Table, Column, Model, AllowNull, ForeignKey, BelongsTo
-} from 'sequelize-typescript'
-import { User } from './user'
+  Table,
+  Column,
+  Model,
+  AllowNull,
+  ForeignKey,
+  BelongsTo,
+} from "sequelize-typescript";
+import { User } from "./user";
 
-@Table 
+@Table
 export class User_Session extends Model {
+  @AllowNull(false)
+  @Column
+  uuid: string;
 
-    @AllowNull(false)
-    @Column
-    uuid: string
+  @ForeignKey(() => User)
+  @Column
+  user_id: number;
 
-    @ForeignKey(() => User)
-    @Column
-    user_id: number
-
-    @BelongsTo(() => User) user: User
+  @BelongsTo(() => User) user: User;
 }

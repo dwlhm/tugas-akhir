@@ -1,220 +1,198 @@
-import { Gateway } from 'database/models/gateway'
-import { User } from 'database/models/user'
-import { User_Session } from 'database/models/user_session'
-import bcrypt from 'bcrypt'
-import { Gateway_Mqtt } from 'database/models/gateway-mqtt'
-import {
-    Request,
-    Response,
-    NextFunction
-} from 'express'
-import crypto from 'node:crypto'
+import { Gateway } from "database/models/gateway";
+import { User } from "database/models/user";
+import { User_Session } from "database/models/user_session";
+import bcrypt from "bcrypt";
+import { Gateway_Mqtt } from "database/models/gateway-mqtt";
+import { Request, Response, NextFunction } from "express";
+import crypto from "node:crypto";
 
-const register = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
+const register = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.body.name)
+      return res.status(400).json({
+        code: 400,
+        error: ["Field name not completed"],
+      });
+    const findGateway = await Gateway.findOne({
+      where: {
+        maintainer: req.user.id,
+        name: req.body.name,
+      },
+    });
+    if (findGateway) throw new Error("409#gateway");
+    const client_id: string = crypto.randomBytes(4).toString("hex");
+    const client_username: string = crypto.randomBytes(4).toString("hex");
+    const client_password: string = crypto.randomBytes(8).toString("hex");
 
-    try {
+    const gateway = await Gateway.create({
+      ...req.body,
+      id: client_id,
+      maintainer: req.user.id,
+    });
 
-        if (!req.body.name) return res.status(400).json({
-            code: 400,
-            error: ['Field name not completed']
-        })
-        const findGateway = await Gateway.findOne({
-            where: {
-                maintainer: req.user.id,
-                name: req.body.name
-            }
-        })
-        if (findGateway) throw new Error('409#gateway')
-        const client_id: string = crypto.randomBytes(4).toString('hex')
-        const client_username: string = crypto.randomBytes(4).toString('hex')
-        const client_password: string = crypto.randomBytes(8).toString('hex')
+    await Gateway_Mqtt.create({
+      credential: Buffer.from(`${client_username}:${client_password}`).toString(
+        "base64"
+      ),
+      topic_data: `node/${client_id}/prod/data`,
+      topic_action: `node/${client_id}/prod/action`,
+      gateway_id: client_id,
+    });
 
-        const gateway = await Gateway.create({
-            ...req.body,
-            id: client_id,
-            maintainer: req.user.id
-        })
-
-        await Gateway_Mqtt.create({
-            credential: Buffer.from(`${client_username}:${client_password}`).toString('base64'),
-            topic_data: `node/${client_id}/prod/data`,
-            topic_action: `node/${client_id}/prod/action`,
-            gateway_id: client_id
-        })
-
-        return res.status(201).json({
-            code: 201,
-            body: {
-                ...gateway.dataValues,
-                updatedAt: undefined
-            }
-        })
-    } catch(err) {
-        console.log('[Gateway Register] ',err.message)
-        let errors: string[] = [] 
-        if (err.message.lastIndexOf('notNull Violation') > -1) {
-            errors = err.message
-                .replace(/notNull Violation: Gateway./gi, 'Field ')
-                .split(',\n')
-            return res.status(400)
-                .json({
-                    code: 400,
-                    error: errors
-                })
-
-        }
-        next(err)
+    return res.status(201).json({
+      code: 201,
+      body: {
+        ...gateway.dataValues,
+        updatedAt: undefined,
+      },
+    });
+  } catch (err) {
+    console.log("[Gateway Register] ", err.message);
+    let errors: string[] = [];
+    if (err.message.lastIndexOf("notNull Violation") > -1) {
+      errors = err.message
+        .replace(/notNull Violation: Gateway./gi, "Field ")
+        .split(",\n");
+      return res.status(400).json({
+        code: 400,
+        error: errors,
+      });
     }
-}
+    next(err);
+  }
+};
 
-const profil = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
+const profil = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const gateway_id: string = req.params["id"];
+    const gateway = await Gateway.findByPk(gateway_id);
 
-    try {
-        const gateway_id: string = req.params['id']
-        const gateway = await Gateway.findByPk(gateway_id)
+    if (!gateway) throw new Error("404#gateway");
 
-        if (!gateway) throw new Error('404#gateway')
+    return res.status(200).json({
+      code: 200,
+      body: gateway,
+    });
+  } catch (err) {
+    console.error("[Gateway Profil] ", err.message);
 
-        return res.status(200).json({
-            code: 200,
-            body: gateway
-        })
-    } catch(err) {
-        console.error('[Gateway Profil] ',err.message)
+    next(err);
+  }
+};
 
-        next(err)
-    }
-}
+const destroy = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const gateway_id: string = req.params["id"];
+    let destroying = await Gateway_Mqtt.destroy({
+      where: {
+        gateway_id: gateway_id,
+      },
+    });
 
-const destroy = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
+    if (!destroying) throw new Error("505#gateway");
 
-    try {
-        const gateway_id: string = req.params['id']
-        let destroying = await Gateway_Mqtt.destroy({
-            where: {
-                gateway_id: gateway_id
-            }
-        })
+    destroying = await Gateway.destroy({
+      where: {
+        id: gateway_id,
+      },
+    });
 
-        if (!destroying) throw new Error('505#gateway')
-        
-        destroying = await Gateway.destroy({
-            where: {
-                id: gateway_id
-            }
-        })
+    if (!destroying) throw new Error("500#gateway");
 
-        if (!destroying) throw new Error('500#gateway')
+    return res.status(200).json({
+      code: 200,
+      body: {
+        status: "success",
+      },
+    });
+  } catch (err) {
+    console.error("[Gateway Destroy] ", err.message);
 
-        return res.status(200).json({
-            code: 200,
-            body: {
-                status: 'success'
-            }
-        })
-    } catch(err) {
-        console.error('[Gateway Destroy] ', err.message)
-
-        next(err)
-    }
-}
+    next(err);
+  }
+};
 
 const get_all_gateway = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
+  try {
+    const gateways = await Gateway.findAll({
+      where: {
+        maintainer: req.user.id,
+      },
+    });
 
-    try {
-        const gateways = await Gateway.findAll({
-            where: {
-                maintainer: req.user.id
-            }
-        })
+    res.status(200).json({
+      code: 200,
+      body: gateways,
+    });
+  } catch (err) {
+    console.error("[get_all_gateway] ", err.message);
 
-        res.status(200).json({
-            code: 200,
-            body: gateways
-        })
-    } catch(err) {
-        console.error('[get_all_gateway] ', err.message)
-
-        next(err)
-    }
-}
+    next(err);
+  }
+};
 
 const get_gateway_mqtt = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
-    
-    try {
-        let authorization = req.headers.authorization
-        let [method,str] = authorization.split(" ")
+  try {
+    let authorization = req.headers.authorization;
+    let [method, str] = authorization.split(" ");
 
-        if (method === 'Basic') authorization = str
-        else throw new Error('401#notbasic')
+    if (method === "Basic") authorization = str;
+    else throw new Error("401#notbasic");
 
-        const extract_str = Buffer.from(authorization, 'base64')
-        let [username, password] = extract_str.toString().split(":")
+    const extract_str = Buffer.from(authorization, "base64");
+    let [username, password] = extract_str.toString().split(":");
 
-        let user = await User.findOne({ where: {
-            email: username
-        }})
+    let user = await User.findOne({
+      where: {
+        email: username,
+      },
+    });
 
-        if (user == null) throw new Error('400#email')
+    if (user == null) throw new Error("400#email");
 
-        const compare_password = bcrypt.compareSync(password, user.dataValues.password)
+    const compare_password = bcrypt.compareSync(
+      password,
+      user.dataValues.password
+    );
 
-        if (!compare_password) throw new Error('400#password')
+    if (!compare_password) throw new Error("400#password");
 
-        const gateway_id = req.params['id']
+    const gateway_id = req.params["id"];
 
-        const mqtt_detail = await Gateway_Mqtt.findOne({
-            where: {
-                gateway_id: gateway_id
-            }
-        })
+    const mqtt_detail = await Gateway_Mqtt.findOne({
+      where: {
+        gateway_id: gateway_id,
+      },
+    });
 
-        if (!mqtt_detail) throw new Error('404#gateway')
+    if (!mqtt_detail) throw new Error("404#gateway");
 
-        res.status(200).json({
-            code: 200,
-            body: {
-                ...mqtt_detail.dataValues,
-                id: undefined,
-                credential: Buffer.from(mqtt_detail.dataValues.credential, 'base64')
-                    .toString()
-                    .split(":")
-            }
-        })
-    } catch(err) {
-        console.error('[get_gateway_mqtt] ',err.message)
+    res.status(200).json({
+      code: 200,
+      body: {
+        ...mqtt_detail.dataValues,
+        id: undefined,
+        credential: Buffer.from(mqtt_detail.dataValues.credential, "base64")
+          .toString()
+          .split(":"),
+      },
+    });
+  } catch (err) {
+    console.error("[get_gateway_mqtt] ", err.message);
 
-        if (err.message.lastIndexOf("reading 'split'") > -1) {
-            return next(new Error('401#notbasic'))
-        }
-        next(err)
+    if (err.message.lastIndexOf("reading 'split'") > -1) {
+      return next(new Error("401#notbasic"));
     }
-}
+    next(err);
+  }
+};
 
-export {
-    register,
-    profil,
-    destroy,
-    get_all_gateway,
-    get_gateway_mqtt
-}
+export { register, profil, destroy, get_all_gateway, get_gateway_mqtt };
