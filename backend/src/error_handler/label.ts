@@ -23,6 +23,10 @@ const label = {
     code: 404,
     error: ["gateway not found"],
   },
+  "412#gateway": {
+    code: 412,
+    error: ["gateway used by devices"]
+  },
   "409#device": {
     code: 409,
     error: ["duplicate device name"],

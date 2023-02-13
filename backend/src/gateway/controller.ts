@@ -89,15 +89,14 @@ const destroy = async (req: Request, res: Response, next: NextFunction) => {
       },
     });
 
-    if (!destroying) throw new Error("505#gateway");
-
     destroying = await Gateway.destroy({
       where: {
         id: gateway_id,
+        maintainer: req.user.id
       },
     });
 
-    if (!destroying) throw new Error("500#gateway");
+    if (!destroying) throw new Error("404#gateway");
 
     return res.status(200).json({
       code: 200,
@@ -106,8 +105,11 @@ const destroy = async (req: Request, res: Response, next: NextFunction) => {
       },
     });
   } catch (err) {
-    console.error("[Gateway Destroy] ", err.message);
+    if (err.message.lastIndexOf("Cannot delete or update a parent row:") > -1) {
+        err = new Error('412#gateway')
+    }
 
+    console.error("[Gateway Destroy] ", err.message);
     next(err);
   }
 };

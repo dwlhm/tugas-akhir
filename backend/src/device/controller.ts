@@ -78,8 +78,14 @@ const profil = async (req: Request, res: Response, next: NextFunction) => {
 const destroy = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id = req.params["id"];
+    
+    let destroying = await Device_Value.destroy({
+        where: {
+            device_id: device_id
+        }
+    })
 
-    const destroying = await Device.destroy({
+    destroying = await Device.destroy({
       where: {
         id: device_id,
       },
