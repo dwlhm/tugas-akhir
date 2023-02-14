@@ -16,7 +16,7 @@ const Publish_Packet = async (packet: any, client: Client) => {
 
     console.log("[Publish_Packet] ", device_id);
   } catch (err) {
-    console.error("[Publish_Packet] ", err.message);
+    console.error("[Publish_Packet] ", err);
   }
 };
 

@@ -1,4 +1,7 @@
 from paho.mqtt import client as mqtt_client
+from datetime import datetime
+import pytz
+import json
 import time
 
 broker = 'localhost'
@@ -23,8 +26,16 @@ def connect_mqtt():
 
 def publish(client):
     while True:
-        time.sleep(1)
-        msg = '{"gateway_timestamp": "2023-02-09T06:32:30Z","device": {"id": "cefb0c56","data": {"pm1":21,"pm2":31,"pm10":29}}}'
+        time.sleep(1000)
+        jakarta_tz = pytz.timezone("Asia/Jakarta")
+        local_time = datetime.now(jakarta_tz)
+        data_node = json.loads('{"id": "cefb0c56","data": {"pm1":21,"pm2":31,"pm10":29}}')
+        data = {
+            "gateway_timestamp": local_time.isoformat(),
+            "device": data_node
+        }
+        msg = json.dumps(data)
+        print(msg)
         result = client.publish(topic, msg)
         status = result[0]
         if status == 0:
