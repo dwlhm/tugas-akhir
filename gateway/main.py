@@ -6,6 +6,7 @@ import time
 import termios
 import sys
 import tty
+import sx126x
 
 broker = 'localhost'
 port = 1883
@@ -61,25 +62,25 @@ def publish(client):
     while True:
         time.sleep(1000)
         node.receive()
-        jakarta_tz = pytz.timezone("Asia/Jakarta")
-        local_time = datetime.now(jakarta_tz)
-        data_node = json.loads('{"id": "cefb0c56","data": {"pm1":21,"pm2":31,"pm10":29}}')
-        data = {
-            "gateway_timestamp": local_time.isoformat(),
-            "device": data_node
-        }
-        msg = json.dumps(data)
-        print(msg)
-        result = client.publish(topic, msg)
-        status = result[0]
-        if status == 0:
-            print("successfully sended")
-        else:
-            print("failed send msg")
+        # jakarta_tz = pytz.timezone("Asia/Jakarta")
+        # local_time = datetime.now(jakarta_tz)
+        # data_node = json.loads('{"id": "cefb0c56","data": {"pm1":21,"pm2":31,"pm10":29}}')
+        # data = {
+        #     "gateway_timestamp": local_time.isoformat(),
+        #     "device": data_node
+        # }
+        # msg = json.dumps(data)
+        # print(msg)
+        # result = client.publish(topic, msg)
+        # status = result[0]
+        # if status == 0:
+        #     print("successfully sended")
+        # else:
+        #     print("failed send msg")
 
 def run():
     client = connect_mqtt()
-    client.loop_start()
+    # client.loop_start()
     publish(client)
 
 if __name__ == '__main__':
