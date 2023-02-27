@@ -3,6 +3,11 @@
 import RPi.GPIO as GPIO
 import serial
 import time
+import pytz
+import json
+import time
+
+topic = 'node/52199ec1/prod/data'
 
 class sx126x:
 
@@ -251,24 +256,43 @@ class sx126x:
         time.sleep(0.1)
 
 
-    def receive(self):
+    def receive(self, client):
         if self.ser.inWaiting() > 0:
             time.sleep(0.5)
             r_buff = self.ser.read(self.ser.inWaiting())
+            msg = r_buff[:-1].decode('utf-8').rstrip()
 
-            print("receive message from node address with frequence\033[1;32m %d,%d.125MHz\033[0m"%((r_buff[0]<<8)+r_buff[1],r_buff[2]+self.start_freq),end='\r\n',flush = True)
-            print("message is "+str(r_buff[3:-1]),end='\r\n')
+            now = datetime.now()
+            f = open.("/home/pi/tugas-akhir/gateway/data/data." + str(now.date()) + ".csv", "a")
+            f.write(str(now.isoformat()) + "," + msg + "\n")
+            f.close()
+
+            # print("receive message from node address with frequence\033[1;32m %d,%d.125MHz\033[0m"%((r_buff[0]<<8)+r_buff[1],r_buff[2]+self.start_freq),end='\r\n',flush = True)
+            # print("message is "+str(r_buff[3:-1]),end='\r\n')
             
-            # print the rssi
-            if self.rssi:
-                # print('\x1b[3A',end='\r')
-                print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
-                self.get_channel_rssi()
-            else:
-                pass
-                #print('\x1b[2A',end='\r')
+            # # print the rssi
+            # if self.rssi:
+            #     # print('\x1b[3A',end='\r')
+            #     print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
+            #     self.get_channel_rssi()
+            # else:
+            #     pass
+            #     #print('\x1b[2A',end='\r')
 
-            return r_buff[:-1].decode()
+            #data_node = json.loads('{"id": "cefb0c56","data": "' + msg + '"}')
+            data_node = json.loads(msg)
+            data = {
+                "gateway_timestamp": now.isoformat(),
+                "device": data_node
+            }
+            msg = json.dumps(data)
+            print(msg)
+            result = client.publish(topic, msg)
+            status = result[0]
+            if status == 0:
+                print("successfully sended")
+            else:
+                print("failed send msg")
 
     def get_channel_rssi(self):
         GPIO.output(self.M1,GPIO.LOW)
