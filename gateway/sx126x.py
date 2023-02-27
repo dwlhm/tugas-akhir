@@ -3,12 +3,18 @@
 import RPi.GPIO as GPIO
 import serial
 import time
+<<<<<<< HEAD
 from datetime import datetime
 import os
 import sys
 from paho.mqtt import client as mqtt_client
 import pytz
 import json
+=======
+import pytz
+import json
+import time
+>>>>>>> baf864a38cb94f96041d58c2298d0048dd679c2f
 
 topic = 'node/52199ec1/prod/data'
 
@@ -263,6 +269,7 @@ class sx126x:
         if self.ser.inWaiting() > 0:
             time.sleep(0.5)
             r_buff = self.ser.read(self.ser.inWaiting())
+<<<<<<< HEAD
             now = datetime.now()
             
             #if (r_buff):
@@ -304,6 +311,42 @@ class sx126x:
                 pass
                 #print('\x1b[2A',end='\r')
 
+=======
+            msg = r_buff[:-1].decode('utf-8').rstrip()
+
+            now = datetime.now()
+            f = open.("/home/pi/tugas-akhir/gateway/data/data." + str(now.date()) + ".csv", "a")
+            f.write(str(now.isoformat()) + "," + msg + "\n")
+            f.close()
+
+            # print("receive message from node address with frequence\033[1;32m %d,%d.125MHz\033[0m"%((r_buff[0]<<8)+r_buff[1],r_buff[2]+self.start_freq),end='\r\n',flush = True)
+            # print("message is "+str(r_buff[3:-1]),end='\r\n')
+            
+            # # print the rssi
+            # if self.rssi:
+            #     # print('\x1b[3A',end='\r')
+            #     print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
+            #     self.get_channel_rssi()
+            # else:
+            #     pass
+            #     #print('\x1b[2A',end='\r')
+
+            #data_node = json.loads('{"id": "cefb0c56","data": "' + msg + '"}')
+            data_node = json.loads(msg)
+            data = {
+                "gateway_timestamp": now.isoformat(),
+                "device": data_node
+            }
+            msg = json.dumps(data)
+            print(msg)
+            result = client.publish(topic, msg)
+            status = result[0]
+            if status == 0:
+                print("successfully sended")
+            else:
+                print("failed send msg")
+
+>>>>>>> baf864a38cb94f96041d58c2298d0048dd679c2f
     def get_channel_rssi(self):
         GPIO.output(self.M1,GPIO.LOW)
         GPIO.output(self.M0,GPIO.LOW)

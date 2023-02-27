@@ -62,6 +62,7 @@ def publish(client):
     while True:
         time.sleep(1000)
         
+<<<<<<< HEAD
         jakarta_tz = pytz.timezone("Asia/Jakarta")
         local_time = datetime.now(jakarta_tz)
         data_node = json.loads('{"id": "cefb0c56","data": ' +'}')
@@ -77,13 +78,21 @@ def publish(client):
             print("successfully sended")
         else:
             print("failed send msg")
+=======
+        
+>>>>>>> baf864a38cb94f96041d58c2298d0048dd679c2f
 
 def run():
     client = connect_mqtt()
     client.loop_start()
+<<<<<<< HEAD
     #publish(client)
     while True:
         node.receive(client)
+=======
+    while True:
+       node.receive(client)
+>>>>>>> baf864a38cb94f96041d58c2298d0048dd679c2f
 
 if __name__ == '__main__':
     run()
