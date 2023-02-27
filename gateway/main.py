@@ -64,7 +64,7 @@ def publish(client):
         
         jakarta_tz = pytz.timezone("Asia/Jakarta")
         local_time = datetime.now(jakarta_tz)
-        data_node = json.loads('{"id": "cefb0c56","data": ' + node.receive() + '}')
+        data_node = json.loads('{"id": "cefb0c56","data": ' +'}')
         data = {
             "gateway_timestamp": local_time.isoformat(),
             "device": data_node
@@ -81,7 +81,9 @@ def publish(client):
 def run():
     client = connect_mqtt()
     client.loop_start()
-    publish(client)
+    #publish(client)
+    while True:
+        node.receive(client)
 
 if __name__ == '__main__':
     run()

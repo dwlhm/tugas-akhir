@@ -3,6 +3,14 @@
 import RPi.GPIO as GPIO
 import serial
 import time
+from datetime import datetime
+import os
+import sys
+from paho.mqtt import client as mqtt_client
+import pytz
+import json
+
+topic = 'node/52199ec1/prod/data'
 
 class sx126x:
 
@@ -251,15 +259,43 @@ class sx126x:
         time.sleep(0.1)
 
 
-    def receive(self):
+    def receive(self, client):
         if self.ser.inWaiting() > 0:
             time.sleep(0.5)
             r_buff = self.ser.read(self.ser.inWaiting())
-
-            print("receive message from node address with frequence\033[1;32m %d,%d.125MHz\033[0m"%((r_buff[0]<<8)+r_buff[1],r_buff[2]+self.start_freq),end='\r\n',flush = True)
-            print("message is "+str(r_buff[3:-1]),end='\r\n')
+            now = datetime.now()
             
-            # print the rssi
+            #if (r_buff):
+
+            #msg = os.write(sys.stdout.fileno(), r_buff) 
+            msg = r_buff[:-1].decode('utf-8').rstrip()
+        
+            f = open("/home/pi/tugas-akhir/gateway/data." + str(now.date()) + ".csv", "a")
+            f.write(str(now.isoformat()) + "," + str(msg) + "\n")
+            f.close()
+            
+            jakarta_tz = pytz.timezone("Asia/Jakarta")
+            local_time = datetime.now(jakarta_tz)
+            data_node = json.loads('{"id": "cefb0c56","data": "' + str(msg) + '"}')
+            data = {
+                "gateway_timestamp": local_time.isoformat(),
+                "device": data_node
+            }
+            msg = json.dumps(data)
+            print(msg)
+            result = client.publish(topic, msg)
+            status = result[0]
+            if status == 0:
+                print("successfully sended")
+            else:
+                print("failed send msg")
+                
+            
+            print("timestamp: " + str(now))
+            print("receive message from node address with frequence\033[1;32m %d,%d.125MHz\033[0m"%((r_buff[0]<<8)+r_buff[1],r_buff[2]+self.start_freq),end='\r\n',flush = True)
+            print("message is "+ str(msg))
+            
+                # print the rssi
             if self.rssi:
                 # print('\x1b[3A',end='\r')
                 print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
@@ -267,8 +303,6 @@ class sx126x:
             else:
                 pass
                 #print('\x1b[2A',end='\r')
-
-            return r_buff[:-1].decode()
 
     def get_channel_rssi(self):
         GPIO.output(self.M1,GPIO.LOW)
