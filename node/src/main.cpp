@@ -17,15 +17,11 @@
 DHT_Unified dht(DHTPIN, DHTTYPE);
 uint32_t delayMS;
 
-
 #include "pm.h"
 
 int PM01Value;
 int PM2_5Value;
 int PM10Value;
-
-
-
 
 void setup() {
 
@@ -35,17 +31,19 @@ void setup() {
   sensor_t sensor;
   dht.temperature().getSensor(&sensor);
   dht.humidity().getSensor(&sensor);
-  delayMS = sensor.min_delay / 1000;
 
   Serial1.begin(9600); 
+  Serial2.begin(9600); 
 
 }
 
 
 void loop() {
 
-  delay(delayMS);
+  delay(5000);
   sensors_event_t event;
+  String header = "";
+  String value = "";
 
   dht.temperature().getEvent(&event);
   if (isnan(event.temperature)) {
@@ -53,6 +51,8 @@ void loop() {
   } else {
     Serial.print(F("Temperature:  "));
     Serial.print(event.temperature);
+    header += "t";
+    value += String(event.temperature);
     Serial.println(F(" °C"));
   }
 
@@ -62,6 +62,8 @@ void loop() {
   } else {
     Serial.print(F("Humidity: "));
     Serial.print(event.relative_humidity);
+    header += "h";
+    value += String(event.relative_humidity);
     Serial.println(F(" %"));
   }
 
@@ -73,6 +75,10 @@ void loop() {
         PM01Value=transmitPM01(buf); 
         PM2_5Value=transmitPM2_5(buf);
         PM10Value=transmitPM10(buf);
+        header += "120";
+        value += String(PM01Value) 
+              + String(PM2_5Value) 
+              + String(PM10Value);
 
         Serial.print("PM1.0:  ");
         Serial.print(PM01Value);
@@ -91,21 +97,29 @@ void loop() {
 
   int sensor_anemometer = analogRead(A0);
   float anemometer = sensor_anemometer * (5.0 / 1023.0);
-  int level_anemometer = 6*anemometer;//The level of wind speed is proportional to the output voltage.
+  int level_anemometer = 6*anemometer;
+  header += "v";
+  value += level_anemometer;
   Serial.print("Wind speed: ");
   Serial.print(level_anemometer);
   Serial.println(" level now");
 
   int sensor_arah_angin = analogRead(A1);
-  float voltage = (sensor_arah_angin / 1023.0) * 5.0;
   float arah_angin = sensor_arah_angin * ((5.0/1024.0)*360/5) ;
   arah_angin = map(sensor_arah_angin, 0, 959, 0, 360);
   if (arah_angin == 360.00) {
     arah_angin = 0;
   }
+  header += 'a';
+  value += String(arah_angin);
   Serial.print("Arah Angin: ");
   Serial.print(arah_angin);
   Serial.println(" °");
 
+
+  String msg = header + "|" + value;
+  Serial.println("[LoRa_msg] " + msg);
+  Serial2.println(msg);
+  
   Serial.println();
 }
