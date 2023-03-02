@@ -4,9 +4,11 @@ Ini adalah repositori kode sistem monitoring udara yang saya buat sebagai bagian
 * Mqtt Broker
 * Node
 * Gateway
+* Android (Frontend)
 
 ## Teknologi
 * Backend: ExpressJS, Typescript, Sequelize, MariaDB
 * Mqtt broker: Aedes, Typescript, Sequelize, MariaDB
 * Node: Arduino, PlatformIO, LoRa
 * Gateway: RaspberryPI 4, Python, LoRa
+* Andorid: Kotlin
