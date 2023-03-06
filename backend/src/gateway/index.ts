@@ -10,8 +10,9 @@ import {
 
 const router: Router = Router();
 
+router.get("/:id", profil);
+
 router.post("/", Authorization, register);
-router.get("/:id", Authorization, profil);
 router.delete("/:id", Authorization, destroy);
 router.get("/", Authorization, get_all_gateway);
 router.get("/:id/mqtt", get_gateway_mqtt);

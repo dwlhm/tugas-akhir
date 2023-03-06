@@ -129,6 +129,35 @@ const get_all_devices = async (
   }
 };
 
+const get_devices_non_auth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const offset = Number(req.query.page) || 0 
+    const limit = 10
+    const devices = await Device.findAndCountAll({
+      limit: limit,
+      offset: offset*limit
+    });
+
+    res.status(200).json({
+      code: 200,
+      body: {
+        data: devices.rows,
+        size: devices.count,
+        pages: Math.ceil(devices.count/limit),
+        current_page: offset
+      },
+    });
+  } catch (err) {
+    console.error("[get_devices_non_auth] ", err.message);
+
+    next(err);
+  }
+};
+
 const get_values = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id = req.params["id"];
@@ -192,4 +221,5 @@ export {
   get_all_devices,
   get_values,
   get_latest_value,
+  get_devices_non_auth
 };

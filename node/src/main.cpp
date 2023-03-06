@@ -117,7 +117,11 @@ void loop() {
   Serial.println(" °");
 
 
-  String msg = '{"id": "cefb0c56","data": "' + header + "|" + value; + '"}' 
+  String msg = "{\"id\": \"bd950176\",\"data\": \"";
+  msg += header;
+  msg += "|";
+  msg += value;
+  msg += "\"}";
   Serial.println("[LoRa_msg] " + msg);
   Serial2.println(msg);
   
