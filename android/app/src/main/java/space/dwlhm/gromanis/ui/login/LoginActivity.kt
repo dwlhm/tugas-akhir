@@ -1,7 +1,8 @@
-package space.dwlhm.gromanis
+package space.dwlhm.gromanis.ui.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import space.dwlhm.gromanis.R
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
