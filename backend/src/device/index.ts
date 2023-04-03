@@ -12,10 +12,10 @@ import {
 
 const router: Router = Router();
 
-router.get("/general", get_devices_non_auth);
-router.get("/:id/values", get_values);
-router.get("/:id", profil);
-router.get("/:id/la", get_latest_value);
+router.get("/general", Authorization, get_devices_non_auth);
+router.get("/:id/values", Authorization, get_values);
+router.get("/:id", Authorization, profil);
+router.get("/:id/la", Authorization, get_latest_value);
 
 router.post("/", Authorization, register);
 router.delete("/:id", Authorization, destroy);
