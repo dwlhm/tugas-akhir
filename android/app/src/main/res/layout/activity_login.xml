@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.login.LoginActivity"
+    tools:context=".view.login.LoginActivity"
     android:paddingHorizontal="10dp"
     android:background="@color/white"
     android:paddingTop="30dp">
@@ -50,6 +50,7 @@
             android:id="@+id/input_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
             android:background="@drawable/bg_input"
             android:paddingVertical="10dp"
             android:paddingHorizontal="15dp"
