@@ -35,18 +35,19 @@ void setup() {
   // uint64_t seed = 1;
   // uint64_t hash_otpt[2]; // allocate 128 bits
   // const char *key = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ";
+  // Serial.println(strlen(key));
   // MurmurHash3_x64_128(key, (uint64_t)strlen(key), seed, hash_otpt);
-  // // uint64_t hsh = hash_otpt;
+  // uint64_t hsh = hash_otpt;
   // Serial.print("hashed: ");
   // print64(&Serial, hash_otpt[0]);
   // print64(&Serial, hash_otpt[1]);
   // // Serial.print(String(hash_otpt[0]));
   // Serial.print(hsh);
 
-  Serial.println();
+  // Serial.println();
   // dht.begin();
   // sensor_t sensor;
-  // dht.temperature().getSensor(&sensor);
+  // dht.temperature().getSensor(p&sensor);
   // dht.humidity().getSensor(&sensor);
 
   // Serial1.begin(9600); 
@@ -122,7 +123,7 @@ void loop() {
   // Serial.println(" level now");
 
   int sensor_arah_angin = analogRead(A1);
-  float arah_angin = sensor_arah_angin * ((5.0/1024.0)*360/5) ;
+  float arah_angin = map(sensor_arah_angin, 0, 959, 0, 360);
   if (arah_angin == 360.00) {
     arah_angin = 0;
   }
@@ -139,8 +140,18 @@ void loop() {
   msg += "|";
   msg += value;
   msg += "\"}";
-  Serial.println("[LoRa_msg] " + msg);
+  Serial.print("[LoRa_msg] " + msg);
+  Serial.print("/");
   Serial2.println(msg);
   
+  for(int i=0; i<msg.length(); i++) {    
+      char myChar = msg.charAt(i);        
+      for(int i=7; i>=0; i--) {       
+          byte bytes = bitRead(myChar,i);       
+          Serial.print(bytes, BIN);     
+      }     
+      Serial.print(" ");  
+  }
+   
   Serial.println();
 }
