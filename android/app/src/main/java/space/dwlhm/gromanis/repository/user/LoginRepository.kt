@@ -1,11 +1,8 @@
-package space.dwlhm.gromanis.repository
+package space.dwlhm.gromanis.repository.user
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,52 +12,9 @@ import space.dwlhm.gromanis.model.user.ProfilSetterGetter
 import space.dwlhm.gromanis.preferences.Prefs
 import space.dwlhm.gromanis.retrofit.RetrofitClient
 
-object LoginActivityRepository {
+object LoginRepository {
 
-    val userProfilSetterGetter = MutableLiveData<ServicesSetterGetter<ProfilSetterGetter>>()
     val userLoginSetterGetter = MutableLiveData<ServicesSetterGetter<LoginSetterGetter>>()
-
-    fun getUserProfilApiCall(
-        context: Context
-        ): MutableLiveData<ServicesSetterGetter<ProfilSetterGetter>>? {
-        val prefs = Prefs(context)
-        val loginPref = prefs.loginInfoPref ?: return null
-
-        val call = RetrofitClient.userInterface.getProfil(loginPref.authentication_token)
-
-        call.enqueue(object : Callback<ServicesSetterGetter<ProfilSetterGetter>> {
-            override fun onResponse(
-                call: Call<ServicesSetterGetter<ProfilSetterGetter>>,
-                response: Response<ServicesSetterGetter<ProfilSetterGetter>>
-            ) {
-
-                Log.v("DEBUG : ", response.body().toString())
-
-                val data = response.body()
-                val code = data!!.code
-                val body = data.body
-                val error = data.errors
-
-                userProfilSetterGetter.value = ServicesSetterGetter(
-                    code,
-                    body,
-                    error
-                )
-
-            }
-
-            override fun onFailure(
-                call: Call<ServicesSetterGetter<ProfilSetterGetter>>,
-                t: Throwable
-            ) {
-                Log.v("DEBUG : ", t.message.toString())
-            }
-
-        })
-
-        return userProfilSetterGetter
-    }
-
 
     fun postUserLoginApiCall(
         authorization: String

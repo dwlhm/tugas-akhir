@@ -9,6 +9,8 @@ class Prefs(context: Context) {
 
     private val appPref = "gromanisePref"
     private val appPrefLoginInfo = "loginInfoPref"
+    private val appPrefDevicesList = "devicesList"
+
     private val preferences: SharedPreferences = context.getSharedPreferences(appPref, Context.MODE_PRIVATE)
     private val gson = Gson()
 
@@ -25,4 +27,8 @@ class Prefs(context: Context) {
                     .putString(appPrefLoginInfo, data)
                     .apply()
         }
+
+    fun delete() {
+        preferences.edit().putString(appPrefLoginInfo, "").apply()
+    }
 }

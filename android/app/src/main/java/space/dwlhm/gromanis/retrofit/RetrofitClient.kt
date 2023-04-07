@@ -8,6 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import space.dwlhm.gromanis.BuildConfig
 import space.dwlhm.gromanis.Config
+import space.dwlhm.gromanis.retrofit.`interface`.GatewayInterface
 import space.dwlhm.gromanis.retrofit.`interface`.UserInterface
 
 object RetrofitClient {
@@ -36,5 +37,11 @@ object RetrofitClient {
         retrofitClient
             .build()
             .create(UserInterface::class.java)
+    }
+
+    val gatewayInterace: GatewayInterface by lazy {
+        retrofitClient
+            .build()
+            .create(GatewayInterface::class.java)
     }
 }

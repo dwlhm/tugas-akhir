@@ -31,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
         if (prefs.loginInfoPref != null) {
             startActivity(Intent(context, HomeActivity::class.java))
             overridePendingTransition(0,0)
+            finish()
         }
 
         findViewById<Button>(R.id.btn_login).setOnClickListener {
@@ -62,6 +63,8 @@ class LoginActivity : AppCompatActivity() {
                     val body = it.body
                     prefs.loginInfoPref = body
                     Toast.makeText(context, "Login berhasil!", Toast.LENGTH_LONG).show()
+                    startActivity(Intent(context, HomeActivity::class.java))
+                    finish()
                 }
 
 
