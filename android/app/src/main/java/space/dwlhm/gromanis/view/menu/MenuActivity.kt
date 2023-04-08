@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import space.dwlhm.gromanis.R
 import space.dwlhm.gromanis.view.devices.NewDeviceActivity
+import space.dwlhm.gromanis.view.gateway.GatewayConfigurationActivity
 import space.dwlhm.gromanis.view.gateway.RegisterGatewayActivity
 import space.dwlhm.gromanis.view.home.HomeActivity
 import space.dwlhm.gromanis.view.profile.ProfileActivity
@@ -59,6 +60,14 @@ class MenuActivity : AppCompatActivity() {
             if (from == "registerDevice") finish()
             else {
                 startActivity(Intent(this, NewDeviceActivity::class.java))
+                finish()
+            }
+        }
+
+        findViewById<Button>(R.id.btn_to_gateway).setOnClickListener {
+            if (from == "gatewayConfiguration") finish()
+            else {
+                startActivity(Intent(this, GatewayConfigurationActivity::class.java))
                 finish()
             }
         }

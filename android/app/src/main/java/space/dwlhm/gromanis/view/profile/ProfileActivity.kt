@@ -53,7 +53,7 @@ class ProfileActivity : AppCompatActivity() {
 
                 if (body != null) {
                     val prefs = Prefs(this)
-                    prefs.loginInfoPref = null
+                    prefs.delete()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 } else Toast.makeText(this, "Logout Gagal! Kesalahan Server", Toast.LENGTH_LONG).show()

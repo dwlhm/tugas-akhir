@@ -35,9 +35,8 @@ interface GatewayInterface {
 
     @GET("/gateway")
     fun getAllGateway(
-        @Header("authorization") authorization: String,
-        @Path("id") id: String
-    ) : Call<ServicesSetterGetter<Array<MqttGatewaySetterGetter>>>
+        @Header("authorization") authorization: String
+    ) : Call<ServicesSetterGetter<Array<GatewaySetterGetter>>>
 
     @DELETE("/gateway/{id}")
     fun deleteGateway(

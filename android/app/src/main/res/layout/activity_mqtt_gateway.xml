@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".view.gateway.RegisterGatewayActivity">
+    tools:context=".view.gateway.MqttGatewayActivity">
 
     <LinearLayout
         android:id="@+id/header_layout"
@@ -29,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/noto_sans_bold"
                 android:gravity="center_vertical"
-                android:text="New Gateway"
+                android:text="MQTT Credentials"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -52,67 +53,57 @@
             android:background="@android:color/transparent"
             android:contentDescription="menu toggle"
             android:paddingLeft="30dp"
-            android:src="@drawable/ic_menu" />
+            android:src="@drawable/ic_back" />
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/bg_general_pendek"
-        android:layout_margin="15dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
         android:padding="15dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nama:"
+            android:text="Username:"
             android:textColor="@color/white"
             android:fontFamily="@font/noto_sans"
-            android:textSize="14sp"/>
-        <EditText
-            android:id="@+id/input_gateway_name"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/mqtt_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:textColor="@color/black"
-            android:background="@drawable/bg_input"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="15dp"/>
+            android:text="-"
+            android:textIsSelectable="true"
+            android:textColor="@color/white"
+            android:fontFamily="@font/noto_sans_bold"
+            android:textSize="14sp"
+            android:layout_marginTop="3dp"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lokasi:"
+            android:text="Password:"
             android:textColor="@color/white"
             android:fontFamily="@font/noto_sans"
-            android:textSize="14sp"/>
-        <EditText
-            android:id="@+id/input_gateway_address"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/mqtt_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:textColor="@color/black"
-            android:background="@drawable/bg_input"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="15dp"/>
+            android:text="-"
+            android:textIsSelectable="true"
+            android:textColor="@color/white"
+            android:fontFamily="@font/noto_sans_bold"
+            android:textSize="14sp"
+            android:layout_marginTop="3dp"/>
 
     </LinearLayout>
 
-    <android.widget.Button
-        android:id="@+id/btn_new_gateway"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:background="@drawable/bg_general_action"
-        android:text="Register"
-        android:textColor="@color/white"
-        android:textAllCaps="false"
-        android:fontFamily="@font/noto_sans_bold"
-        android:textSize="14sp" />
 
 </LinearLayout>

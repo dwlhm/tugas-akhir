@@ -47,10 +47,10 @@ class RegisterGatewayActivity : AppCompatActivity() {
                     inputAddress.text.toString()
                 )
             )!!.observe(this, Observer {
-                if (it.errors != null) Toast.makeText(this, it.errors[0], Toast.LENGTH_LONG).show()
+                if (it.errors != null) Toast.makeText(this, it.errors[0], Toast.LENGTH_SHORT).show()
                 else {
                     val body = it.body
-                    Toast.makeText(this, "Registrasi berhasil!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Registrasi berhasil!", Toast.LENGTH_SHORT).show()
                 }
             })
         }
