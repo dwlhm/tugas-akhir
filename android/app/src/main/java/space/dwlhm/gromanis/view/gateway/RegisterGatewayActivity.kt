@@ -50,7 +50,7 @@ class RegisterGatewayActivity : AppCompatActivity() {
                 if (it.errors != null) Toast.makeText(this, it.errors[0], Toast.LENGTH_SHORT).show()
                 else {
                     val body = it.body
-                    Toast.makeText(this, "Registrasi berhasil!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Registrasi Gateway berhasil!", Toast.LENGTH_SHORT).show()
                 }
             })
         }

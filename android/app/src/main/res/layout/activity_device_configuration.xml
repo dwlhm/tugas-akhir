@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".view.gateway.GatewayConfigurationActivity">
+    tools:context=".view.devices.DeviceConfigurationActivity">
 
     <LinearLayout
         android:id="@+id/header_layout"
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/noto_sans_bold"
                 android:gravity="center_vertical"
-                android:text="Gateway Configuration"
+                android:text="Device Configuration"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -57,11 +57,11 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/no_gateway"
+        android:id="@+id/no_device"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="Tidak ada Gateway yang terdaftar di server!"
+        android:text="Tidak ada Device yang terdaftar di server!"
         android:textAlignment="center"
         android:fontFamily="@font/noto_sans"
         android:textColor="@color/white"
@@ -70,7 +70,7 @@
         android:visibility="gone"/>
 
     <LinearLayout
-        android:id="@+id/gateway_details"
+        android:id="@+id/device_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -81,7 +81,7 @@
             android:layout_marginBottom="10dp">
 
             <Spinner
-                android:id="@+id/gateway_selector"
+                android:id="@+id/device_selector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_dropdown"
@@ -104,7 +104,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Profil Gateway"
+            android:text="Profil Device"
             android:textColor="@color/black"
             android:fontFamily="@font/noto_sans"
             android:textSize="14sp"
@@ -123,7 +123,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ID Gateway:"
+                android:text="ID Device:"
                 android:textColor="@color/white"
                 android:fontFamily="@font/noto_sans"
                 android:textSize="14sp"
@@ -142,7 +142,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nama Gateway:"
+                android:text="Nama Device:"
                 android:textColor="@color/white"
                 android:fontFamily="@font/noto_sans"
                 android:textSize="14sp"
@@ -160,7 +160,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Alamat Gateway:"
+                android:text="Alamat Device:"
                 android:textColor="@color/white"
                 android:fontFamily="@font/noto_sans"
                 android:textSize="14sp"
@@ -178,7 +178,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Maintainer Gateway:"
+                android:text="Maintainer Device:"
                 android:textColor="@color/white"
                 android:fontFamily="@font/noto_sans"
                 android:textSize="14sp"
@@ -217,7 +217,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="MQTT Credentials"
+            android:text="Delete Device"
             android:textColor="@color/black"
             android:fontFamily="@font/noto_sans"
             android:textSize="14sp"
@@ -225,44 +225,19 @@
             android:layout_marginBottom="5dp"/>
 
         <android.widget.Button
-            android:id="@+id/btn_mqtt"
+            android:id="@+id/btn_delete_device"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:background="@drawable/bg_danger_action"
-            android:drawableEnd="@drawable/ic_open"
+            android:drawableEnd="@drawable/ic_delete"
             android:fontFamily="@font/noto_sans_bold"
-            android:text="Open Up"
+            android:text="Delete!"
             android:gravity="start|center_vertical"
             android:padding="15dp"
-            android:layout_marginBottom="15dp"
             android:textColor="@color/white"
             android:textAllCaps="false"
             android:textSize="12sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Delete Gateway"
-            android:textColor="@color/black"
-            android:fontFamily="@font/noto_sans"
-            android:textSize="14sp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="5dp"/>
-
-        <android.widget.Button
-        android:id="@+id/btn_delete_gateway"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:background="@drawable/bg_danger_action"
-        android:drawableEnd="@drawable/ic_delete"
-        android:fontFamily="@font/noto_sans_bold"
-        android:text="Delete!"
-        android:gravity="start|center_vertical"
-        android:padding="15dp"
-        android:textColor="@color/white"
-        android:textAllCaps="false"
-        android:textSize="12sp" />
     </LinearLayout>
+
 </LinearLayout>

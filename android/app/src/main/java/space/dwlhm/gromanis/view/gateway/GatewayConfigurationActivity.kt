@@ -99,7 +99,6 @@ class GatewayConfigurationActivity : AppCompatActivity(), OnItemSelectedListener
                 txtCreatedAt.text = date.toString()
             }
         })
-        Log.v("Selected : ", listGateways[p2].id)
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -112,7 +111,6 @@ class GatewayConfigurationActivity : AppCompatActivity(), OnItemSelectedListener
             val body = it.body
 
             if (body != null) {
-                Log.v("Gateway: ", body.size.toString())
                 if (body.isEmpty()) {
                     findViewById<LinearLayout>(R.id.gateway_details).visibility = View.GONE
                     findViewById<TextView>(R.id.no_gateway).visibility = View.VISIBLE
