@@ -11,9 +11,9 @@ import space.dwlhm.gromanis.repository.gateway.GatewayRepository
 
 class GatewayConfigurationViewModel : ViewModel() {
 
-    var allGatewaysLiveData: MutableLiveData<ServicesSetterGetter<Array<GatewaySetterGetter>>> ? = null
-    var gatewayLiveData: MutableLiveData<ServicesSetterGetter<GatewaySetterGetter>>? = null
-    var deleteGatewayLiveData: MutableLiveData<ServicesSetterGetter<StatusSetterGetter>>? = null
+    private var allGatewaysLiveData: MutableLiveData<ServicesSetterGetter<Array<GatewaySetterGetter>>> ? = null
+    private var gatewayLiveData: MutableLiveData<ServicesSetterGetter<GatewaySetterGetter>>? = null
+    private var deleteGatewayLiveData: MutableLiveData<ServicesSetterGetter<StatusSetterGetter>>? = null
 
     fun getAllGateways(
         context: Context

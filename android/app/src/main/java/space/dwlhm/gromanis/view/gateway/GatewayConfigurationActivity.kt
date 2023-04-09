@@ -95,7 +95,8 @@ class GatewayConfigurationActivity : AppCompatActivity(), OnItemSelectedListener
                 txtName.text = body.name
                 txtAddress.text = body.address
                 txtMaintainerId.text = body.maintainer.toString()
-                val date = ZonedDateTime.parse(body.createdAt).withZoneSameLocal(ZoneId.systemDefault()).toLocalDate()
+                val date = ZonedDateTime.parse(body.createdAt)
+                    .withZoneSameLocal(ZoneId.systemDefault()).toLocalDate()
                 txtCreatedAt.text = date.toString()
             }
         })
