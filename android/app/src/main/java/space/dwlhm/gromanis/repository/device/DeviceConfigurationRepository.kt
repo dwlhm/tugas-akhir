@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import space.dwlhm.gromanis.helper.HttpResponse
 import space.dwlhm.gromanis.model.ServicesSetterGetter
 import space.dwlhm.gromanis.model.StatusSetterGetter
+import space.dwlhm.gromanis.model.device.DeviceProfileSetterGetter
 import space.dwlhm.gromanis.model.device.DeviceSetterGetter
 import space.dwlhm.gromanis.preferences.Prefs
 import space.dwlhm.gromanis.retrofit.RetrofitClient
@@ -12,7 +13,7 @@ import space.dwlhm.gromanis.retrofit.RetrofitClient
 object DeviceConfigurationRepository {
 
     private val allDevicesSetterGetter = MutableLiveData<ServicesSetterGetter<Array<DeviceSetterGetter>>>()
-    private val deviceSetterGetter = MutableLiveData<ServicesSetterGetter<DeviceSetterGetter>>()
+    private val deviceSetterGetter = MutableLiveData<ServicesSetterGetter<DeviceProfileSetterGetter>>()
     private val deleteDeviceSetterGetter = MutableLiveData<ServicesSetterGetter<StatusSetterGetter>>()
 
     fun getAllDevicesApiCall(
@@ -34,7 +35,7 @@ object DeviceConfigurationRepository {
     fun getDeviceApiCall(
         context: Context,
         id: String
-    ) : MutableLiveData<ServicesSetterGetter<DeviceSetterGetter>>? {
+    ) : MutableLiveData<ServicesSetterGetter<DeviceProfileSetterGetter>>? {
 
         val prefs = Prefs(context)
         val loginInfo = prefs.loginInfoPref ?: return null

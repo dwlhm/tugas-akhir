@@ -9,7 +9,9 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import space.dwlhm.gromanis.model.ServicesSetterGetter
 import space.dwlhm.gromanis.model.StatusSetterGetter
+import space.dwlhm.gromanis.model.device.DeviceProfileSetterGetter
 import space.dwlhm.gromanis.model.device.DeviceSetterGetter
+import space.dwlhm.gromanis.model.device.DeviceValueSetterGetter
 import space.dwlhm.gromanis.model.device.RegisterDeviceBody
 import space.dwlhm.gromanis.model.gateway.RegisterGatewayBody
 
@@ -30,11 +32,17 @@ interface DeviceInterface {
     fun getDevice(
         @Header("authorization") authorization: String,
         @Path("id") id: String
-    ) : Call<ServicesSetterGetter<DeviceSetterGetter>>
+    ) : Call<ServicesSetterGetter<DeviceProfileSetterGetter>>
 
     @DELETE("/device/{id}")
     fun deleteDevice(
         @Header("authorization") authorization: String,
         @Path("id") id: String
     ) : Call<ServicesSetterGetter<StatusSetterGetter>>
+
+    @GET("/device/{id}/la")
+    fun getLatestDeviceValue(
+        @Header("authorization") authorization: String,
+        @Path("id") id: String
+    ) : Call<ServicesSetterGetter<DeviceValueSetterGetter>>
 }

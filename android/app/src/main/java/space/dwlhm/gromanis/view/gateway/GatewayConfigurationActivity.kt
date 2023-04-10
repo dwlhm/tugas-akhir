@@ -25,6 +25,7 @@ import space.dwlhm.gromanis.view.menu.MenuActivity
 import space.dwlhm.gromanis.viewmodel.gateway.GatewayConfigurationViewModel
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
 
 class GatewayConfigurationActivity : AppCompatActivity(), OnItemSelectedListener {
@@ -94,10 +95,11 @@ class GatewayConfigurationActivity : AppCompatActivity(), OnItemSelectedListener
                 txtId.text = body.id
                 txtName.text = body.name
                 txtAddress.text = body.address
-                txtMaintainerId.text = body.maintainer.toString()
+                txtMaintainerId.text = "${body.user.name}/${body.user.email}"
                 val date = ZonedDateTime.parse(body.createdAt)
-                    .withZoneSameLocal(ZoneId.systemDefault()).toLocalDate()
-                txtCreatedAt.text = date.toString()
+                    .withZoneSameInstant(ZoneId.systemDefault())
+                    .format(DateTimeFormatter.ofPattern("dd-MM-uuuu hh:mm a"))
+                txtCreatedAt.text = date
             }
         })
     }

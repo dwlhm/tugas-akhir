@@ -6,13 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import space.dwlhm.gromanis.model.ServicesSetterGetter
 import space.dwlhm.gromanis.model.StatusSetterGetter
+import space.dwlhm.gromanis.model.device.DeviceProfileSetterGetter
 import space.dwlhm.gromanis.model.device.DeviceSetterGetter
 import space.dwlhm.gromanis.repository.device.DeviceConfigurationRepository
 
 class DeviceConfigurationViewModel : ViewModel() {
 
     var allDevicesLiveData: MutableLiveData<ServicesSetterGetter<Array<DeviceSetterGetter>>>? = null
-    var deviceLiveData: MutableLiveData<ServicesSetterGetter<DeviceSetterGetter>>? = null
+    var deviceLiveData: MutableLiveData<ServicesSetterGetter<DeviceProfileSetterGetter>>? = null
     var deleteDeviceLiveData: MutableLiveData<ServicesSetterGetter<StatusSetterGetter>>? = null
 
     fun getAllDevices(
@@ -27,7 +28,7 @@ class DeviceConfigurationViewModel : ViewModel() {
     fun getDevice(
         context: Context,
         id: String
-    ) : LiveData<ServicesSetterGetter<DeviceSetterGetter>>? {
+    ) : LiveData<ServicesSetterGetter<DeviceProfileSetterGetter>>? {
         deviceLiveData = DeviceConfigurationRepository.getDeviceApiCall(
             context, id
         )

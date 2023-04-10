@@ -115,7 +115,7 @@ class DeviceConfigurationActivity : AppCompatActivity(), OnItemSelectedListener 
                 txtId.text = body.id
                 txtName.text = body.name
                 txtAddress.text = body.address
-                txtMaintainerId.text = body.maintainer.toString()
+                txtMaintainerId.text = "${body.user.name}/${body.user.email}"
                 val date = ZonedDateTime.parse(body.createdAt)
                     .withZoneSameInstant(ZoneId.systemDefault())
                     .format(DateTimeFormatter.ofPattern("dd-MM-uuuu hh:mm a"))
