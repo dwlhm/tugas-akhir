@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".view.menu.MenuActivity">
+
+    <LinearLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_bold"
+                android:gravity="center_vertical"
+                android:text="Menu"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans"
+                android:gravity="center_vertical"
+                android:text="Gromanis System"
+                android:textColor="@color/black"
+                android:textSize="11sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="back button"
+            android:paddingLeft="30dp"
+            android:src="@drawable/ic_back" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_general_pendek"
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:padding="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gromanis"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans_bold"
+                android:textSize="16sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Versi 1.0.0"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans"
+                android:textSize="12sp"
+                android:layout_marginLeft="5dp"
+                android:textStyle="italic"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Powered by:"
+            android:textColor="@color/white"
+            android:fontFamily="@font/noto_sans"
+            android:textSize="12sp"
+            android:layout_marginTop="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/logo_unsil"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Universitas Siliwangi"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans"
+                android:gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="© 2023"
+            android:textColor="@color/white"
+            android:fontFamily="@font/noto_sans"
+            android:textSize="12sp"
+            android:layout_marginTop="20dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Menu"
+        android:textColor="@color/black"
+        android:fontFamily="@font/noto_sans"
+        android:textSize="14sp"
+        android:layout_marginHorizontal="20dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.widget.Button
+                android:id="@+id/btn_to_home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_general_blue"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="5dp"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:text="Home"
+                android:gravity="start|center_vertical"/>
+
+            <android.widget.Button
+                android:id="@+id/btn_to_device"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_general_blue"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="5dp"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:text="Devices Configuration"
+                android:gravity="start|center_vertical"/>
+
+            <android.widget.Button
+                android:id="@+id/btn_to_gateway"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_general_blue"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="5dp"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:text="Gateways Configuration"
+                android:gravity="start|center_vertical"/>
+
+            <android.widget.Button
+                android:id="@+id/btn_to_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_general_blue"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="5dp"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:text="My Profile"
+                android:gravity="start|center_vertical"/>
+
+            <android.widget.Button
+                android:id="@+id/btn_to_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_general_blue"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="5dp"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:text="New Account"
+                android:drawableEnd="@drawable/ic_add"
+                android:gravity="start|center_vertical"/>
+
+            <android.widget.Button
+                android:id="@+id/btn_to_new_device"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_general_blue"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="5dp"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:text="New Device"
+                android:drawableEnd="@drawable/ic_add"
+                android:gravity="start|center_vertical"/>
+
+            <android.widget.Button
+                android:id="@+id/btn_to_new_gateway"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_general_blue"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="5dp"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:text="New Gateway"
+                android:drawableEnd="@drawable/ic_add"
+                android:gravity="start|center_vertical"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

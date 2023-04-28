@@ -134,7 +134,7 @@ void loop() {
 
   int sensor_anemometer = analogRead(A0);
   float anemometer = sensor_anemometer * (5.0 / 1023.0);
-  int level_anemometer = 6*anemometer;
+  float level_anemometer = 6*anemometer;
   header += "v";
   // value += level_anemometer 
   //       + ",";

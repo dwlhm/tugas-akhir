@@ -15,6 +15,6 @@ router.get("/:id", profil);
 router.post("/", Authorization, register);
 router.delete("/:id", Authorization, destroy);
 router.get("/", Authorization, get_all_gateway);
-router.get("/:id/mqtt", get_gateway_mqtt);
+router.get("/:id/mqtt", Authorization, get_gateway_mqtt);
 
 export default router;

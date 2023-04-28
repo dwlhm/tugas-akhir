@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".view.devices.DeviceConfigurationActivity">
+
+    <LinearLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_bold"
+                android:gravity="center_vertical"
+                android:text="Device Configuration"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans"
+                android:gravity="center_vertical"
+                android:text="Gromanis System"
+                android:textColor="@color/black"
+                android:textSize="11sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btn_menu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="menu toggle"
+            android:paddingLeft="30dp"
+            android:src="@drawable/ic_menu" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/no_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Tidak ada Device yang terdaftar di server!"
+        android:textAlignment="center"
+        android:fontFamily="@font/noto_sans"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_danger_action"
+        android:padding="15dp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/device_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="10dp">
+
+            <Spinner
+                android:id="@+id/device_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_dropdown"
+                android:padding="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_dropdown"
+                android:layout_margin="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Profil Device"
+            android:textColor="@color/black"
+            android:fontFamily="@font/noto_sans"
+            android:textSize="14sp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_general"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="20dp"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ID Device:"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"/>
+            <TextView
+                android:id="@+id/device_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textIsSelectable="true"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans_bold"
+                android:textSize="14sp"
+                android:layout_marginTop="3dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nama Device:"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"/>
+            <TextView
+                android:id="@+id/device_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans_bold"
+                android:textSize="14sp"
+                android:layout_marginTop="3dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alamat Device:"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"/>
+            <TextView
+                android:id="@+id/device_alamat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans_bold"
+                android:textSize="14sp"
+                android:layout_marginTop="3dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Maintainer Device:"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"/>
+            <TextView
+                android:id="@+id/device_maintainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans_bold"
+                android:textSize="14sp"
+                android:layout_marginTop="3dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Created At:"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"/>
+            <TextView
+                android:id="@+id/device_createdat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textColor="@color/white"
+                android:fontFamily="@font/noto_sans_bold"
+                android:textSize="14sp"
+                android:layout_marginTop="3dp"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Device"
+            android:textColor="@color/black"
+            android:fontFamily="@font/noto_sans"
+            android:textSize="14sp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="5dp"/>
+
+        <android.widget.Button
+            android:id="@+id/btn_delete_device"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/bg_danger_action"
+            android:drawableEnd="@drawable/ic_delete"
+            android:fontFamily="@font/noto_sans_bold"
+            android:text="Delete!"
+            android:gravity="start|center_vertical"
+            android:padding="15dp"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>
