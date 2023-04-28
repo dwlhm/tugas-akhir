@@ -65,7 +65,14 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 const profil = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const gateway_id: string = req.params["id"];
-    const gateway = await Gateway.findByPk(gateway_id);
+    const gateway = await Gateway.findByPk(gateway_id, {
+      include: {
+        model: User,
+        attributes: {
+          exclude: [ "id", "password" ]
+        }
+      }
+    });
 
     if (!gateway) throw new Error("404#gateway");
 
@@ -91,8 +98,7 @@ const destroy = async (req: Request, res: Response, next: NextFunction) => {
 
     destroying = await Gateway.destroy({
       where: {
-        id: gateway_id,
-        maintainer: req.user.id
+        id: gateway_id
       },
     });
 
@@ -120,11 +126,7 @@ const get_all_gateway = async (
   next: NextFunction
 ) => {
   try {
-    const gateways = await Gateway.findAll({
-      where: {
-        maintainer: req.user.id,
-      },
-    });
+    const gateways = await Gateway.findAll();
 
     res.status(200).json({
       code: 200,
@@ -143,29 +145,6 @@ const get_gateway_mqtt = async (
   next: NextFunction
 ) => {
   try {
-    let authorization = req.headers.authorization;
-    let [method, str] = authorization.split(" ");
-
-    if (method === "Basic") authorization = str;
-    else throw new Error("401#notbasic");
-
-    const extract_str = Buffer.from(authorization, "base64");
-    let [username, password] = extract_str.toString().split(":");
-
-    let user = await User.findOne({
-      where: {
-        email: username,
-      },
-    });
-
-    if (user == null) throw new Error("400#email");
-
-    const compare_password = bcrypt.compareSync(
-      password,
-      user.dataValues.password
-    );
-
-    if (!compare_password) throw new Error("400#password");
 
     const gateway_id = req.params["id"];
 

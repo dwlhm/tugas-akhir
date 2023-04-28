@@ -8,6 +8,12 @@
  //******************************
 #include <Arduino.h>
 
+#include "helpers/MurmurHash3.h"
+#include "helpers/IsSame.h"
+#include "struct/Fingerprint.h"
+#include "helpers/Substr.h"
+#include "helpers/Print32.h"
+
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
@@ -23,24 +29,36 @@ int PM01Value;
 int PM2_5Value;
 int PM10Value;
 
+const int metadata_size = 10;
+
+
+Fingerprint metadata[metadata_size];
+bool duplicate = false;
+int location = 0;
+int metadata_length = 0;
+
+unsigned long timeout;
+
 void setup() {
 
   Serial.begin(9600);  
-
-  dht.begin();
-  sensor_t sensor;
-  dht.temperature().getSensor(&sensor);
-  dht.humidity().getSensor(&sensor);
-
-  Serial1.begin(9600); 
   Serial2.begin(9600); 
+  Serial2.setTimeout(30000);
+
+  // Serial.println();
+  // dht.begin();
+  // sensor_t sensor;
+  // dht.temperature().getSensor(p&sensor);
+  // dht.humidity().getSensor(&sensor);
+
+  // Serial1.begin(9600); 
 
 }
 
 
 void loop() {
-
-  delay(5000);
+  
+  delay(1000);
   sensors_event_t event;
   String header = "";
   String value = "";
@@ -52,9 +70,13 @@ void loop() {
     Serial.print(F("Temperature:  "));
     Serial.print(event.temperature);
     header += "t";
-    value += String(event.temperature);
+    // value += String(event.temperature);
+    
     Serial.println(F(" °C"));
   }
+  float rand_temp = random(0,10000)/500.0;
+    value += String(rand_temp);
+    value += ",";
 
   dht.humidity().getEvent(&event);
   if (isnan(event.relative_humidity)) {
@@ -63,9 +85,13 @@ void loop() {
     Serial.print(F("Humidity: "));
     Serial.print(event.relative_humidity);
     header += "h";
-    value += String(event.relative_humidity);
+    // value += String(event.relative_humidity);
+    
     Serial.println(F(" %"));
   }
+  float rand_hum = random(0,10000)/1000.0;
+    value += String(rand_hum);
+    value += ",";
 
   if(Serial1.find(0x42)){    
     Serial1.readBytes(buf,LENG);
@@ -76,10 +102,21 @@ void loop() {
         PM2_5Value=transmitPM2_5(buf);
         PM10Value=transmitPM10(buf);
         header += "120";
-        value += String(PM01Value) 
-              + String(PM2_5Value) 
-              + String(PM10Value);
-
+        // value += String(PM01Value) 
+        //       + ","
+        //       + String(PM2_5Value)  
+        //       + ","
+        //       + String(PM10Value) 
+        //       + ",";
+        int rand_pm1 = random(0,50);
+        int rand_pm2 = random(0,50);
+        int rand_pm0 = random(0,50);
+        value += String(rand_pm1) 
+              + ","
+              + String(rand_pm2)  
+              + ","
+              + String(rand_pm0) 
+              + ",";
         Serial.print("PM1.0:  ");
         Serial.print(PM01Value);
         Serial.println(" ug/m3");
@@ -97,29 +134,103 @@ void loop() {
 
   int sensor_anemometer = analogRead(A0);
   float anemometer = sensor_anemometer * (5.0 / 1023.0);
-  int level_anemometer = 6*anemometer;
+  float level_anemometer = 6*anemometer;
   header += "v";
-  value += level_anemometer;
+  // value += level_anemometer 
+  //       + ",";
+  float rand_kecepatan = random(0,10000)/1000.0;
+  value += String(rand_kecepatan);
+  value += ",";
   Serial.print("Wind speed: ");
   Serial.print(level_anemometer);
   Serial.println(" level now");
 
   int sensor_arah_angin = analogRead(A1);
-  float arah_angin = sensor_arah_angin * ((5.0/1024.0)*360/5) ;
-  arah_angin = map(sensor_arah_angin, 0, 959, 0, 360);
+  float arah_angin = map(sensor_arah_angin, 0, 959, 0, 360);
   if (arah_angin == 360.00) {
     arah_angin = 0;
   }
   header += 'a';
-  value += String(arah_angin);
+  // value += String(arah_angin) 
+  //       + ",";
+  int rand_arah = random(0,360);
+  value += String(rand_arah);
+  value += ",";
   Serial.print("Arah Angin: ");
   Serial.print(arah_angin);
+  delay(1000);
   Serial.println(" °");
 
 
-  String msg = '{"id": "cefb0c56","data": "' + header + "|" + value; + '"}' 
-  Serial.println("[LoRa_msg] " + msg);
-  Serial2.println(msg);
-  
+  String msg = "{\"id\": \"bd950176\",\"data\": \"";
+  msg += header;
+  msg += "|";
+  msg += value;
+  msg += "\"}";
+
+  uint32_t seed = 1;
+
+char *key = msg.c_str();
+  const int length = strlen(key);
+
+  if (length > 0) {
+    if (length >> 5) {
+      for (int i = 0; i < length; i = i+32) { 
+        char *str = substr(key, i, i + 32);
+        if (i +32 > length) {
+          str = substr(key,i, length);
+        }
+        char *half_str = substr(str, 0, 16);
+
+        uint32_t fingerprint_1 = MurmurHash3_x86_32(half_str, (uint32_t)strlen(half_str), seed);
+        uint32_t fingerprint_2 = MurmurHash3_x86_32(str, (uint32_t)strlen(str), seed);
+          for (Fingerprint m : metadata) {
+            if (is_same(m.fingerprint_1, fingerprint_1)) {
+              location = m.location;
+              duplicate = true;
+              break;
+            }
+          }  
+
+          if (duplicate || metadata_length > metadata_size) {
+            Serial.print(location);
+            Serial.print(";");
+            Serial2.print(location);
+            Serial2.print(";");
+          } else {
+            metadata[metadata_length] = Fingerprint{
+              fingerprint_1,
+              fingerprint_2,
+              metadata_length
+            };
+            Serial.print(str);
+            Serial.print(";");
+            Serial2.print(str);
+            Serial2.print(";");
+            metadata_length++;
+          } 
+        
+      }
+      Serial2.println("");
+
+    }
+  }
+
+  timeout = micros();
+
+  while (timeout < 10000000) {
+    if (Serial2.available() > 0) {
+      String post = Serial2.readString();
+      Serial.print("dari lora: ");
+      int server_location = post.substring(3,6).toInt();
+      Serial.println(server_location);
+      break;
+    } else {
+      Serial.println("Coba lagi...");
+      Serial.println(timeout);
+    }
+    delay(100);
+  }
+   
   Serial.println();
 }

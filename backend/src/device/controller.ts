@@ -1,5 +1,7 @@
 import { Device } from "database/models/device";
 import { Device_Value } from "database/models/Device_Value";
+import { Latest_Device_Value } from "database/models/Latest_Device_Value";
+import { User } from "database/models/user";
 import { Request, Response, NextFunction } from "express";
 import crypto from "node:crypto";
 
@@ -26,6 +28,11 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
       maintainer: req.user.id,
       id: device_id,
     });
+    const latest_table = await Latest_Device_Value.create({
+      value: "",
+      device_id: device_id,
+      gateway_id: req.body.gateway_id
+    })
 
     return res.status(200).json({
       code: 200,
@@ -60,7 +67,14 @@ const profil = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id: number = req.params["id"] as unknown as number;
 
-    const device = await Device.findByPk(device_id);
+    const device = await Device.findByPk(device_id, {
+      include: {
+        model: User,
+        attributes: {
+          exclude: [ "id", "password"]
+        }
+      }
+    });
 
     if (!device) throw new Error("404#device");
 
@@ -112,11 +126,7 @@ const get_all_devices = async (
   next: NextFunction
 ) => {
   try {
-    const devices = await Device.findAll({
-      where: {
-        maintainer: req.user.id,
-      },
-    });
+    const devices = await Device.findAll();
 
     res.status(200).json({
       code: 200,
@@ -162,14 +172,10 @@ const get_latest_value = async (
 ) => {
   try {
     const device_id = req.params["id"];
-    const value = await Device_Value.findOne({
+    const value = await Latest_Device_Value.findOne({
       where: {
         device_id: device_id,
-      },
-      order: [["createdAt", "DESC"]],
-      attributes: {
-        exclude: ["id", "updatedAt"],
-      },
+      }
     });
 
     if (!value) throw new Error("404#devicevalue");
@@ -191,5 +197,5 @@ export {
   destroy,
   get_all_devices,
   get_values,
-  get_latest_value,
+  get_latest_value
 };

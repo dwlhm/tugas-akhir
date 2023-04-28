@@ -1,0 +1,114 @@
+Lokasi:
+-7.3743110, 108.2546690
+
+~ is 📦 v1.0.0 via  v19.4.0 via 🐍 v3.10.9 took 2m10s 
+❯ pio device monitor -f time
+--- Terminal on /dev/ttyACM0 | 9600 8-N-1
+--- Available filters and text transformations: colorize, debug, default, direct, hexlify, log2file, nocontrol, printable, send_on_enter, time
+--- More details at https://bit.ly/pio-monitor-filters
+--- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+06:41:50.967 > ": "cefb0c56","data": "va|8109.00"}
+06:41:50.967 > 
+06:41:50.967 > ing PM1.0, PM2.5, PM1 0!
+06:41:50.967 > Wind speed: 8 level now
+06:41:50.967 > Arah Angin: 109.00 °
+06:41:50.967 > [LoRa_msg] {"id": "cefb0c56","data": "va|8109.00"}
+06:41:50.967 > 
+06:41:56.916 > Error reading temperature
+06:41:56.945 > Error reading humidity!
+06:41:57.916 > Error reading PM1.0, PM2.5, PM1 0!
+06:41:57.953 > Wind speed: 14 level now
+06:41:57.981 > Arah Angin: 162.00 °
+06:41:58.006 > [LoRa_msg] {"id": "cefb0c56","data": "va|14162.00"}
+06:41:58.059 > 
+06:42:03.039 > Error reading temperature
+06:42:03.064 > Error reading humidity!
+06:42:04.039 > Error reading PM1.0, PM2.5, PM1 0!
+06:42:04.076 > Wind speed: 8 level now
+06:42:04.101 > Arah Angin: 110.00 °
+06:42:04.125 > [LoRa_msg] {"id": "cefb0c56","data": "va|8110.00"}
+06:42:04.178 > 
+06:42:09.154 > Error reading temperature
+06:42:09.183 > Error reading humidity!
+06:42:10.158 > Error reading PM1.0, PM2.5, PM1 0!
+06:42:10.195 > Wind speed: 8 level now
+06:42:10.219 > Arah Angin: 110.00 °
+06:42:10.244 > [LoRa_msg] {"id": "cefb0c56","data": "va|8110.00"}
+06:42:10.298 > 
+06:42:15.278 > Error reading temperature
+06:42:15.302 > Error reading humidity!
+06:42:16.277 > Error reading PM1.0, PM2.5, PM1 0!
+06:42:16.314 > Wind speed: 8 level now
+06:42:16.339 > Arah Angin: 109.00 °
+06:42:16.363 > [LoRa_msg] {"id": "cefb0c56","data": "va|8109.00"}
+06:42:16.416 > 
+06:42:21.393 > Error reading temperature
+06:42:21.421 > Error reading humidity!
+06:42:22.396 > Error reading PM1.0, PM2.5, PM1 0!
+06:42:22.433 > Wind speed: 8 level now
+06:42:22.458 > Arah Angin: 109.00 °
+06:42:22.482 > [LoRa_msg] {"id": "cefb0c56","data": "va|8109.00"}
+06:42:22.535 > 
+06:42:27.516 > Error reading temperature
+06:42:27.541 > Error reading humidity!
+06:42:28.515 > Error reading PM1.0, PM2.5, PM1 0!
+06:42:28.552 > Wind speed: 8 level now
+06:42:28.577 > Arah Angin: 109.00 °
+06:42:28.601 > [LoRa_msg] {"id": "cefb0c56","data": "va|8109.00"}
+06:42:28.654 > 
+06:42:33.631 > Error reading temperature
+06:42:33.660 > Error reading humidity!
+06:42:34.634 > Error reading PM1.0, PM2.5, PM1 0!
+06:42:34.671 > Wind speed: 8 level now
+06:42:34.696 > Arah Angin: 110.00 °
+06:42:34.720 > [LoRa_msg] {"id": "cefb0c56","data": "va|8110.00"}
+06:42:34.774 > 
+06:42:39.754 > Error reading temperature
+06:42:39.779 > Error reading humidity!
+06:42:40.753 > Error reading PM1.0, PM2.5, PM1 0!
+06:42:40.790 > Wind speed: 8 level now
+06:42:40.815 > Arah Angin: 110.00 °
+06:42:40.840 > [LoRa_msg] {"id": "cefb0c56","data": "va|8110.00"}
+06:42:40.893 > 
+06:42:45.869 > Error reading temperature
+06:42:45.898 > Error reading humidity!
+06:42:46.873 > Error reading PM1.0, PM2.5, PM1 0!
+06:42:46.910 > Wind speed: 8 level now
+06:42:46.934 > Arah Angin: 110.00 °
+06:42:46.959 > [LoRa_msg] {"id": "cefb0c56","data": "va|8110.00"}
+06:42:47.012 > 
+06:42:51.988 > Error reading temperature
+06:42:52.017 > Error reading humidity!
+06:42:52.992 > Error reading PM1.0, PM2.5, PM1 0!
+06:42:53.029 > Wind speed: 8 level now
+06:42:53.053 > Arah Angin: 110.00 °
+06:42:53.078 > [LoRa_msg] {"id": "cefb0c56","data": "va|8110.00"}
+06:42:53.131 > 
+06:42:58.107 > Error reading temperature
+06:42:58.136 > Error reading humidity!
+06:42:59.111 > Error reading PM1.0, PM2.5, PM1 0!
+06:42:59.148 > Wind speed: 8 level now
+06:42:59.172 > Arah Angin: 111.00 °
+06:42:59.197 > [LoRa_msg] {"id": "cefb0c56","data": "va|8111.00"}
+06:42:59.250 > 
+06:43:04.226 > Error reading temperature
+06:43:04.255 > Error reading humidity!
+06:43:05.230 > Error reading PM1.0, PM2.5, PM1 0!
+06:43:05.267 > Wind speed: 8 level now
+06:43:05.291 > Arah Angin: 110.00 °
+06:43:05.316 > [LoRa_msg] {"id": "cefb0c56","data": "va|8110.00"}
+06:43:05.369 > 
+06:43:10.349 > Error reading temperature
+06:43:10.374 > Error reading humidity!
+06:43:11.349 > Error reading PM1.0, PM2.5, PM1 0!
+06:43:11.386 > Wind speed: 8 level now
+06:43:11.410 > Arah Angin: 110.00 °
+06:43:11.435 > [LoRa_msg] {"id": "cefb0c56","data": "va|8110.00"}
+06:43:11.488 > 
+06:43:16.469 > Error reading temperature
+06:43:16.497 > Error reading humidity!
+06:43:17.468 > Error reading PM1.0, PM2.5, PM1 0!
+06:43:17.505 > Wind speed: 8 level now
+06:43:17.533 > Arah Angin: 110.00 °
+06:43:17.554 > [LoRa_msg] {"id": "cefb0c56","data": "va|8110.00"}
+06:43:17.611 > 
