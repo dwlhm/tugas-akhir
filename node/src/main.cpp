@@ -218,7 +218,7 @@ char *key = msg.c_str();
 
   timeout = micros();
 
-  while (timeout < 10000000) {
+  while (micros() - timeout < 10000000) {
     if (Serial2.available() > 0) {
       String post = Serial2.readString();
       Serial.print("dari lora: ");
@@ -231,6 +231,7 @@ char *key = msg.c_str();
     }
     delay(100);
   }
+  delay(2000);
    
   Serial.println();
 }
