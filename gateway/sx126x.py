@@ -3,11 +3,17 @@
 import RPi.GPIO as GPIO
 import serial
 import time
+from datetime import datetime
+import os
+import sys
+from paho.mqtt import client as mqtt_client
+import pytz
+import json
 import pytz
 import json
 import time
 
-topic = 'node/52199ec1/prod/data'
+topic = 'node/c0c854f5/prod/data'
 
 class sx126x:
 
@@ -262,37 +268,48 @@ class sx126x:
             r_buff = self.ser.read(self.ser.inWaiting())
             msg = r_buff[:-1].decode('utf-8').rstrip()
 
-            now = datetime.now()
-            f = open.("/home/pi/tugas-akhir/gateway/data/data." + str(now.date()) + ".csv", "a")
-            f.write(str(now.isoformat()) + "," + msg + "\n")
-            f.close()
-
-            # print("receive message from node address with frequence\033[1;32m %d,%d.125MHz\033[0m"%((r_buff[0]<<8)+r_buff[1],r_buff[2]+self.start_freq),end='\r\n',flush = True)
-            # print("message is "+str(r_buff[3:-1]),end='\r\n')
-            
-            # # print the rssi
-            # if self.rssi:
-            #     # print('\x1b[3A',end='\r')
-            #     print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
-            #     self.get_channel_rssi()
-            # else:
-            #     pass
-            #     #print('\x1b[2A',end='\r')
-
-            #data_node = json.loads('{"id": "cefb0c56","data": "' + msg + '"}')
-            data_node = json.loads(msg)
-            data = {
-                "gateway_timestamp": now.isoformat(),
-                "device": data_node
-            }
-            msg = json.dumps(data)
             print(msg)
-            result = client.publish(topic, msg)
+
+            
+            now = datetime.now()
+            data_node = json.loads(msg)
+            print(data_node)
+            data = {
+               "gateway_timestamp": now.isoformat(),
+               "device": data_node
+            }
+            msg_publish = json.dumps(data)
+	    
+            data_biner = ""
+            for byte in r_buff[:-1]:
+                data_biner += str(bin(byte)) + " "
+            print(data_biner + "\n")
+            result = client.publish(topic, msg_publish)
             status = result[0]
+            #if status == 0:
+            #    print("successfully sended")
+            #else:
+            #    print("failed send msg")
+
+	    # print the rssi
+            if self.rssi:
+                #print('\x1b[3A',end='\r')
+                print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
+                self.get_channel_rssi()
+            else:
+                pass
+                #print('\x1b[2A',end='\r')1
+
+            f = open("/home/pi/tugas-akhir/gateway/data/data." + str(now.date()) + ".csv", "a")
+            f.write(str(now.isoformat()) + "," + msg + ",-" + str(256-r_buff[-1:][0]) + "," + data_biner + "\n")
+            f.close()
             if status == 0:
                 print("successfully sended")
+                return True
             else:
                 print("failed send msg")
+                return False
+
 
     def get_channel_rssi(self):
         GPIO.output(self.M1,GPIO.LOW)
