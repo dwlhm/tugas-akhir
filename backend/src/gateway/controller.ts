@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import { Gateway_Mqtt } from "database/models/gateway-mqtt";
 import { Request, Response, NextFunction } from "express";
 import crypto from "node:crypto";
+import { Latest_Device_Value } from "database/models/Latest_Device_Value";
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {

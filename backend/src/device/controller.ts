@@ -29,9 +29,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
       id: device_id,
     });
     const latest_table = await Latest_Device_Value.create({
-      value: "",
-      device_id: device_id,
-      gateway_id: req.body.gateway_id
+      device_id: device_id
     })
 
     return res.status(200).json({

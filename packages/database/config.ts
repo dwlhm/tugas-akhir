@@ -7,6 +7,8 @@ import { User } from "./models/user";
 import { Gateway } from "./models/gateway";
 import { Gateway_Mqtt } from "./models/gateway-mqtt";
 import { User_Session } from "./models/user_session";
+import { Metadata } from "./models/Metadata";
+import { Duplication_Order } from "./models/Duplication_Order";
 
 dotenv.config();
 
@@ -19,7 +21,9 @@ const connection = new Sequelize(db_name, db_user, db_password, {
   host: db_host,
   dialect: "mariadb",
   models: [
-    User, Device, Device_Value, Gateway_Mqtt, Gateway, User_Session, Latest_Device_Value
+    User, Device, Device_Value, Gateway_Mqtt, Gateway, 
+    User_Session, Latest_Device_Value, Metadata,
+    Duplication_Order
   ],
 });
 

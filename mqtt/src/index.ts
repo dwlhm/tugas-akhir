@@ -5,6 +5,7 @@ import { Authenticate } from "./authenticate";
 import Database from "database";
 import { Authorize_Publish, Authorize_Subscribe } from "./authorize";
 import { Publish_Packet } from "./publish";
+import { Client } from "aedes:client";
 
 dotenv.config();
 
@@ -22,4 +23,4 @@ server.listen(PORT, () => {
 aedes.authenticate = Authenticate;
 aedes.authorizeSubscribe = Authorize_Subscribe;
 aedes.authorizePublish = Authorize_Publish;
-aedes.on("publish", Publish_Packet);
+aedes.on("publish", (packet: any, client: Client) => Publish_Packet(packet, client, aedes));
