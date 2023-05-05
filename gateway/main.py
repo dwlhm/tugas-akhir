@@ -39,6 +39,19 @@ def connect_mqtt():
     return client
 
 def run():
+
+    # check internet connection
+
+    # establish mqtt connection
+
+    # do while True
+
+        # get data from lora module 
+        # and process it
+
+    # stop the mqtt
+
+    # do error handling
     
     while True:
         if is_cnx_active(1000) is True:
@@ -55,23 +68,26 @@ def run():
     while True:
         try: 
             data_node = node.receive(client)
+            print("[data_node] ")
+            print(data_node)
+            print("\n")
 
-            if (data_note):
-                rand_val = "5,4,3"
-                 offset_frequence = int(get_t[1])-(850 if int(get_t[1])>850 else 410)     
-                 #     
-                 # the sending message format     
-                 #     #         receiving node              receiving node                   receiving node           own high 8bit           own low 8bit                 own      #         high 8bit address           low 8bit address                    frequency                address                 address                  frequency             message payload     
-                 data = bytes([int(get_t[0])>>8]) + bytes([int(get_t[0])&0xff]) + bytes([offset_frequence]) + bytes([node.addr>>8]) + bytes([node.addr&0xff]) + bytes([node.offset_freq]) + get_t[2].encode()     
-                 node.send(data) 
+            # if (data_note):
+            #     rand_val = "5,4,3"
+            #      offset_frequence = int(get_t[1])-(850 if int(get_t[1])>850 else 410)     
+            #      #     
+            #      # the sending message format     
+            #      #     #         receiving node              receiving node                   receiving node           own high 8bit           own low 8bit                 own      #         high 8bit address           low 8bit address                    frequency                address                 address                  frequency             message payload     
+            #      data = bytes([int(get_t[0])>>8]) + bytes([int(get_t[0])&0xff]) + bytes([offset_frequence]) + bytes([node.addr>>8]) + bytes([node.addr&0xff]) + bytes([node.offset_freq]) + get_t[2].encode()     
+            #      node.send(data) 
 
-            # declaring an integer value
-            integer_val = 5
+            # # declaring an integer value
+            # integer_val = 5
               
-            # converting int to bytes with length 
-            # of the array as 2 and byter order as big
-            bytes_val = integer_val.to_bytes(2, 'big')
-            node.send(bytes_val)
+            # # converting int to bytes with length 
+            # # of the array as 2 and byter order as big
+            # bytes_val = integer_val.to_bytes(2, 'big')
+            # node.send(bytes_val)
         except Exception as e:
             print("Error: ", e)
             

@@ -264,51 +264,69 @@ class sx126x:
 
     def receive(self, client):
         if self.ser.inWaiting() > 0:
-            time.sleep(0.5)
-            r_buff = self.ser.read(self.ser.inWaiting())
-            msg = r_buff[:-1].decode('utf-8').rstrip()
 
-            print(msg)
+            # get message
+            time.sleep(0.5)
+            message_raw = input()
+            print("input: ", message_raw, "\n")
+
+            # decode message from lora module
+
+            # send message to server
+
+            # get server response
+
+            #
+
+            # forward the server response as return value 
+
+
+            return None
+            # time.sleep(0.5)
+            # r_buff = self.ser.read(self.ser.inWaiting())
+            # msg = r_buff[:-1].decode('utf-8').rstrip()
+
+            # print(msg)
 
             
-            now = datetime.now()
-            data_node = json.loads(msg)
-            print(data_node)
-            data = {
-               "gateway_timestamp": now.isoformat(),
-               "device": data_node
-            }
-            msg_publish = json.dumps(data)
+            # now = datetime.now()
+            # data_node = json.loads(msg)
+            # print(data_node)
+            # data = {
+            #    "gateway_timestamp": now.isoformat(),
+            #    "device": data_node
+            # }
+            # msg_publish = json.dumps(data)
 	    
-            data_biner = ""
-            for byte in r_buff[:-1]:
-                data_biner += str(bin(byte)) + " "
-            print(data_biner + "\n")
-            result = client.publish(topic, msg_publish)
-            status = result[0]
+            # data_biner = ""
+            # for byte in r_buff[:-1]:
+            #     data_biner += str(bin(byte)) + " "
+            # print(data_biner + "\n")
+            # result = client.publish(topic, msg_publish)
+            # status = result[0]
             #if status == 0:
             #    print("successfully sended")
             #else:
             #    print("failed send msg")
 
-	    # print the rssi
-            if self.rssi:
-                #print('\x1b[3A',end='\r')
-                print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
-                self.get_channel_rssi()
-            else:
-                pass
-                #print('\x1b[2A',end='\r')1
+	    # # print the rssi
+        #     if self.rssi:
+        #         #print('\x1b[3A',end='\r')
+        #         print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
+        #         self.get_channel_rssi()
+        #     else:
+        #         pass
+        #         #print('\x1b[2A',end='\r')1
 
-            f = open("/home/pi/tugas-akhir/gateway/data/data." + str(now.date()) + ".csv", "a")
-            f.write(str(now.isoformat()) + "," + msg + ",-" + str(256-r_buff[-1:][0]) + "," + data_biner + "\n")
-            f.close()
-            if status == 0:
-                print("successfully sended")
-                return True
-            else:
-                print("failed send msg")
-                return False
+        #     f = open("/home/pi/tugas-akhir/gateway/data/data." + str(now.date()) + ".csv", "a")
+        #     f.write(str(now.isoformat()) + "," + msg + ",-" + str(256-r_buff[-1:][0]) + "," + data_biner + "\n")
+        #     f.close()
+        #     if status == 0:
+        #         print("successfully sended")
+        #         return True
+        #     else:
+        #         print("failed send msg")
+        #         return False
 
 
     def get_channel_rssi(self):
