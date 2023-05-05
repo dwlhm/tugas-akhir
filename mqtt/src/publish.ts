@@ -12,11 +12,13 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
 
     // get the message
     const message = packet.payload.toString("ascii");
-    // console.log('[RCV MSG] ', message)
+    console.log('[RCV MSG] ', message)
 
     // concat it
     const json_str = message.replace(/;/g, "");
     // console.log('[JSON MSG] ', json_str); 
+
+
 
     // do for loop
     let pk_order = ""
@@ -53,8 +55,9 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
     // get the device id
     const device_id = json_parse.id;
 
+    if (!device_id) throw new Error("device id not recognized")
     // save json_parse var to latest_device_value
-    Latest_Device_Value.update({
+    await Latest_Device_Value.update({
       value: complete_message,
       updatedAt: new Date()
     }, {
@@ -64,7 +67,7 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
     });
 
     // store the pk_order to Duplication_Orders
-    Duplication_Order.create({
+    await Duplication_Order.create({
       value: pk_order,
       device_id: device_id
     })
@@ -77,6 +80,15 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
         dup: false,
         topic: `node/${client.id}/prod/action`,
         payload: Buffer.from(new_pk),
+        retain: false
+    }, () => {})
+    else aedes.publish({
+      cmd: 'publish',
+        messageId: 42,
+        qos: 2,
+        dup: false,
+        topic: `node/${client.id}/prod/action`,
+        payload: Buffer.from("0"),
         retain: false
     }, () => {})
 

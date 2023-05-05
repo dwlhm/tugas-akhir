@@ -2,6 +2,7 @@ from paho.mqtt import client as mqtt_client
 import lora
 import requests
 import time
+from queue import Queue
 
 # broker = '103.150.197.37'
 broker = '192.168.0.113'
@@ -12,7 +13,7 @@ client_id = '0718455b'
 username = '7e60b970'
 password = 'ce337860917213c7'
 
-mqtt_message = None
+q = Queue()
 
 node = lora.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=0,power=22,rssi=True,air_speed=2400,relay=False)
 
@@ -34,8 +35,7 @@ def connect_mqtt():
         print("subscribed to topic_action with qos: ", granted_qos[0])
 
     def on_message(client, userdata, message):
-        mqtt_message = message.payload
-        print("a message arrived: ", message)
+        q.put(message.payload.decode('utf-8').rstrip())
             
     client = mqtt_client.Client(client_id)
     client.username_pw_set(username,password)
@@ -78,7 +78,7 @@ def run():
         # get callback message from mqtt broker
         if (data_node):
             print("message forwarded to server")
-            print("mqtt_message: ", mqtt_message)
+            print("mqtt_message: ", q.get())
 
         # send the callback message to node
 
