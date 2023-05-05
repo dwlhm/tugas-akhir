@@ -54,8 +54,11 @@ def connect_mqtt():
 
 def run():
 
+    mqtt_message = None
+
     # check internet connection
     while True:
+        try:
         if is_cnx_active(1000) is True:
             # Do somthing
             print("The internet connection is active")
@@ -70,55 +73,29 @@ def run():
 
     # do while True
     while True:
-        # get data from lora module 
-        # and publish it
-        data_node = node.receive(client, topic_data)
-        print("data node: ", data_node)
+        try:
+            # get data from lora module 
+            # and publish it
+            data_node = node.receive(client, topic_data)
+            print("data node: ", data_node)
 
-        # get callback message from mqtt broker
-        if (data_node):
-            print("message forwarded to server")
-            print("mqtt_message: ", q.get())
+            if (data_node):
+                # get callback message from mqtt broker
+                mqtt_message = q.get()
+                print("message forwarded to server")
+                print("mqtt_message: ", mqtt_message)
 
-        # send the callback message to node
+                # send the callback message to node
+                data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([255]) + bytes([255]) + bytes([12]) + mqtt_message.encode()
+                node.send(data)
+
+        # do error handling
+        except Exception as e:
+            print("Error: ", e)
 
     # stop the mqtt
     client.loop_stop()
-    client.disconnect() # disconnect
-
-    # do error handling
-    
-        
-    
-        
-    # while True:
-    #     try: 
-    #         data_node = node.receive(client)
-    #         print("[data_node] ")
-    #         print(data_node)
-    #         print("\n")
-
-    #         # if (data_note):
-    #         #     rand_val = "5,4,3"
-    #         #      offset_frequence = int(get_t[1])-(850 if int(get_t[1])>850 else 410)     
-    #         #      #     
-    #         #      # the sending message format     
-    #         #      #     #         receiving node              receiving node                   receiving node           own high 8bit           own low 8bit                 own      #         high 8bit address           low 8bit address                    frequency                address                 address                  frequency             message payload     
-    #         #      data = bytes([int(get_t[0])>>8]) + bytes([int(get_t[0])&0xff]) + bytes([offset_frequence]) + bytes([node.addr>>8]) + bytes([node.addr&0xff]) + bytes([node.offset_freq]) + get_t[2].encode()     
-    #         #      node.send(data) 
-
-    #         # # declaring an integer value
-    #         # integer_val = 5
-              
-    #         # # converting int to bytes with length 
-    #         # # of the array as 2 and byter order as big
-    #         # bytes_val = integer_val.to_bytes(2, 'big')
-    #         # node.send(bytes_val)
-    #     except Exception as e:
-    #         print("Error: ", e)
-            
-    # client.loop_stop()
-    # client.disconnect() # disconnect
+    client.disconnect() # disconnect   
 
 if __name__ == '__main__':
     run()
