@@ -85,7 +85,8 @@ def run():
                 print("mqtt_message: ", mqtt_message)
 
                 # send the callback message to node
-                data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([255]) + bytes([255]) + bytes([12]) + mqtt_message.encode()
+                # data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([255]) + bytes([255]) + bytes([12]) + mqtt_message.encode()
+                data = bytes([int(0)>>8]) + bytes([int(0)&0xff]) + bytes(18) + bytes([node.addr>>8]) + bytes([node.addr&0xff]) + bytes([node.offset_freq]) + mqtt_message.encode()
                 node.send(data)
 
         # do error handling
