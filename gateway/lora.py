@@ -76,7 +76,7 @@ class sx126x:
 
     def receive(self, client, topic_data):
         # if self.ser.inWaiting() > 0:
-        if True:
+        if self.ser.inWaiting() > 0:
 
             # get message
             time.sleep(0.5)
@@ -93,6 +93,14 @@ class sx126x:
             print("pub to mqtt status: ", pub_to_mqtt)
 
             if pub_to_mqtt[0] == 0:
+                mqtt_message = q.get()
+                print("message forwarded to server")
+                print("mqtt_message: ", mqtt_message)
+
+                # send the callback message to node
+                # data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([255]) + bytes([255]) + bytes([12]) + mqtt_message.encode()
+                data = bytes([int(0)>>8]) + bytes([int(0)&0xff]) + bytes(18) + bytes([self.addr>>8]) + bytes([self.addr&0xff]) + bytes([self.offset_freq]) + mqtt_message.encode()
+                self.send(data)
                 return True
             else:
                 return False
