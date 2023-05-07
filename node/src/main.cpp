@@ -31,6 +31,7 @@ int PM10Value;
 
 const int metadata_size = 10;
 
+    String readString;
 
 Fingerprint metadata[metadata_size];
 bool duplicate = false;
@@ -39,26 +40,29 @@ int metadata_length = 0;
 
 unsigned long timeout;
 
+String pointer_data[3];
+int pointer_position = 0;
+bool pointer_received = false;
+
 void setup() {
 
   Serial.begin(9600);  
   Serial2.begin(9600); 
   Serial2.setTimeout(30000);
 
-  // Serial.println();
-  // dht.begin();
-  // sensor_t sensor;
-  // dht.temperature().getSensor(p&sensor);
-  // dht.humidity().getSensor(&sensor);
+  Serial.println();
+  dht.begin();
+  sensor_t sensor;
+  dht.temperature().getSensor(p&sensor);
+  dht.humidity().getSensor(&sensor);
 
-  // Serial1.begin(9600); 
+  Serial1.begin(9600); 
 
 }
 
 
 void loop() {
   
-  delay(1000);
   sensors_event_t event;
   String header = "";
   String value = "";
@@ -162,7 +166,7 @@ void loop() {
   Serial.println(" °");
 
 
-  String msg = "{\"id\": \"bd950176\",\"data\": \"";
+  String msg = "{\"id\": \"5d5bb1a0\",\"data\": \"";
   msg += header;
   msg += "|";
   msg += value;
@@ -219,16 +223,36 @@ char *key = msg.c_str();
   timeout = micros();
 
   while (micros() - timeout < 10000000) {
-    if (Serial2.available() > 0) {
-      String post = Serial2.readString();
-      Serial.print("dari lora: ");
-      int server_location = post.substring(3,6).toInt();
-      Serial.println(server_location);
-      break;
-    } else {
-      Serial.println("Coba lagi...");
-      Serial.println(timeout);
+    Serial2.flush();
+    while (Serial2.available()) {
+      delay(2);  //delay to allow byte to arrive in input buffer
+      char c = Serial2.read();
+
+      if (c == ';') pointer_received = true;
+
+      if (
+        c != '\u0012' 
+        && c != ',' 
+        && c != '\0' 
+        && c != ';' 
+        && !pointer_received
+        ) pointer_data[pointer_position] += c;
+        
+      if (c == ',') pointer_position++;
+
     }
+    if (pointer_received) {
+      Serial.println("lora: ");
+      Serial.print("1. ");Serial.println(pointer_data[0]);
+      Serial.print("2. ");Serial.println(pointer_data[1]);
+      Serial.print("3. ");Serial.println(pointer_data[2]);
+
+      pointer_data[0] = "";
+      pointer_data[1] = "";
+      pointer_data[2] = "";
+      pointer_position = 0;
+      pointer_received = false;
+    } 
     delay(100);
   }
   delay(2000);

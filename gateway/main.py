@@ -76,7 +76,6 @@ def run():
             # get data from lora module 
             # and publish it
             data_node = node.receive(client, topic_data)
-            print("data node: ", data_node)
 
         # do error handling
         except Exception as e:
