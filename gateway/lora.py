@@ -74,7 +74,7 @@ class sx126x:
         self.ser.flushInput()
         self.set(freq,addr,power,rssi,air_speed,net_id,buffer_size,crypt,relay,lbt,wor)
 
-    def receive(self, client, topic_data):
+    def receive(self, client, topic_data, q):
         # if self.ser.inWaiting() > 0:
         if self.ser.inWaiting() > 0:
 
@@ -83,10 +83,7 @@ class sx126x:
             # message_raw = input()
             # print("input: ", message_raw, "\n")
             r_buff = self.ser.read(self.ser.inWaiting())
-            message_raw = r_buff[:-1]
-
-            # decode message from lora module
-            message = message_raw.decode('utf-8').rstrip()
+            message = r_buff[:-1].decode('utf-8').rstrip()
 
             # send message to server
             pub_to_mqtt = client.publish(topic_data, message)
@@ -99,13 +96,12 @@ class sx126x:
 
                 # send the callback message to node
                 # data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([255]) + bytes([255]) + bytes([12]) + mqtt_message.encode()
-                data = bytes([int(0)>>8]) + bytes([int(0)&0xff]) + bytes(18) + bytes([self.addr>>8]) + bytes([self.addr&0xff]) + bytes([self.offset_freq]) + mqtt_message.encode()
+                # data = bytes([int(0)>>8]) + bytes([int(0)&0xff]) + bytes(18) + bytes([self.addr>>8]) + bytes([self.addr&0xff]) + bytes([self.offset_freq]) + mqtt_message.encode()
+                data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([self.addr>>8]) + bytes([self.addr&0xff]) +  bytes([self.offset_freq]) + bytes(mqtt_message, "utf-8")
                 self.send(data)
-                return True
-            else:
-                return False
 
     def send(self,data):
+        print("Sending data")
         GPIO.output(self.M1,GPIO.LOW)
         GPIO.output(self.M0,GPIO.LOW)
         time.sleep(0.1)

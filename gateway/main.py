@@ -5,7 +5,8 @@ import time
 from queue import Queue
 
 # broker = '103.150.197.37'
-broker = '192.168.0.113'
+# broker = '192.168.0.113'
+broker = '192.168.35.163'
 port = 1883
 topic_data = 'node/0718455b/prod/data'
 topic_action = 'node/0718455b/prod/action'
@@ -75,8 +76,7 @@ def run():
         try:
             # get data from lora module 
             # and publish it
-            data_node = node.receive(client, topic_data)
-            print("data node: ", data_node)
+            node.receive(client, topic_data, q)
 
         # do error handling
         except Exception as e:
