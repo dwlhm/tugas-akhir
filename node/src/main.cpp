@@ -29,9 +29,8 @@ int PM01Value;
 int PM2_5Value;
 int PM10Value;
 
-const int metadata_size = 10;
-
-    String readString;
+const int metadata_size = 100;
+int new_metadata = 0;
 
 Fingerprint metadata[metadata_size];
 bool duplicate = false;
@@ -53,7 +52,7 @@ void setup() {
   Serial.println();
   dht.begin();
   sensor_t sensor;
-  dht.temperature().getSensor(p&sensor);
+  dht.temperature().getSensor(&sensor);
   dht.humidity().getSensor(&sensor);
 
   Serial1.begin(9600); 
@@ -71,8 +70,8 @@ void loop() {
   if (isnan(event.temperature)) {
     Serial.println(F("Error reading temperature"));
   } else {
-    Serial.print(F("Temperature:  "));
-    Serial.print(event.temperature);
+    // Serial.print(F("Temperature:  "));
+    // Serial.print(event.temperature);
     header += "t";
     // value += String(event.temperature);
     
@@ -86,8 +85,8 @@ void loop() {
   if (isnan(event.relative_humidity)) {
     Serial.println(F("Error reading humidity!"));
   } else {
-    Serial.print(F("Humidity: "));
-    Serial.print(event.relative_humidity);
+    // Serial.print(F("Humidity: "));
+    // Serial.print(event.relative_humidity);
     header += "h";
     // value += String(event.relative_humidity);
     
@@ -121,15 +120,15 @@ void loop() {
               + ","
               + String(rand_pm0) 
               + ",";
-        Serial.print("PM1.0:  ");
-        Serial.print(PM01Value);
-        Serial.println(" ug/m3");
-        Serial.print("PM2.5:  ");
-        Serial.print(PM2_5Value);
-        Serial.println(" ug/m3");
-        Serial.print("PM1 0:  ");
-        Serial.print(PM10Value);
-        Serial.println(" ug/m3");
+        // Serial.print("PM1.0:  ");
+        // Serial.print(PM01Value);
+        // Serial.println(" ug/m3");
+        // Serial.print("PM2.5:  ");
+        // Serial.print(PM2_5Value);
+        // Serial.println(" ug/m3");
+        // Serial.print("PM1 0:  ");
+        // Serial.print(PM10Value);
+        // Serial.println(" ug/m3");
       }
     }
   } else {
@@ -145,9 +144,9 @@ void loop() {
   float rand_kecepatan = random(0,10000)/1000.0;
   value += String(rand_kecepatan);
   value += ",";
-  Serial.print("Wind speed: ");
-  Serial.print(level_anemometer);
-  Serial.println(" level now");
+  // Serial.print("Wind speed: ");
+  // Serial.print(level_anemometer);
+  // Serial.println(" level now");
 
   int sensor_arah_angin = analogRead(A1);
   float arah_angin = map(sensor_arah_angin, 0, 959, 0, 360);
@@ -160,10 +159,9 @@ void loop() {
   int rand_arah = random(0,360);
   value += String(rand_arah);
   value += ",";
-  Serial.print("Arah Angin: ");
-  Serial.print(arah_angin);
-  delay(1000);
-  Serial.println(" °");
+  // Serial.print("Arah Angin: ");
+  // Serial.print(arah_angin);
+  // Serial.println(" °");
 
 
   String msg = "{\"id\": \"5d5bb1a0\",\"data\": \"";
@@ -172,10 +170,16 @@ void loop() {
   msg += value;
   msg += "\"}";
 
+  Serial.print("data: ");
+  Serial.println(msg);
+
   uint32_t seed = 1;
 
-char *key = msg.c_str();
+  char *key = msg.c_str();
   const int length = strlen(key);
+
+  Serial.print("message: ");
+  String lora_message = "";
 
   if (length > 0) {
     if (length >> 5) {
@@ -185,22 +189,35 @@ char *key = msg.c_str();
           str = substr(key,i, length);
         }
         char *half_str = substr(str, 0, 16);
+        // Serial.print("half_str: ");
+        // Serial.println(half_str);
+        // Serial.print("str: ");
+        // Serial.println(str);
 
         uint32_t fingerprint_1 = MurmurHash3_x86_32(half_str, (uint32_t)strlen(half_str), seed);
         uint32_t fingerprint_2 = MurmurHash3_x86_32(str, (uint32_t)strlen(str), seed);
           for (Fingerprint m : metadata) {
             if (is_same(m.fingerprint_1, fingerprint_1)) {
-              location = m.location;
-              duplicate = true;
-              break;
+              Serial.print("fingerprint_1 of ");
+              Serial.print(m.location);
+              Serial.println(": -passed");
+              if (is_same(m.fingerprint_2, fingerprint_2)) {
+                location = m.location;
+                duplicate = true;
+                Serial.print("fingerprint_2 of ");
+                Serial.print(m.location);
+                Serial.println(": -passed");
+                break;
+              }
             }
           }  
 
-          if (duplicate || metadata_length > metadata_size) {
+          if (duplicate) {
             Serial.print(location);
             Serial.print(";");
-            Serial2.print(location);
-            Serial2.print(";");
+            lora_message += String(location);
+            lora_message += ";";
+            duplicate = false;
           } else {
             metadata[metadata_length] = Fingerprint{
               fingerprint_1,
@@ -209,52 +226,63 @@ char *key = msg.c_str();
             };
             Serial.print(str);
             Serial.print(";");
-            Serial2.print(str);
-            Serial2.print(";");
+            lora_message += str;
+            lora_message += ";";
             metadata_length++;
+            new_metadata++;
           } 
         
       }
-      Serial2.println("");
+      Serial.println("");
+      Serial2.println(lora_message);
 
     }
   }
 
   timeout = micros();
+  Serial2.flush();
+  delay(5000); //delay to allow byte to arrive in input buffer
 
-  while (micros() - timeout < 10000000) {
-    Serial2.flush();
-    while (Serial2.available()) {
-      delay(2);  //delay to allow byte to arrive in input buffer
-      char c = Serial2.read();
+  while (Serial2.available()) {
+    delay(2); //delay to allow byte to arrive in input buffer
+    char c = Serial2.read();
 
-      if (c == ';') pointer_received = true;
+    if (c == ';') pointer_received = true;
 
-      if (
-        c != '\u0012' 
-        && c != ',' 
-        && c != '\0' 
-        && c != ';' 
-        && !pointer_received
-        ) pointer_data[pointer_position] += c;
+    if (
+      c != '\u0012' 
+      && c != ',' 
+      && c != '\0' 
+      && c != ';' 
+      && !pointer_received
+      ) pointer_data[pointer_position] += c;
         
-      if (c == ',') pointer_position++;
+    if (c == ',') pointer_position++;
 
-    }
-    if (pointer_received) {
-      Serial.println("lora: ");
-      Serial.print("1. ");Serial.println(pointer_data[0]);
-      Serial.print("2. ");Serial.println(pointer_data[1]);
-      Serial.print("3. ");Serial.println(pointer_data[2]);
-
-      pointer_data[0] = "";
-      pointer_data[1] = "";
-      pointer_data[2] = "";
-      pointer_position = 0;
-      pointer_received = false;
-    } 
-    delay(100);
   }
+  
+  if (pointer_received) {
+    Serial.print("new_metadata: ");
+    Serial.println(new_metadata);
+    Serial.print("metadata_length: ");
+    Serial.println(metadata_length);
+    for (int i = 0; i <= new_metadata; i++) {
+      metadata[metadata_length - (new_metadata - i
+      )].location = pointer_data[i].toInt();
+      Serial.println(metadata[metadata_length - i].location);
+    }
+    Serial.print("metadata ");
+    Serial.print(metadata_length+1);
+    Serial.print(": ");
+    Serial.println(metadata[metadata_length].location);
+    
+    pointer_data[0] = "";
+    pointer_data[1] = "";
+    pointer_data[2] = "";
+    pointer_position = 0;
+    pointer_received = false;
+    new_metadata = 0;
+  } 
   delay(2000);
    
   Serial.println();
