@@ -177,6 +177,7 @@ void loop() {
 
   char *key = msg.c_str();
   const int length = strlen(key);
+  Fingerprint new_metadata_repo[3];
 
   Serial.print("message: ");
   String lora_message = "";
@@ -219,16 +220,15 @@ void loop() {
             lora_message += ";";
             duplicate = false;
           } else {
-            metadata[metadata_length] = Fingerprint{
+            new_metadata_repo[new_metadata] = Fingerprint{
               fingerprint_1,
               fingerprint_2,
-              metadata_length
+              new_metadata
             };
             Serial.print(str);
             Serial.print(";");
             lora_message += str;
             lora_message += ";";
-            metadata_length++;
             new_metadata++;
           } 
         
@@ -266,15 +266,19 @@ void loop() {
     Serial.println(new_metadata);
     Serial.print("metadata_length: ");
     Serial.println(metadata_length);
-    for (int i = 0; i <= new_metadata; i++) {
-      metadata[metadata_length - (new_metadata - i
-      )].location = pointer_data[i].toInt();
-      Serial.println(metadata[metadata_length - i].location);
+    for (int i = 0; i < new_metadata; i++) {
+      metadata[metadata_length] = Fingerprint{
+        new_metadata_repo[i].fingerprint_1,
+        new_metadata_repo[i].fingerprint_2,
+        pointer_data[i].toInt()
+      };
+      Serial.print("metadata ");
+      Serial.print(metadata_length);
+      Serial.println(": ");
+      Serial.println(metadata[metadata_length].fingerprint_2);
+      Serial.println(metadata[metadata_length].location);
+      metadata_length++;
     }
-    Serial.print("metadata ");
-    Serial.print(metadata_length+1);
-    Serial.print(": ");
-    Serial.println(metadata[metadata_length].location);
     
     pointer_data[0] = "";
     pointer_data[1] = "";

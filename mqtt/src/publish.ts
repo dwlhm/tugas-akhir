@@ -79,7 +79,7 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
         qos: 2,
         dup: false,
         topic: `node/${client.id}/prod/action`,
-        payload: Buffer.from(new_pk),
+        payload: Buffer.from(new_pk.slice(0,-1) + ";"),
         retain: false
     }, () => {})
     else aedes.publish({
