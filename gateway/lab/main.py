@@ -5,8 +5,7 @@ import time
 from queue import Queue
 
 # broker = '103.150.197.37'
-# broker = '192.168.0.113'
-broker = '192.168.35.163'
+broker = '192.168.0.113'
 port = 1883
 topic_data = 'node/0718455b/prod/data'
 topic_action = 'node/0718455b/prod/action'
@@ -59,6 +58,7 @@ def run():
 
     # check internet connection
     while True:
+        try:
         if is_cnx_active(1000) is True:
             # Do somthing
             print("The internet connection is active")
@@ -76,7 +76,18 @@ def run():
         try:
             # get data from lora module 
             # and publish it
-            node.receive(client, topic_data, q)
+            data_node = node.receive(client, topic_data)
+            print("data node: ", data_node)
+
+            if (data_node):
+                # get callback message from mqtt broker
+                mqtt_message = q.get()
+                print("message forwarded to server")
+                print("mqtt_message: ", mqtt_message)
+
+                # send the callback message to node
+                data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([255]) + bytes([255]) + bytes([12]) + mqtt_message.encode()
+                node.send(data)
 
         # do error handling
         except Exception as e:

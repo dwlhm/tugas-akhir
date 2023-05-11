@@ -1,44 +1,20 @@
-# This file is used for LoRa and Raspberry pi4B related issues 
-
 import RPi.GPIO as GPIO
 import serial
 import time
-import pytz
-import json
-import time
-
-topic = 'node/52199ec1/prod/data'
 
 class sx126x:
-
+    
+    # module configuration
     M0 = 22
     M1 = 27
-    # if the header is 0xC0, then the LoRa register settings dont lost when it poweroff, and 0xC2 will be lost. 
-    # cfg_reg = [0xC0,0x00,0x09,0x00,0x00,0x00,0x62,0x00,0x17,0x43,0x00,0x00]
     cfg_reg = [0xC2,0x00,0x09,0x00,0x00,0x00,0x62,0x00,0x12,0x43,0x00,0x00]
     get_reg = bytes(12)
     rssi = False
     addr = 65535
     serial_n = ""
     addr_temp = 0
-
-    #
-    # start frequence of two lora module
-    #
-    # E22-400T22S           E22-900T22S
-    # 410~493MHz      or    850~930MHz
     start_freq = 850
-
-    #
-    # offset between start and end frequence of two lora module
-    #
-    # E22-400T22S           E22-900T22S
-    # 410~493MHz      or    850~930MHz
     offset_freq = 18
-
-    # power = 22
-    # air_speed =2400
-
     SX126X_UART_BAUDRATE_1200 = 0x00
     SX126X_UART_BAUDRATE_2400 = 0x20
     SX126X_UART_BAUDRATE_4800 = 0x40
@@ -47,17 +23,14 @@ class sx126x:
     SX126X_UART_BAUDRATE_38400 = 0xA0
     SX126X_UART_BAUDRATE_57600 = 0xC0
     SX126X_UART_BAUDRATE_115200 = 0xE0
-
     SX126X_PACKAGE_SIZE_240_BYTE = 0x00
     SX126X_PACKAGE_SIZE_128_BYTE = 0x40
     SX126X_PACKAGE_SIZE_64_BYTE = 0x80
     SX126X_PACKAGE_SIZE_32_BYTE = 0xC0
-
     SX126X_Power_22dBm = 0x00
     SX126X_Power_17dBm = 0x01
     SX126X_Power_13dBm = 0x02
     SX126X_Power_10dBm = 0x03
-
     lora_air_speed_dic = {
         1200:0x01,
         2400:0x02,
@@ -67,14 +40,12 @@ class sx126x:
         38400:0x06,
         62500:0x07
     }
-
     lora_power_dic = {
         22:0x00,
         17:0x01,
         13:0x02,
         10:0x03
     }
-
     lora_buffer_size_dic = {
         240:SX126X_PACKAGE_SIZE_240_BYTE,
         128:SX126X_PACKAGE_SIZE_128_BYTE,
@@ -103,6 +74,63 @@ class sx126x:
         self.ser.flushInput()
         self.set(freq,addr,power,rssi,air_speed,net_id,buffer_size,crypt,relay,lbt,wor)
 
+    def receive(self, client, topic_data, q):
+        # if self.ser.inWaiting() > 0:
+        if self.ser.inWaiting() > 0:
+
+            # get message
+            time.sleep(0.5)
+            # message_raw = input()
+            # print("input: ", message_raw, "\n")
+            r_buff = self.ser.read(self.ser.inWaiting())
+            message = r_buff[:-1].decode('utf-8').rstrip()
+
+            # send message to server
+            pub_to_mqtt = client.publish(topic_data, message)
+            print("pub to mqtt status: ", pub_to_mqtt)
+
+            if pub_to_mqtt[0] == 0:
+                mqtt_message = q.get()
+                print("message forwarded to server")
+                print("mqtt_message: ", mqtt_message)
+
+                # send the callback message to node
+                # data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([255]) + bytes([255]) + bytes([12]) + mqtt_message.encode()
+                # data = bytes([int(0)>>8]) + bytes([int(0)&0xff]) + bytes(18) + bytes([self.addr>>8]) + bytes([self.addr&0xff]) + bytes([self.offset_freq]) + mqtt_message.encode()
+                data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([self.addr>>8]) + bytes([self.addr&0xff]) +  bytes([self.offset_freq]) + bytes(mqtt_message, "utf-8")
+                self.send(data)
+
+    def send(self,data):
+        print("Sending data")
+        GPIO.output(self.M1,GPIO.LOW)
+        GPIO.output(self.M0,GPIO.LOW)
+        time.sleep(0.1)
+
+        self.ser.write(data)
+        # if self.rssi == True:
+            # self.get_channel_rssi()
+        time.sleep(0.1)
+
+    def get_channel_rssi(self):
+        GPIO.output(self.M1,GPIO.LOW)
+        GPIO.output(self.M0,GPIO.LOW)
+        time.sleep(0.1)
+        self.ser.flushInput()
+        self.ser.write(bytes([0xC0,0xC1,0xC2,0xC3,0x00,0x02]))
+        time.sleep(0.5)
+        re_temp = bytes(5)
+        if self.ser.inWaiting() > 0:
+            time.sleep(0.1)
+            re_temp = self.ser.read(self.ser.inWaiting())
+        if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
+            print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
+            # print("the last receive packet rssi value: -{0}dBm".format(256-re_temp[4]))
+        else:
+            # pass
+            print("receive rssi value fail")
+            # print("receive rssi value fail: ",re_temp)
+
+    
     def set(self,freq,addr,power,rssi,air_speed=2400,\
             net_id=0,buffer_size = 240,crypt=0,\
             relay=False,lbt=False,wor=False):
@@ -216,99 +244,3 @@ class sx126x:
         GPIO.output(self.M0,GPIO.LOW)
         GPIO.output(self.M1,GPIO.LOW)
         time.sleep(0.1)
-
-    def get_settings(self):
-        # the pin M1 of lora HAT must be high when enter setting mode and get parameters
-        GPIO.output(M1,GPIO.HIGH)
-        time.sleep(0.1)
-        
-        # send command to get setting parameters
-        self.ser.write(bytes([0xC1,0x00,0x09]))
-        if self.ser.inWaiting() > 0:
-            time.sleep(0.1)
-            self.get_reg = self.ser.read(self.ser.inWaiting())
-        
-        # check the return characters from hat and print the setting parameters
-        if self.get_reg[0] == 0xC1 and self.get_reg[2] == 0x09:
-            fre_temp = self.get_reg[8]
-            addr_temp = self.get_reg[3] + self.get_reg[4]
-            air_speed_temp = self.get_reg[6] & 0x03
-            power_temp = self.get_reg[7] & 0x03
-            
-            print("Frequence is {0}.125MHz.",fre_temp)
-            print("Node address is {0}.",addr_temp)
-            print("Air speed is {0} bps"+ lora_air_speed_dic.get(None,air_speed_temp))
-            print("Power is {0} dBm" + lora_power_dic.get(None,power_temp))
-            GPIO.output(M1,GPIO.LOW)
-
-#
-# the data format like as following
-# "node address,frequence,payload"
-# "20,868,Hello World"
-    def send(self,data):
-        GPIO.output(self.M1,GPIO.LOW)
-        GPIO.output(self.M0,GPIO.LOW)
-        time.sleep(0.1)
-
-        self.ser.write(data)
-        # if self.rssi == True:
-            # self.get_channel_rssi()
-        time.sleep(0.1)
-
-
-    def receive(self, client):
-        if self.ser.inWaiting() > 0:
-            time.sleep(0.5)
-            r_buff = self.ser.read(self.ser.inWaiting())
-            msg = r_buff[:-1].decode('utf-8').rstrip()
-
-            now = datetime.now()
-            f = open.("/home/pi/tugas-akhir/gateway/data/data." + str(now.date()) + ".csv", "a")
-            f.write(str(now.isoformat()) + "," + msg + "\n")
-            f.close()
-
-            # print("receive message from node address with frequence\033[1;32m %d,%d.125MHz\033[0m"%((r_buff[0]<<8)+r_buff[1],r_buff[2]+self.start_freq),end='\r\n',flush = True)
-            # print("message is "+str(r_buff[3:-1]),end='\r\n')
-            
-            # # print the rssi
-            # if self.rssi:
-            #     # print('\x1b[3A',end='\r')
-            #     print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
-            #     self.get_channel_rssi()
-            # else:
-            #     pass
-            #     #print('\x1b[2A',end='\r')
-
-            #data_node = json.loads('{"id": "cefb0c56","data": "' + msg + '"}')
-            data_node = json.loads(msg)
-            data = {
-                "gateway_timestamp": now.isoformat(),
-                "device": data_node
-            }
-            msg = json.dumps(data)
-            print(msg)
-            result = client.publish(topic, msg)
-            status = result[0]
-            if status == 0:
-                print("successfully sended")
-            else:
-                print("failed send msg")
-
-    def get_channel_rssi(self):
-        GPIO.output(self.M1,GPIO.LOW)
-        GPIO.output(self.M0,GPIO.LOW)
-        time.sleep(0.1)
-        self.ser.flushInput()
-        self.ser.write(bytes([0xC0,0xC1,0xC2,0xC3,0x00,0x02]))
-        time.sleep(0.5)
-        re_temp = bytes(5)
-        if self.ser.inWaiting() > 0:
-            time.sleep(0.1)
-            re_temp = self.ser.read(self.ser.inWaiting())
-        if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
-            print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
-            # print("the last receive packet rssi value: -{0}dBm".format(256-re_temp[4]))
-        else:
-            # pass
-            print("receive rssi value fail")
-            # print("receive rssi value fail: ",re_temp)
