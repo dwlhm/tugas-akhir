@@ -1,0 +1,174 @@
+monorepo/node on  main [!] 
+❯ pio device monitor -f time
+--- Terminal on /dev/ttyACM0 | 9600 8-N-1
+--- Available filters and text transformations: colorize, debug, default, direct, hexlify, log2file, nocontrol, printable, send_on_enter, time
+--- More details at https://bit.ly/pio-monitor-filters
+--- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+12:21:21.839 > 
+12:21:21.880 > Error reading temperature
+12:21:21.909 > Error reading humidity!
+12:21:22.884 > Error reading PM1.0, PM2.5, PM1 0!
+12:21:22.921 > data: {"id": "7d80e4e0","data": "va|13.61,5.25,0.07,218,"}
+12:21:22.982 > metadata_length: 0
+12:21:23.003 > message: {"id": "7d80e4e0","data": "va|13;.61,5.25,0.07,218,"};
+12:21:30.047 > 
+12:21:30.088 > Error reading temperature
+12:21:30.113 > Error reading humidity!
+12:21:31.088 > Error reading PM1.0, PM2.5, PM1 0!
+12:21:31.125 > data: {"id": "7d80e4e0","data": "va|17.86,1.27,7.54,278,"}
+12:21:31.186 > metadata_length: 2
+12:21:31.210 > message: {"id": "7d80e4e0","data": "va|17;.86,1.27,7.54,278,"};
+12:21:38.252 > 
+12:21:38.292 > Error reading temperature
+12:21:38.321 > Error reading humidity!
+12:21:39.292 > Error reading PM1.0, PM2.5, PM1 0!
+12:21:39.333 > data: {"id": "7d80e4e0","data": "va|15.85,7.71,4.44,125,"}
+12:21:39.394 > metadata_length: 4
+12:21:39.415 > message: {"id": "7d80e4e0","data": "va|15;.85,7.71,4.44,125,"};
+12:21:46.459 > 
+12:21:46.496 > Error reading temperature
+12:21:46.525 > Error reading humidity!
+12:21:47.500 > Error reading PM1.0, PM2.5, PM1 0!
+12:21:47.536 > data: {"id": "7d80e4e0","data": "va|8.98,3.04,7.99,263,"}
+12:21:47.598 > metadata_length: 6
+12:21:47.619 > message: {"id": "7d80e4e0","data": "va|8.;98,3.04,7.99,263,"};
+12:21:54.663 > 
+12:21:54.700 > Error reading temperature
+12:21:54.729 > Error reading humidity!
+12:21:55.704 > Error reading PM1.0, PM2.5, PM1 0!
+12:21:55.740 > data: {"id": "7d80e4e0","data": "va|4.65,1.73,8.84,172,"}
+12:21:55.802 > metadata_length: 8
+12:21:55.822 > message: {"id": "7d80e4e0","data": "va|4.;65,1.73,8.84,172,"};
+12:22:02.867 > 
+12:22:02.904 > Error reading temperature
+12:22:02.933 > Error reading humidity!
+12:22:03.907 > Error reading PM1.0, PM2.5, PM1 0!
+12:22:03.944 > data: {"id": "7d80e4e0","data": "va|8.61,3.17,7.71,317,"}
+12:22:04.006 > metadata_length: 10
+12:22:04.026 > message: 5205;61,3.17,7.71,317,"};
+12:22:11.030 > 
+12:22:11.071 > Error reading temperature
+12:22:11.099 > Error reading humidity!
+12:22:12.070 > Error reading PM1.0, PM2.5, PM1 0!
+12:22:12.111 > data: {"id": "7d80e4e0","data": "va|19.12,0.93,3.10,198,"}
+12:22:12.172 > metadata_length: 10
+12:22:12.193 > message: {"id": "7d80e4e0","data": "va|19;.12,0.93,3.10,198,"};
+12:22:19.238 > 
+12:22:19.279 > Error reading temperature
+12:22:19.303 > Error reading humidity!
+12:22:27.052 > Error reading PM1.0, PM2.5, PM1 0!
+12:22:27.090 > data: {"id": "7d80e4e0","data": "va|3.63,5.34,9.10,146,"}
+12:22:27.151 > metadata_length: 10
+12:22:27.175 > message: {"id": "7d80e4e0","data": "va|3.;63,5.34,9.10,146,"};
+12:22:34.216 > 
+12:22:34.257 > Error reading temperature
+12:22:34.286 > Error reading humidity!
+12:22:35.257 > Error reading PM1.0, PM2.5, PM1 0!
+12:22:35.297 > data: {"id": "7d80e4e0","data": "va|7.02,9.27,3.81,153,"}
+12:22:35.359 > metadata_length: 10
+12:22:35.379 > message: {"id": "7d80e4e0","data": "va|7.;02,9.27,3.81,153,"};
+12:22:42.420 > 
+12:22:42.461 > Error reading temperature
+12:22:42.490 > Error reading humidity!
+12:22:43.460 > Error reading PM1.0, PM2.5, PM1 0!
+12:22:43.501 > data: {"id": "7d80e4e0","data": "va|1.96,9.15,6.58,21,"}
+12:22:43.559 > metadata_length: 10
+12:22:43.583 > message: {"id": "7d80e4e0","data": "va|1.;96,9.15,6.58,21,"};
+12:22:50.624 > 
+12:22:50.665 > Error reading temperature
+12:22:50.693 > Error reading humidity!
+12:22:51.664 > Error reading PM1.0, PM2.5, PM1 0!
+12:22:51.701 > data: {"id": "7d80e4e0","data": "va|3.93,0.67,1.39,216,"}
+12:22:51.763 > metadata_length: 10
+12:22:51.787 > message: {"id": "7d80e4e0","data": "va|3.;93,0.67,1.39,216,"};
+12:22:58.828 > 
+12:22:58.869 > Error reading temperature
+12:22:58.897 > Error reading humidity!
+12:22:59.868 > Error reading PM1.0, PM2.5, PM1 0!
+12:22:59.909 > data: {"id": "7d80e4e0","data": "va|10.97,1.75,5.23,211,"}
+12:22:59.971 > metadata_length: 10
+12:22:59.991 > message: {"id": "7d80e4e0","data": "va|10;.97,1.75,5.23,211,"};
+12:23:07.036 > 
+12:23:07.076 > Error reading temperature
+12:23:07.101 > Error reading humidity!
+12:23:08.076 > Error reading PM1.0, PM2.5, PM1 0!
+12:23:08.113 > data: {"id": "7d80e4e0","data": "va|0.39,6.36,5.00,353,"}
+12:23:08.174 > metadata_length: 10
+12:23:08.195 > message: {"id": "7d80e4e0","data": "va|0.;39,6.36,5.00,353,"};
+12:23:15.240 > 
+12:23:15.280 > Error reading temperature
+12:23:15.309 > Error reading humidity!
+12:23:16.280 > Error reading PM1.0, PM2.5, PM1 0!
+12:23:16.317 > data: {"id": "7d80e4e0","data": "va|13.42,7.94,5.67,50,"}
+12:23:16.378 > metadata_length: 10
+12:23:16.403 > message: 5190;.42,7.94,5.67,50,"};
+12:23:23.407 > 
+12:23:23.443 > Error reading temperature
+12:23:23.472 > Error reading humidity!
+12:23:24.447 > Error reading PM1.0, PM2.5, PM1 0!
+12:23:24.484 > data: {"id": "7d80e4e0","data": "va|16.25,2.20,9.53,103,"}
+12:23:24.545 > metadata_length: 10
+12:23:24.566 > message: {"id": "7d80e4e0","data": "va|16;.25,2.20,9.53,103,"};
+12:23:31.611 > 
+12:23:31.651 > Error reading temperature
+12:23:31.680 > Error reading humidity!
+12:23:32.651 > Error reading PM1.0, PM2.5, PM1 0!
+12:23:32.688 > data: {"id": "7d80e4e0","data": "va|15.44,4.67,8.55,224,"}
+12:23:32.753 > metadata_length: 10
+12:23:32.774 > message: 5200;.44,4.67,8.55,224,"};
+12:23:39.777 > 
+12:23:39.818 > Error reading temperature
+12:23:39.847 > Error reading humidity!
+12:23:40.818 > Error reading PM1.0, PM2.5, PM1 0!
+12:23:40.858 > data: {"id": "7d80e4e0","data": "va|15.60,6.85,0.98,288,"}
+12:23:40.920 > metadata_length: 10
+12:23:40.941 > message: 5200;.60,6.85,0.98,288,"};
+12:23:47.944 > 
+12:23:47.986 > Error reading temperature
+12:23:48.014 > Error reading humidity!
+12:23:48.984 > Error reading PM1.0, PM2.5, PM1 0!
+12:23:49.025 > data: {"id": "7d80e4e0","data": "va|16.46,4.93,0.30,61,"}
+12:23:49.087 > metadata_length: 10
+12:23:49.108 > message: {"id": "7d80e4e0","data": "va|16;.46,4.93,0.30,61,"};
+12:23:56.152 > 
+12:23:56.189 > Error reading temperature
+12:23:56.218 > Error reading humidity!
+12:23:57.193 > Error reading PM1.0, PM2.5, PM1 0!
+12:23:57.229 > data: {"id": "7d80e4e0","data": "va|17.27,8.01,3.87,94,"}
+12:23:57.291 > metadata_length: 10
+12:23:57.311 > message: 5195;.27,8.01,3.87,94,"};
+12:24:04.315 > 
+12:24:04.356 > Error reading temperature
+12:24:04.385 > Error reading humidity!
+12:24:05.355 > Error reading PM1.0, PM2.5, PM1 0!
+12:24:05.392 > data: {"id": "7d80e4e0","data": "va|18.13,4.54,9.43,29,"}
+12:24:05.454 > metadata_length: 10
+12:24:05.478 > message: {"id": "7d80e4e0","data": "va|18;.13,4.54,9.43,29,"};
+12:24:12.519 > 
+12:24:12.560 > Error reading temperature
+12:24:12.589 > Error reading humidity!
+12:24:13.563 > Error reading PM1.0, PM2.5, PM1 0!
+12:24:13.600 > data: {"id": "7d80e4e0","data": "va|8.23,0.09,5.63,301,"}
+12:24:13.662 > metadata_length: 10
+12:24:13.682 > message: 5205;23,0.09,5.63,301,"};
+12:24:20.686 > 
+12:24:20.727 > Error reading temperature
+12:24:20.751 > Error reading humidity!
+12:24:21.727 > Error reading PM1.0, PM2.5, PM1 0!
+12:24:21.763 > data: {"id": "7d80e4e0","data": "va|13.03,4.20,0.10,44,"}
+12:24:21.825 > metadata_length: 10
+12:24:21.845 > message: 5190;.03,4.20,0.10,44,"};
+12:24:28.849 > 
+12:24:28.890 > Error reading temperature
+12:24:28.919 > Error reading humidity!
+12:24:29.890 > Error reading PM1.0, PM2.5, PM1 0!
+12:24:29.930 > data: {"id": "7d80e4e0","data": "va|18.90,4.30,2.19,323,"}
+12:24:29.992 > metadata_length: 10
+12:24:30.012 > message: {"id": "7d80e4e0","data": "va|18;.90,4.30,2.19,323,"};
+12:24:37.057 > 
+12:24:37.098 > Error reading temperature
+12:24:37.127 > Error reading humidity!
+12:24:38.097 > Error reading PM1.0, PM2.5, PM1 0!
+12:24:38.134 > data: {"id": "7d80e4e0","data": "va|19.01,6.88,6.75,206,"}
+12:24:38.200 > metadata_length: 10
+12:24:38.220 > message: {"id": "7d80e4e0","data": "va|19;.01,6.88,6.75,206,"};

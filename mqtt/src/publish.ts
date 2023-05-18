@@ -14,12 +14,6 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
     const message = packet.payload.toString("ascii");
     console.log('[RCV MSG] ', message)
 
-    // concat it
-    const json_str = message.replace(/;/g, "");
-    // console.log('[JSON MSG] ', json_str); 
-
-
-
     // do for loop
     let pk_order = ""
     let new_pk = ""
@@ -47,6 +41,12 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
     // console.log('[pk_order] ', pk_order)
     // console.log('[new_pk] ', new_pk)
     // console.log('[complete_message]', complete_message)
+
+    const lastIndex = complete_message.lastIndexOf(";")
+
+    if ((lastIndex + 1) >= complete_message.length) {
+      complete_message = complete_message.slice(0, lastIndex);
+    }
 
     // parse it 
     const json_parse = JSON.parse(complete_message);
