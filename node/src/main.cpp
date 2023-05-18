@@ -139,7 +139,7 @@ void data_deduplication(String data) {
                     duplicate = false;
                 } else {
                     result += str;
-                    if (str.length() >> 5) result += ";";
+                    if (str.length() >> 5)  result += ";";
 
                     if (metadata_length < metadata_size) {
                         new_metadata_repo[new_metadata] = Fingerprint{
