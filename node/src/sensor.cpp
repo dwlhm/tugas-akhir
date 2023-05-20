@@ -17,30 +17,31 @@ void sensor_begin() {
 String sensor(String device_id) {
 
     String header = "";
+    String error = "";
     String value = "";
 
     // dht temperature
     dht.temperature().getEvent(&event);
     if (isnan(event.temperature)) {
         Serial.println(F("Error reading temperature"));
-        header += "t";
-        value += String(random(0,10000)/500.0);
-        value += ",";
+        error += "t";
     } else {
         header += "t";
         value += String(event.temperature);
+        Serial.print("temperature: ");
+        Serial.println(event.temperature);
     }
 
     // dht humidity
     dht.humidity().getEvent(&event);
     if (isnan(event.relative_humidity)) {
         Serial.println(F("Error reading humidity!"));
-        header += "h";
-        value += String(random(0,10000)/1000.0);
-        value += ",";
+        error += "h";
     } else {
         header += "h";
         value += String(event.relative_humidity);
+        Serial.print("humidity: ");
+        Serial.println(event.relative_humidity);
     }
     
     // pm1.0, pm2.5, pm10
@@ -56,29 +57,27 @@ String sensor(String device_id) {
                     + ","
                     + String(transmitPM10(buf)) 
                     + ",";
+
+                Serial.print("pm1.0: ");
+                Serial.println(transmitPM01(buf));
+                Serial.print("pm2.5: ");
+                Serial.println(transmitPM2_5(buf));
+                Serial.print("pm10: ");
+                Serial.println(transmitPM10(buf));
             }
         }
     } else {
         Serial.println(F("Error reading PM1.0, PM2.5, PM1 0!"));
-        header += "120";
-        value += String(random(30,50)) 
-            + ","
-            + String(random(30,50))  
-            + ","
-            + String(random(30,50)) 
-            + ",";
+        error += "120";
     }
 
     // anemometer 
-    float anemometer = analogRead(A0) * (5.0 / 1023.0);
-    float level_anemometer = 6*anemometer;
     header += "v";
-    value += String(random(0,10000)/1000.0);
+    value += String((analogRead(A0) - 51.174)/44.952);
     value += ",";
 
     // arah angin
-    int sensor_arah_angin = analogRead(A1);
-    float arah_angin = map(sensor_arah_angin, 0, 959, 0, 360);
+    float arah_angin = (0.3504*analogRead(A1))+0.2038+0.5 ;
     if (arah_angin == 360.00) {
         arah_angin = 0;
     }
@@ -87,5 +86,5 @@ String sensor(String device_id) {
     value += ",";
 
     // data
-    return "{\"id\": \"" + device_id + "\",\"data\": \"" + header + "|" + value + "\"}";
+    return "{\"id\": \"" + device_id + "\",\"data\": \"" + header + error + "|" + value + "\"}";
 }

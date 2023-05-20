@@ -12,6 +12,7 @@
 #include "struct/Fingerprint.h"
 
 #include <sensor.h>
+
 void data_deduplication(String data);
 
 const int metadata_size = 10;
@@ -31,8 +32,8 @@ int hitungan = 0;
 void setup() {
 
   Serial.begin(9600);  
-  Serial3.begin(9600); 
-  Serial3.setTimeout(30000);
+  Serial2.begin(9600); 
+  Serial2.setTimeout(30000);
 
   sensor_begin();
 
@@ -54,9 +55,9 @@ void loop() {
   delay(5000); 
 
   Serial.print("pointer: ");
-  while (Serial3.available()) {
+  while (Serial2.available()) {
     delay(2); 
-    char c = Serial3.read();
+    char c = Serial2.read();
 
     if (c == ';') pointer_received = true;
 
@@ -154,7 +155,7 @@ void data_deduplication(String data) {
 
             Serial.print("result: ");
             Serial.println(result);
-            Serial3.println(result);
+            Serial2.println(result);
         }
     }
 }
