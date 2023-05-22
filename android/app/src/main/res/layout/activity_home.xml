@@ -94,7 +94,8 @@
         <ScrollView
             android:id="@+id/main_view_home"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -118,6 +119,17 @@
                         android:text="Overview"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/timestamp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="terakhir di update: "
+                        android:layout_weight="1"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="15dp"
+                        android:textColor="@color/black"
+                        android:textStyle="italic" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -154,26 +166,16 @@
                                 android:textSize="30sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/pm1_timestamp"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="2023-02-09T06:32:30Z"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="italic" />
-
-                            <TextView
-                                android:id="@+id/pm1_status"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="Baik"
-                                android:textColor="@color/white"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+<!--                            <TextView-->
+<!--                                android:id="@+id/pm1_status"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginTop="5dp"-->
+<!--                                android:fontFamily="@font/noto_sans"-->
+<!--                                android:text="Baik"-->
+<!--                                android:textColor="@color/white"-->
+<!--                                android:textSize="16sp"-->
+<!--                                android:textStyle="bold" />-->
                         </LinearLayout>
 
                         <LinearLayout
@@ -206,26 +208,16 @@
                                 android:textSize="30sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/pm25_timestamp"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="2023-02-09T06:32:30Z"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="italic" />
-
-                            <TextView
-                                android:id="@+id/pm25_status"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="Baik"
-                                android:textColor="@color/white"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+<!--                            <TextView-->
+<!--                                android:id="@+id/pm25_status"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginTop="5dp"-->
+<!--                                android:fontFamily="@font/noto_sans"-->
+<!--                                android:text="Baik"-->
+<!--                                android:textColor="@color/white"-->
+<!--                                android:textSize="16sp"-->
+<!--                                android:textStyle="bold" />-->
                         </LinearLayout>
 
                     </LinearLayout>
@@ -266,25 +258,15 @@
                                 android:textSize="30sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/pm25_timestamp2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="2023-02-09T06:32:30Z"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="italic" />
-
-                            <TextView
-                                android:id="@+id/pm25_status2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="Baik"
-                                android:textColor="@color/white"
-                                android:textSize="16sp" />
+<!--                            <TextView-->
+<!--                                android:id="@+id/pm25_status2"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginTop="5dp"-->
+<!--                                android:fontFamily="@font/noto_sans"-->
+<!--                                android:text="Baik"-->
+<!--                                android:textColor="@color/white"-->
+<!--                                android:textSize="16sp" />-->
                         </LinearLayout>
 
                         <LinearLayout
@@ -302,11 +284,12 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/bg_general_card"
                             android:orientation="vertical"
+                            android:layout_marginRight="7.5dp"
                             android:padding="15dp">
 
                             <TextView
@@ -329,22 +312,13 @@
                                 android:textSize="30sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/temperature_timestamp"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="2023-02-09T06:32:30Z"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="italic" />
 
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginLeft="7.5dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_general_card"
                             android:orientation="vertical"
@@ -354,6 +328,7 @@
                                 android:id="@+id/textView10"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:fontFamily="@font/noto_sans_bold"
                                 android:text="Humidity"
                                 android:textColor="@color/white"
@@ -363,6 +338,7 @@
                                 android:id="@+id/humidity_value"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:layout_marginVertical="10dp"
                                 android:fontFamily="@font/noto_sans"
                                 android:text="90"
@@ -370,15 +346,6 @@
                                 android:textSize="30sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/humidity_timestamp"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="2023-02-09T06:32:30Z"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="italic" />
 
                         </LinearLayout>
 
@@ -392,9 +359,10 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_marginRight="7.5dp"
                             android:background="@drawable/bg_general_card"
                             android:orientation="vertical"
                             android:padding="15dp">
@@ -419,22 +387,12 @@
                                 android:textSize="30sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/arahangin_timestamp"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="2023-02-09T06:32:30Z"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="italic" />
-
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginLeft="7.5dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_general_card"
                             android:orientation="vertical"
@@ -460,15 +418,6 @@
                                 android:textSize="30sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/kecepatanangin_timestamp"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="2023-02-09T06:32:30Z"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="italic" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -476,6 +425,16 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
+
+        <TextView
+            android:id="@+id/loading_view_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textStyle="italic"
+            android:text="Loading..."
+            android:textColor="@color/black"
+            android:layout_marginVertical="10dp"/>
     </LinearLayout>
 
 

@@ -14,12 +14,16 @@ import kotlinx.coroutines.*
 import org.w3c.dom.Text
 import space.dwlhm.gromanis.R
 import space.dwlhm.gromanis.model.device.DeviceDataPacketSetterGetter
+import space.dwlhm.gromanis.model.device.DeviceDataValueSetterGetter
 import space.dwlhm.gromanis.model.device.DeviceSetterGetter
 import space.dwlhm.gromanis.preferences.Prefs
 import space.dwlhm.gromanis.repository.device.DeviceValueRepository
 import space.dwlhm.gromanis.view.menu.MenuActivity
 import space.dwlhm.gromanis.viewmodel.device.DeviceConfigurationViewModel
 import space.dwlhm.gromanis.viewmodel.device.DeviceValueViewModel
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
 class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -36,9 +40,11 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var valuePm1: TextView
     private lateinit var valuePm2: TextView
     private lateinit var valuePm10: TextView
+    private lateinit var timestamp: TextView
 
     private lateinit var mainViewHome: ScrollView
     private lateinit var noData: TextView
+    private lateinit var loadingViewHome: TextView
 
     var active = false
 
@@ -61,9 +67,11 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         valuePm1 = findViewById(R.id.pm1_value)
         valuePm2 = findViewById(R.id.pm25_value)
         valuePm10 = findViewById(R.id.pm10_value)
+        timestamp = findViewById(R.id.timestamp)
 
         noData = findViewById(R.id.no_data)
         mainViewHome = findViewById(R.id.main_view_home)
+        loadingViewHome = findViewById(R.id.loading_view_home)
 
         deviceSelector = findViewById(R.id.device_selector_home)
         deviceSelector.onItemSelectedListener = this
@@ -100,7 +108,11 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         loopSystem.cancel()
 
         active = true
-        loopSystem.start()
+        loopSystem = CoroutineScope(Dispatchers.IO).launchPeriodic(TimeUnit.SECONDS.toMillis(5)) {
+
+            if (prefs.deviceInfoPref != null)
+                deviceValueViewModel.getLatestDeviceValue(this, prefs.deviceInfoPref!!.id)
+        }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -149,47 +161,64 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
             deviceValueViewModel.deviceValue.observe(this) {
                 if (it != null) {
-                    val body = it.body
-                    if (it.body != null) {
+                    if (it.code == 200 && it.body != null) {
+                        mainViewHome.visibility = View.VISIBLE
+                        noData.visibility = View.GONE
+                        loadingViewHome.visibility = View.GONE
+
                         val gson = Gson()
-                        val value = gson.fromJson(body!!.value, DeviceDataPacketSetterGetter::class.java)
-                        if (value != null) {
-                            mainViewHome.visibility = View.VISIBLE
-                            noData.visibility = View.GONE
-                            val data = value.device.data
-                            val (dataHeader, dataBody) = data.split("|")
-                            var position = 0
-                            for ((i, element) in dataHeader.withIndex()) {
-                                position = (i + 1) * 5
-                                Log.v("Position : ", position.toString())
-                                if (element == 'v') valueKecepatanangin.text =
-                                    dataBody.slice(IntRange(position - 5, position - 1))
-                                if (element == 'a') valueArahangin.text =
-                                    dataBody.slice(IntRange(position - 5, position - 1))
-                                if (element == 'h') valueHumidity.text =
-                                    dataBody.slice(IntRange(position - 5, position - 1))
-                                if (element == 't') valueTemperature.text =
-                                    dataBody.slice(IntRange(position - 5, position - 1))
-                                if (element == '1') valuePm1.text =
-                                    dataBody.slice(IntRange(position - 5, position - 1))
-                                if (element == '2') valuePm2.text =
-                                    dataBody.slice(IntRange(position - 5, position - 1))
-                                if (element == '0') valuePm10.text =
-                                    dataBody.slice(IntRange(position - 5, position - 1))
+                        val bodyJson = gson.fromJson(it.body.value, DeviceDataValueSetterGetter::class.java)
+
+                        val (dataHeader, dataBody) = bodyJson.data.split("|")
+
+                        val sensorValue = dataBody.split(",")
+                        val lengthValue = sensorValue.size - 2
+
+                        for ((i, element) in dataHeader.withIndex()) {
+                            if (element == 'v') {
+                                if (i > lengthValue) deviceOffline(valueKecepatanangin)
+                                else valueKecepatanangin.text = sensorValue[i]
                             }
-                            if (!dataHeader.contains('v')) deviceOffline(valueKecepatanangin)
-                            if (!dataHeader.contains('a')) deviceOffline(valueArahangin)
-                            if (!dataHeader.contains('h')) deviceOffline(valueHumidity)
-                            if (!dataHeader.contains('t')) deviceOffline(valueTemperature)
-                            if (!dataHeader.contains('1')) deviceOffline(valuePm1)
-                            if (!dataHeader.contains('2')) deviceOffline(valuePm2)
-                            if (!dataHeader.contains('0')) deviceOffline(valuePm10)
-                            Log.v("Data : ", dataHeader)
-                        } else {
-                            mainViewHome.visibility = View.GONE
-                            noData.visibility = View.VISIBLE
+                            if (element == 'a') {
+                                if (i > lengthValue) deviceOffline(valueArahangin)
+                                else valueArahangin.text = sensorValue[i]
+                            }
+                            if (element == 'h') {
+                                if (i > lengthValue) deviceOffline(valueHumidity)
+                                else valueHumidity.text = sensorValue[i]
+                            }
+                            if (element == 't') {
+                                if (i > lengthValue) deviceOffline(valueTemperature)
+                                else valueTemperature.text = sensorValue[i]
+                            }
+                            if (element == '1') {
+                                if (i > lengthValue) deviceOffline(valuePm1)
+                                else valuePm1.text = sensorValue[i]
+                            }
+                            if (element == '2') {
+                                if (i > lengthValue) deviceOffline(valuePm2)
+                                else valuePm2.text = sensorValue[i]
+                            }
+                            if (element == '0') {
+                                if (i > lengthValue) deviceOffline(valuePm10)
+                                else valuePm10.text = sensorValue[i]
+                            }
                         }
+
+                        val dateString = LocalDateTime.parse(it.body.updatedAt.substring(0,22)).atOffset(ZoneOffset.UTC).format(
+                            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
+
+                        timestamp.text = "terakhir diupdate: ${dateString}"
+
+                    } else {
+                        mainViewHome.visibility = View.GONE
+                        noData.visibility = View.VISIBLE
+                        loadingViewHome.visibility = View.GONE
                     }
+                } else {
+                    mainViewHome.visibility = View.GONE
+                    noData.visibility = View.VISIBLE
+                    loadingViewHome.visibility = View.GONE
                 }
             }
         }

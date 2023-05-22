@@ -15,7 +15,6 @@ class DeviceValueViewModel : ViewModel() {
     private val _deviceValueViewModel = MutableLiveData<ServicesSetterGetter<DeviceValueSetterGetter>>()
     val deviceValue: LiveData<ServicesSetterGetter<DeviceValueSetterGetter>>
         get() = _deviceValueViewModel
-    var active = true
 
     fun getLatestDeviceValue(
         context: Context,
