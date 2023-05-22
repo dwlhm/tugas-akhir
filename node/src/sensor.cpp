@@ -82,7 +82,7 @@ String sensor(String device_id) {
         arah_angin = 0;
     }
     header += 'a';
-    value += String(random(0,360));
+    value += String(arah_angin);
     value += ",";
 
     // data

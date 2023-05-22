@@ -42,6 +42,18 @@ importers:
       nodemon: 2.0.20
       typescript: 4.9.5
 
+  bot:
+    specifiers:
+      '@types/node-cron': ^3.0.7
+      database: workspace:1.0.0
+      dotenv: ^16.0.3
+      node-cron: ^3.0.2
+    dependencies:
+      '@types/node-cron': 3.0.7
+      database: link:../packages/database
+      dotenv: 16.0.3
+      node-cron: 3.0.2
+
   mqtt:
     specifiers:
       '@types/node': ^18.11.19
@@ -152,6 +164,10 @@ packages:
 
   /@types/ms/0.7.31:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
+    dev: false
+
+  /@types/node-cron/3.0.7:
+    resolution: {integrity: sha512-9PuLtBboc/+JJ7FshmJWv769gDonTpItN0Ol5TMwclpSQNjVyB2SRxSKBcTtbSysSL5R7Oea06kTTFNciCoYwA==}
     dev: false
 
   /@types/node/17.0.45:
@@ -1121,6 +1137,13 @@ packages:
 
   /node-addon-api/5.1.0:
     resolution: {integrity: sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==}
+    dev: false
+
+  /node-cron/3.0.2:
+    resolution: {integrity: sha512-iP8l0yGlNpE0e6q1o185yOApANRe47UPbLf4YxfbiNHt/RU5eBcGB/e0oudruheSf+LQeDMezqC5BVAb5wwRcQ==}
+    engines: {node: '>=6.0.0'}
+    dependencies:
+      uuid: 8.3.2
     dev: false
 
   /node-fetch/2.6.9:

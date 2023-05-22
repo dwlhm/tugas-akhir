@@ -15,6 +15,7 @@ const port = process.env.PORT || 5423;
 Sq_Start();
 
 app.use(express.json());
+app.use(express.static("public"));
 
 app.use("/device", Device);
 app.use("/user", User);

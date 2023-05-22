@@ -1,5 +1,6 @@
 import Aedes from "aedes";
 import { Client } from "aedes:client";
+import fs from "fs";
 import { Duplication_Order } from "database/models/Duplication_Order";
 import { Latest_Device_Value } from "database/models/Latest_Device_Value";
 import { Metadata } from "database/models/Metadata";
@@ -65,6 +66,13 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
         device_id: device_id
       }
     });
+
+    const currentDate = new Date();
+    const currMonth = currentDate.getMonth();
+    const currYear = currentDate.getFullYear()
+    const csvStream = fs.createWriteStream( "../backend/public/"+ device_id + "-" + currMonth + "-" + currYear + ".csv", { flags: "a" })
+    csvStream.write(complete_message);
+    csvStream.end("\n");
 
     // store the pk_order to Duplication_Orders
     await Duplication_Order.create({

@@ -26,8 +26,8 @@ bool pointer_received = false;
 String device_id = "7d80e4e0";
 
 int hitungan = 0;
-  int new_metadata = 0;
-  Fingerprint new_metadata_repo[5];
+int new_metadata = 0;
+Fingerprint new_metadata_repo[5];
 
 void setup() {
 
@@ -109,12 +109,12 @@ void loop() {
 void data_deduplication(String data) { 
     String result = "";
     int data_length = data.length();
-    int location = 0;
-    bool duplicate = false;
 
     if (data_length > 0) {
         if (data_length >> 5) {
             for (int i = 0; i < data_length; i = i+32) { 
+                int location = 0;
+                bool duplicate = false;
                 String str = data.substring(i, i + 32);
                 
                 if (i +32 > data_length) str = data.substring(i, data_length);
