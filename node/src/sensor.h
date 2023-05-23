@@ -1,2 +1,2 @@
-String sensor(String device_id);
-void sensor_begin();
+// String sensor(String device_id, MCUFRIEND_kbv &tft);
+// void sensor_begin();
