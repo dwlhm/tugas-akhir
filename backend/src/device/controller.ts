@@ -1,3 +1,4 @@
+import { Csv_List } from "database/models/Csv_List";
 import { Device } from "database/models/device";
 import { Device_Value } from "database/models/Device_Value";
 import { Latest_Device_Value } from "database/models/Latest_Device_Value";
@@ -189,11 +190,39 @@ const get_latest_value = async (
   }
 };
 
+const get_history = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const device_id = req.params["id"];
+    const list_db = await Csv_List.findByPk(device_id);
+
+    if (!list_db) throw new Error("404#devicevalue");
+
+    const list = list_db.list.split(",");
+
+    res.status(200).json({
+      code: 200,
+      body: {
+        id: device_id,
+        list: list
+      }
+    })
+  } catch (error) {
+    console.error("[get_history] ", error.message);
+    
+    next(error);
+  }
+}
+
 export {
   register,
   profil,
   destroy,
   get_all_devices,
   get_values,
-  get_latest_value
+  get_latest_value,
+  get_history
 };

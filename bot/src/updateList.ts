@@ -21,15 +21,15 @@ export async function update_list() {
         else {
             const csv_list: String = csv_list_db.dataValues.list;
             const list_arr = csv_list.split(",")
-            // if (list_arr[0] !== `${v.id}-${curr_month}-${curr_year}`) {
-                let new_list = [`${v.id}-${curr_month}-${curr_year}-${Math.random()}`];
+            if (list_arr[0] !== `${v.id}-${curr_month}-${curr_year}`) {
+                let new_list = [`${v.id}-${curr_month}-${curr_year}`];
                 
                 csv_list_db.update({
                     list: list_arr.length >= 2
                         ? new_list.concat(list_arr.slice(0, -1)).join(",") 
                         : new_list.concat(list_arr).join(",")
                 })
-            // }
+            }
         }
     })
 }
