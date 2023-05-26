@@ -9,6 +9,8 @@ import android.widget.*
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import org.w3c.dom.Text
@@ -20,6 +22,8 @@ import space.dwlhm.gromanis.preferences.Prefs
 import space.dwlhm.gromanis.repository.device.DeviceValueRepository
 import space.dwlhm.gromanis.view.menu.MenuActivity
 import space.dwlhm.gromanis.viewmodel.device.DeviceConfigurationViewModel
+import space.dwlhm.gromanis.viewmodel.device.DeviceHistoryAdapter
+import space.dwlhm.gromanis.viewmodel.device.DeviceHistoryViewModel
 import space.dwlhm.gromanis.viewmodel.device.DeviceValueViewModel
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -45,6 +49,9 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var mainViewHome: ScrollView
     private lateinit var noData: TextView
     private lateinit var loadingViewHome: TextView
+    private lateinit var rvHistory: RecyclerView
+    private lateinit var deviceHistoryViewModel: DeviceHistoryViewModel
+    private lateinit var panelNoHistory: TextView
 
     var active = false
 
@@ -55,6 +62,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        prefs = Prefs(this)
 
         findViewById<ImageButton>(R.id.btn_menu).setOnClickListener {
             active = false
@@ -76,11 +84,15 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         deviceSelector = findViewById(R.id.device_selector_home)
         deviceSelector.onItemSelectedListener = this
 
-        prefs = Prefs(this)
-
         deviceConfigurationViewModel = ViewModelProvider(this)[DeviceConfigurationViewModel::class.java]
         listingDevice()
         deviceValueViewModel = ViewModelProvider(this)[DeviceValueViewModel::class.java]
+        deviceHistoryViewModel = ViewModelProvider(this)[DeviceHistoryViewModel::class.java]
+
+        panelNoHistory = findViewById(R.id.panel_no_history)
+        rvHistory = findViewById(R.id.rv_history)
+        rvHistory.layoutManager = LinearLayoutManager(this)
+        generateHistory()
 
     }
 
@@ -119,6 +131,31 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         TODO("Not yet implemented")
     }
 
+    private fun generateHistory() {
+        val deviceId = prefs.deviceInfoPref?.id
+        if (deviceId != null) {
+            deviceHistoryViewModel
+                .getHistoryDevices(this, deviceId)!!.observe(this) {
+                    val body = it.body
+
+                    if (body != null) {
+                        if (body.list.isEmpty()) {
+                            rvHistory.visibility = View.GONE
+                            panelNoHistory.visibility = View.VISIBLE
+                        }
+                        else {
+                            rvHistory.visibility = View.VISIBLE
+                            panelNoHistory.visibility = View.GONE
+                            rvHistory.adapter = DeviceHistoryAdapter(body.list, this)
+                            rvHistory.invalidate()
+                        }
+                    } else {
+                        rvHistory.visibility = View.GONE
+                        panelNoHistory.visibility = View.VISIBLE
+                    }
+                }
+        }
+    }
     private fun listingDevice() {
         deviceConfigurationViewModel
             .getAllDevices(this)!!.observe(this) {
