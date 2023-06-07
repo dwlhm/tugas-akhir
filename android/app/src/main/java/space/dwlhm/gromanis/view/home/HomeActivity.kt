@@ -1,32 +1,28 @@
 package space.dwlhm.gromanis.view.home
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.core.view.setPadding
-import androidx.core.view.updatePadding
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import kotlinx.coroutines.*
-import org.w3c.dom.Text
 import space.dwlhm.gromanis.R
-import space.dwlhm.gromanis.model.device.DeviceDataPacketSetterGetter
+import space.dwlhm.gromanis.helper.DynamicLineChart
 import space.dwlhm.gromanis.model.device.DeviceDataValueSetterGetter
 import space.dwlhm.gromanis.model.device.DeviceSetterGetter
 import space.dwlhm.gromanis.preferences.Prefs
-import space.dwlhm.gromanis.repository.device.DeviceValueRepository
 import space.dwlhm.gromanis.view.menu.MenuActivity
 import space.dwlhm.gromanis.viewmodel.device.DeviceConfigurationViewModel
 import space.dwlhm.gromanis.viewmodel.device.DeviceHistoryAdapter
 import space.dwlhm.gromanis.viewmodel.device.DeviceHistoryViewModel
 import space.dwlhm.gromanis.viewmodel.device.DeviceValueViewModel
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
@@ -36,6 +32,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var deviceValueViewModel: DeviceValueViewModel
     private lateinit var deviceSelector: Spinner
     private lateinit var arrayAdapter: ArrayAdapter<String>
+    private lateinit var pmCardReader: RelativeLayout
 
     private lateinit var valueKecepatanangin: TextView
     private lateinit var valueArahangin: TextView
@@ -53,6 +50,13 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var deviceHistoryViewModel: DeviceHistoryViewModel
     private lateinit var panelNoHistory: TextView
 
+    private lateinit var pmCardChart: LinearLayout
+    private lateinit var pmCardText: LinearLayout
+    private lateinit var chartPm1: DynamicLineChart
+    private lateinit var chartPm25: DynamicLineChart
+    private lateinit var chartPm10: DynamicLineChart
+    private var dataUpdateTime: Float = 0.0f
+
     var active = false
 
     lateinit var loopSystem: Job
@@ -68,6 +72,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             active = false
             startActivity(Intent(this, MenuActivity::class.java).putExtra("from", "home"))
         }
+        pmCardReader = findViewById(R.id.pm_card_reader)
         valueKecepatanangin = findViewById(R.id.kecepatanangin_value)
         valueArahangin = findViewById(R.id.arahangin_value)
         valueHumidity = findViewById(R.id.humidity_value)
@@ -94,7 +99,16 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         rvHistory.layoutManager = LinearLayoutManager(this)
         generateHistory()
 
+        pmCardChart = findViewById(R.id.pm_card_chart)
+        pmCardText = findViewById(R.id.pm_card_text)
+
+        chartPm1 = DynamicLineChart(findViewById(R.id.chart_pm1), this)
+        chartPm25 = DynamicLineChart(findViewById(R.id.chart_pm25), this)
+        chartPm10 = DynamicLineChart(findViewById(R.id.chart_pm10), this)
+
     }
+
+
 
     override fun onStart() {
         super.onStart()
@@ -120,7 +134,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         loopSystem.cancel()
 
         active = true
-        loopSystem = CoroutineScope(Dispatchers.IO).launchPeriodic(TimeUnit.SECONDS.toMillis(5)) {
+        loopSystem = CoroutineScope(Dispatchers.IO).launchPeriodic(TimeUnit.SECONDS.toMillis(2)) {
 
             if (prefs.deviceInfoPref != null)
                 deviceValueViewModel.getLatestDeviceValue(this, prefs.deviceInfoPref!!.id)
@@ -211,39 +225,71 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         val sensorValue = dataBody.split(",")
                         val lengthValue = sensorValue.size - 2
 
+                        val localDate = ZonedDateTime.parse(it.body.updatedAt).withZoneSameInstant(
+                            ZoneId.systemDefault())
+                        val dateString = localDate.format(
+                            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
+                        val chartTime = localDate.format(DateTimeFormatter.ofPattern("1HHmmss")).toFloat()
+
                         for ((i, element) in dataHeader.withIndex()) {
                             if (element == 'v') {
                                 if (i > lengthValue) deviceOffline(valueKecepatanangin)
-                                else valueKecepatanangin.text = sensorValue[i]
+                                else deviceOnline(valueKecepatanangin, sensorValue[i])
                             }
                             if (element == 'a') {
                                 if (i > lengthValue) deviceOffline(valueArahangin)
-                                else valueArahangin.text = sensorValue[i]
+                                else deviceOnline(valueArahangin, sensorValue[i])
                             }
                             if (element == 'h') {
                                 if (i > lengthValue) deviceOffline(valueHumidity)
-                                else valueHumidity.text = sensorValue[i]
+                                else deviceOnline(valueHumidity, sensorValue[i])
                             }
                             if (element == 't') {
                                 if (i > lengthValue) deviceOffline(valueTemperature)
-                                else valueTemperature.text = sensorValue[i]
+                                else deviceOnline(valueTemperature, sensorValue[i])
                             }
                             if (element == '1') {
                                 if (i > lengthValue) deviceOffline(valuePm1)
-                                else valuePm1.text = sensorValue[i]
+                                else {
+                                    deviceOnline(valuePm1, sensorValue[i])
+                                    if (dataUpdateTime != chartTime) {
+                                        chartPm1.addEntry(
+                                            Entry(
+                                                chartTime, sensorValue[i].toFloat()
+                                            )
+                                        )
+                                    }
+                                }
                             }
                             if (element == '2') {
                                 if (i > lengthValue) deviceOffline(valuePm2)
-                                else valuePm2.text = sensorValue[i]
+                                else {
+                                    deviceOnline(valuePm2, sensorValue[i])
+                                    if (dataUpdateTime != chartTime) {
+                                        chartPm25.addEntry(
+                                            Entry(
+                                                chartTime, sensorValue[i].toFloat()
+                                            )
+                                        )
+                                    }
+                                }
                             }
                             if (element == '0') {
                                 if (i > lengthValue) deviceOffline(valuePm10)
-                                else valuePm10.text = sensorValue[i]
+                                else {
+                                    deviceOnline(valuePm10, sensorValue[i])
+                                    if (dataUpdateTime != chartTime) {
+                                        chartPm10.addEntry(
+                                            Entry(
+                                                chartTime, sensorValue[i].toFloat()
+                                            )
+                                        )
+                                    }
+                                }
                             }
                         }
 
-                        val dateString = LocalDateTime.parse(it.body.updatedAt.substring(0,22)).atOffset(ZoneOffset.UTC).format(
-                            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
+                        if (dataUpdateTime != chartTime) dataUpdateTime = chartTime
 
                         timestamp.text = "terakhir diupdate: ${dateString}"
 
@@ -261,13 +307,14 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
 
     }
-
     private fun deviceOffline(textView: TextView) {
         textView.text = "offline!"
         textView.setTextColor(getColor(R.color.red))
     }
-
-
+    private fun deviceOnline(textView: TextView, value: String) {
+        textView.text = value
+        textView.setTextColor(getColor(R.color.white))
+    }
     private fun CoroutineScope.launchPeriodic(repeatMillis: Long, action: () -> Unit) : Job {
         return launch {
             while (active) {
@@ -277,3 +324,4 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 }
+

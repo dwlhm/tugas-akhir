@@ -131,151 +131,190 @@
                         android:textColor="@color/black"
                         android:textStyle="italic" />
 
-                    <LinearLayout
+                    <RelativeLayout
+                        android:id="@+id/pm_card_reader"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent">
 
                         <LinearLayout
-                            android:id="@+id/pm1_card"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_safe_card"
-                            android:orientation="vertical"
-                            android:padding="15dp">
-
-                            <TextView
-                                android:id="@+id/textView2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/noto_sans_bold"
-                                android:text="PM 1.0"
-                                android:textColor="@color/white"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:id="@+id/pm1_value"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="10dp"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="90"
-                                android:textColor="@color/white"
-                                android:textSize="30sp"
-                                android:textStyle="bold" />
-
-<!--                            <TextView-->
-<!--                                android:id="@+id/pm1_status"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_marginTop="5dp"-->
-<!--                                android:fontFamily="@font/noto_sans"-->
-<!--                                android:text="Baik"-->
-<!--                                android:textColor="@color/white"-->
-<!--                                android:textSize="16sp"-->
-<!--                                android:textStyle="bold" />-->
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/pm25_card"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="15dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_safe_card"
-                            android:orientation="vertical"
-                            android:padding="15dp">
-
-                            <TextView
-                                android:id="@+id/textView6"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/noto_sans_bold"
-                                android:text="PM 2.5"
-                                android:textColor="@color/white"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:id="@+id/pm25_value"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="10dp"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="90"
-                                android:textColor="@color/white"
-                                android:textSize="30sp"
-                                android:textStyle="bold" />
-
-<!--                            <TextView-->
-<!--                                android:id="@+id/pm25_status"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_marginTop="5dp"-->
-<!--                                android:fontFamily="@font/noto_sans"-->
-<!--                                android:text="Baik"-->
-<!--                                android:textColor="@color/white"-->
-<!--                                android:textSize="16sp"-->
-<!--                                android:textStyle="bold" />-->
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:id="@+id/pm10_card"
+                            android:id="@+id/pm_card_chart"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="7.5dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_safe_card"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="15dp">
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
-                                android:id="@+id/textView8"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/noto_sans_bold"
-                                android:text="PM 10"
-                                android:textColor="@color/white"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:id="@+id/pm10_value"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="10dp"
-                                android:fontFamily="@font/noto_sans"
-                                android:text="90"
-                                android:textColor="@color/white"
-                                android:textSize="30sp"
-                                android:textStyle="bold" />
-
-<!--                            <TextView-->
-<!--                                android:id="@+id/pm25_status2"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_marginTop="5dp"-->
-<!--                                android:fontFamily="@font/noto_sans"-->
-<!--                                android:text="Baik"-->
-<!--                                android:textColor="@color/white"-->
-<!--                                android:textSize="16sp" />-->
+                                android:text="Ini slide 2"
+                                android:textAlignment="center"
+                                android:textSize="14dp" />
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/pm_card_text"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical" />
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:visibility="visible"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                    </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="20dp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/pm1_card"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/bg_safe_card"
+                                    android:orientation="vertical"
+                                    android:padding="15dp">
+
+                                    <TextView
+                                        android:id="@+id/textView2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/noto_sans_bold"
+                                        android:text="PM 1.0"
+                                        android:textColor="@color/white"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/pm1_value"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginVertical="10dp"
+                                        android:fontFamily="@font/noto_sans"
+                                        android:text="90"
+                                        android:textColor="@color/white"
+                                        android:textSize="30sp"
+                                        android:textStyle="bold" />
+
+                                    <!--                            <TextView-->
+                                    <!--                                android:id="@+id/pm1_status"-->
+                                    <!--                                android:layout_width="match_parent"-->
+                                    <!--                                android:layout_height="wrap_content"-->
+                                    <!--                                android:layout_marginTop="5dp"-->
+                                    <!--                                android:fontFamily="@font/noto_sans"-->
+                                    <!--                                android:text="Baik"-->
+                                    <!--                                android:textColor="@color/white"-->
+                                    <!--                                android:textSize="16sp"-->
+                                    <!--                                android:textStyle="bold" />-->
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/pm25_card"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/bg_safe_card"
+                                    android:orientation="vertical"
+                                    android:padding="15dp">
+
+                                    <TextView
+                                        android:id="@+id/textView6"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/noto_sans_bold"
+                                        android:text="PM 2.5"
+                                        android:textColor="@color/white"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/pm25_value"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginVertical="10dp"
+                                        android:fontFamily="@font/noto_sans"
+                                        android:text="90"
+                                        android:textColor="@color/white"
+                                        android:textSize="30sp"
+                                        android:textStyle="bold" />
+
+                                    <!--                            <TextView-->
+                                    <!--                                android:id="@+id/pm25_status"-->
+                                    <!--                                android:layout_width="match_parent"-->
+                                    <!--                                android:layout_height="wrap_content"-->
+                                    <!--                                android:layout_marginTop="5dp"-->
+                                    <!--                                android:fontFamily="@font/noto_sans"-->
+                                    <!--                                android:text="Baik"-->
+                                    <!--                                android:textColor="@color/white"-->
+                                    <!--                                android:textSize="16sp"-->
+                                    <!--                                android:textStyle="bold" />-->
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="15dp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/pm10_card"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="7.5dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/bg_safe_card"
+                                    android:orientation="vertical"
+                                    android:padding="15dp">
+
+                                    <TextView
+                                        android:id="@+id/textView8"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/noto_sans_bold"
+                                        android:text="PM 10"
+                                        android:textColor="@color/white"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/pm10_value"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginVertical="10dp"
+                                        android:fontFamily="@font/noto_sans"
+                                        android:text="90"
+                                        android:textColor="@color/white"
+                                        android:textSize="30sp"
+                                        android:textStyle="bold" />
+
+                                    <!--                            <TextView-->
+                                    <!--                                android:id="@+id/pm25_status2"-->
+                                    <!--                                android:layout_width="match_parent"-->
+                                    <!--                                android:layout_height="wrap_content"-->
+                                    <!--                                android:layout_marginTop="5dp"-->
+                                    <!--                                android:fontFamily="@font/noto_sans"-->
+                                    <!--                                android:text="Baik"-->
+                                    <!--                                android:textColor="@color/white"-->
+                                    <!--                                android:textSize="16sp" />-->
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -428,7 +467,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:paddingVertical="15dp"
+                    android:paddingTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -443,11 +482,84 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_history"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="10dp" />
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:id="@+id/panel_no_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:background="@drawable/bg_danger_action"
+                        android:padding="10dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:layout_marginVertical="10dp"
+                        android:text="no data" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:paddingVertical="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:fontFamily="@font/noto_sans_bold"
+                        android:text="Charts"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/noto_sans_bold"
+                        android:text="PM 1.0"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chart_pm1"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/noto_sans_bold"
+                        android:text="PM 2.5"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chart_pm25"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/noto_sans_bold"
+                        android:text="PM 10"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chart_pm10"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+
+                    <TextView
+                        android:id="@+id/panel_no_chart"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
