@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import kotlinx.coroutines.*
@@ -34,6 +35,15 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var arrayAdapter: ArrayAdapter<String>
     private lateinit var pmCardReader: RelativeLayout
 
+    private lateinit var pm1Card: LinearLayout
+    private lateinit var pm25Card: LinearLayout
+    private lateinit var pm10Card: LinearLayout
+    private lateinit var pm100Card: LinearLayout
+    private lateinit var arahAnginCard: LinearLayout
+    private lateinit var kecAngingCard: LinearLayout
+    private lateinit var tempCard: LinearLayout
+    private lateinit var humCard: LinearLayout
+
     private lateinit var valueKecepatanangin: TextView
     private lateinit var valueArahangin: TextView
     private lateinit var valueHumidity: TextView
@@ -41,6 +51,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var valuePm1: TextView
     private lateinit var valuePm2: TextView
     private lateinit var valuePm10: TextView
+    private lateinit var valuePm100: TextView
     private lateinit var timestamp: TextView
 
     private lateinit var mainViewHome: ScrollView
@@ -55,6 +66,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var chartPm1: DynamicLineChart
     private lateinit var chartPm25: DynamicLineChart
     private lateinit var chartPm10: DynamicLineChart
+    private lateinit var chartPm100: DynamicLineChart
     private var dataUpdateTime: Float = 0.0f
 
     var active = false
@@ -72,6 +84,16 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             active = false
             startActivity(Intent(this, MenuActivity::class.java).putExtra("from", "home"))
         }
+
+        pm1Card = findViewById(R.id.pm1_card)
+        pm25Card = findViewById(R.id.pm25_card)
+        pm10Card = findViewById(R.id.pm10_card)
+        pm100Card = findViewById(R.id.pm100_card)
+        arahAnginCard = findViewById(R.id.arah_wrap)
+        kecAngingCard = findViewById(R.id.kecepatan_wrap)
+        tempCard = findViewById(R.id.temp_wrap)
+        humCard = findViewById(R.id.hum_wrap)
+
         pmCardReader = findViewById(R.id.pm_card_reader)
         valueKecepatanangin = findViewById(R.id.kecepatanangin_value)
         valueArahangin = findViewById(R.id.arahangin_value)
@@ -80,6 +102,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         valuePm1 = findViewById(R.id.pm1_value)
         valuePm2 = findViewById(R.id.pm25_value)
         valuePm10 = findViewById(R.id.pm10_value)
+        valuePm100 = findViewById(R.id.pm100_value)
         timestamp = findViewById(R.id.timestamp)
 
         noData = findViewById(R.id.no_data)
@@ -105,6 +128,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         chartPm1 = DynamicLineChart(findViewById(R.id.chart_pm1), this)
         chartPm25 = DynamicLineChart(findViewById(R.id.chart_pm25), this)
         chartPm10 = DynamicLineChart(findViewById(R.id.chart_pm10), this)
+        chartPm100 = DynamicLineChart(findViewById(R.id.chart_pm100), this)
 
     }
 
@@ -233,22 +257,28 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                         for ((i, element) in dataHeader.withIndex()) {
                             if (element == 'v') {
+                                showDevice(kecAngingCard)
                                 if (i > lengthValue) deviceOffline(valueKecepatanangin)
                                 else deviceOnline(valueKecepatanangin, sensorValue[i])
                             }
                             if (element == 'a') {
+                                showDevice(arahAnginCard)
                                 if (i > lengthValue) deviceOffline(valueArahangin)
                                 else deviceOnline(valueArahangin, sensorValue[i])
                             }
                             if (element == 'h') {
+                                showDevice(humCard)
                                 if (i > lengthValue) deviceOffline(valueHumidity)
                                 else deviceOnline(valueHumidity, sensorValue[i])
                             }
                             if (element == 't') {
+                                showDevice(tempCard)
                                 if (i > lengthValue) deviceOffline(valueTemperature)
                                 else deviceOnline(valueTemperature, sensorValue[i])
                             }
                             if (element == '1') {
+                                showDevice(pm1Card)
+                                showChart(findViewById(R.id.chart_pm1_title), findViewById(R.id.chart_pm1))
                                 if (i > lengthValue) deviceOffline(valuePm1)
                                 else {
                                     deviceOnline(valuePm1, sensorValue[i])
@@ -262,6 +292,8 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                                 }
                             }
                             if (element == '2') {
+                                showDevice(pm25Card)
+                                showChart(findViewById(R.id.chart_pm25_title), findViewById(R.id.chart_pm25))
                                 if (i > lengthValue) deviceOffline(valuePm2)
                                 else {
                                     deviceOnline(valuePm2, sensorValue[i])
@@ -275,11 +307,28 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                                 }
                             }
                             if (element == '0') {
+                                showDevice(pm10Card)
+                                showChart(findViewById(R.id.chart_pm10_title), findViewById(R.id.chart_pm10))
                                 if (i > lengthValue) deviceOffline(valuePm10)
                                 else {
                                     deviceOnline(valuePm10, sensorValue[i])
                                     if (dataUpdateTime != chartTime) {
                                         chartPm10.addEntry(
+                                            Entry(
+                                                chartTime, sensorValue[i].toFloat()
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                            if (element == '3') {
+                                showDevice(pm100Card)
+                                showChart(findViewById(R.id.chart_pm100_title), findViewById(R.id.chart_pm100))
+                                if (i > lengthValue) deviceOffline(valuePm100)
+                                else {
+                                    deviceOnline(valuePm100, sensorValue[i])
+                                    if (dataUpdateTime != chartTime) {
+                                        chartPm100.addEntry(
                                             Entry(
                                                 chartTime, sensorValue[i].toFloat()
                                             )
@@ -306,6 +355,17 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
         }
 
+    }
+
+    private fun showChart(title: TextView, chart: LineChart) {
+        title.visibility = View.VISIBLE
+        chart.visibility = View.VISIBLE
+    }
+    private fun showDevice(layout: LinearLayout) {
+        layout.visibility = View.VISIBLE
+    }
+    private fun hideDevice(layout: LinearLayout) {
+        layout.visibility = View.GONE
     }
     private fun deviceOffline(textView: TextView) {
         textView.text = "offline!"
