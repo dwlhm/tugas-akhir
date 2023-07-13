@@ -69,9 +69,63 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
 
     const currentDate = new Date();
     const currMonth = currentDate.getMonth();
-    const currYear = currentDate.getFullYear()
-    const csvStream = fs.createWriteStream( "../backend/public/"+ device_id + "-" + currMonth + "-" + currYear + ".csv", { flags: "a" })
-    csvStream.write(complete_message);
+    const currYear = currentDate.getFullYear();
+    let archive = {
+      time: currentDate.toLocaleString(),
+      "1": "",
+      "2": "",
+      "0": "",
+      "3": "",
+      a: "",
+      v: "",
+      t: "",
+      h: ""
+    };
+    const devValueText = json_parse.data.split("|");
+    const devValue = devValueText[1].split(",");
+    for (let i = 0; i < devValueText[0].length; i++) {
+      archive[devValueText[0].charAt(i)] = devValue[i];
+    }
+    const checkCsv = fs.existsSync("../backend/public/"+ device_id + "-" + currMonth + "-" + currYear + ".csv");
+    if (!checkCsv) {
+      const csvStream = fs.createWriteStream("../backend/public/"+ device_id + "-" + currMonth + "-" + currYear + ".csv", { flags: "a" })
+      csvStream.write("timestamp");
+      csvStream.write(";");
+      csvStream.write("PM_1.0");
+      csvStream.write(";");
+      csvStream.write("PM_2.5");
+      csvStream.write(";");
+      csvStream.write("PM_10");
+      csvStream.write(";");
+      csvStream.write("PM_100");
+      csvStream.write(";");
+      csvStream.write("temp");
+      csvStream.write(";");
+      csvStream.write("humidity");
+      csvStream.write(";");
+      csvStream.write("arah_angin");
+      csvStream.write(";");
+      csvStream.write("kecepatan_angin");
+      csvStream.end("\n");
+    }
+    const csvStream = fs.createWriteStream("../backend/public/"+ device_id + "-" + currMonth + "-" + currYear + ".csv", { flags: "a" })
+    csvStream.write(archive.time);
+    csvStream.write(";");
+    csvStream.write(archive["1"]);
+    csvStream.write(";");
+    csvStream.write(archive["2"]);
+    csvStream.write(";");
+    csvStream.write(archive["0"]);
+    csvStream.write(";");
+    csvStream.write(archive["3"]);
+    csvStream.write(";");
+    csvStream.write(archive.t);
+    csvStream.write(";");
+    csvStream.write(archive.h);
+    csvStream.write(";");
+    csvStream.write(archive.a);
+    csvStream.write(";");
+    csvStream.write(archive.v);
     csvStream.end("\n");
 
     // store the pk_order to Duplication_Orders
