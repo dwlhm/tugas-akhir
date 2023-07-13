@@ -84,21 +84,21 @@ class sx126x:
             # print("input: ", message_raw, "\n")
             r_buff = self.ser.read(self.ser.inWaiting())
             message = r_buff[:-1].decode('utf-8').rstrip()
-
+            print("message: ", message)
             # send message to server
             pub_to_mqtt = client.publish(topic_data, message)
             print("pub to mqtt status: ", pub_to_mqtt)
 
             if pub_to_mqtt[0] == 0:
-                mqtt_message = q.get()
+                mqtt_message = q.get_nowait()
+                q.task_done()
+
                 print("message forwarded to server")
                 print("mqtt_message: ", mqtt_message)
 
-                # send the callback message to node
-                # data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([255]) + bytes([255]) + bytes([12]) + mqtt_message.encode()
-                # data = bytes([int(0)>>8]) + bytes([int(0)&0xff]) + bytes(18) + bytes([self.addr>>8]) + bytes([self.addr&0xff]) + bytes([self.offset_freq]) + mqtt_message.encode()
-                data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([self.addr>>8]) + bytes([self.addr&0xff]) +  bytes([self.offset_freq]) + bytes(mqtt_message, "utf-8")
-                self.send(data)
+                if (len(mqtt_message) > 0): 
+                    data = bytes([255]) + bytes([255]) + bytes([18]) + bytes([self.addr>>8]) + bytes([self.addr&0xff]) +  bytes([self.offset_freq]) + bytes(mqtt_message, "utf-8")
+                    self.send(data)
 
     def send(self,data):
         print("Sending data")

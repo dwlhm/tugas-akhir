@@ -4,15 +4,13 @@ import requests
 import time
 from queue import Queue
 
-# broker = '103.150.197.37'
-# broker = '192.168.0.113'
-broker = '192.168.35.163'
+broker = '103.150.197.37'
 port = 1883
-topic_data = 'node/0718455b/prod/data'
-topic_action = 'node/0718455b/prod/action'
-client_id = '0718455b'
-username = '7e60b970'
-password = 'ce337860917213c7'
+topic_data = 'node/c85e7441/prod/data'
+topic_action = 'node/c85e7441/prod/action'
+client_id = 'c85e7441'
+username = '13a6e232'
+password = '88e60ac85b1f2b09'
 
 q = Queue()
 
@@ -37,6 +35,7 @@ def connect_mqtt():
 
     def on_message(client, userdata, message):
         q.put(message.payload.decode('utf-8').rstrip())
+        print("mqtt_message",message.payload.decode('utf-8').rstrip()) 
             
     client = mqtt_client.Client(client_id)
     client.username_pw_set(username,password)
