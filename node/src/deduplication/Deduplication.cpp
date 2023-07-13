@@ -8,7 +8,7 @@
 
 void Deduplication::start(String& data) {
 
-    int newMetadataSizeLocal = 0;
+    this->newMetadataSize = 0;
     this->indexOrder = "";
     int dataLength = data.length();
 
@@ -47,12 +47,11 @@ void Deduplication::start(String& data) {
                     this->indexOrder += ";";
                     
                     if (this->metadataSize > this->metadataPosition) {
-                        this->metadata[this->metadataPosition] = MetadataStruct{
+                        this->newMetadata[this->newMetadataSize] = FingerprintStruct{
                             fingerprint_1,
-                            fingerprint_2,
-                            String(this->metadataPosition)
+                            fingerprint_2
                         };
-                        this->metadataPosition++;
+                        this->newMetadataSize++;
                     }
 
                 } else {
@@ -69,11 +68,12 @@ void Deduplication::start(String& data) {
 
 void Deduplication::write(HardwareSerial& lora) {
     bool indexReceived = false;
-    String *index;
-    size_t currentIndexPosition;
-    while (lora.available()) {
+    String index = "";
+    int currentIndexPosition = 0;
+    Serial.print(F("indexReference: "));
+    while (Serial2.available()) {
         delay(2); 
-        char c = lora.read();
+        char c = Serial2.read();
 
         if (c == ';') indexReceived = true;
 
@@ -84,19 +84,39 @@ void Deduplication::write(HardwareSerial& lora) {
         && c != ';' 
         && !indexReceived
         ) {
-            index[currentIndexPosition] += c;
+            index += c;
+            Serial.print(c);
         }
             
-        if (c == ',') currentIndexPosition++;
+        if (c == ',') {
+            if (currentIndexPosition < this->newMetadataSize) {
+                metadata[this->metadataPosition] = MetadataStruct{
+                    this->newMetadata[currentIndexPosition].fingerprint_1,
+                    this->newMetadata[currentIndexPosition].fingerprint_2,
+                    index
+                };
+                this->metadataPosition++;
+                currentIndexPosition++;
+                index = "";
+            }
+            Serial.print(F(","));
+        }
 
     }
-    
-    if (indexReceived) {
-        for (int i = 0; this->newMetadataSize > i; i++) {
-            metadata[this->newMetadataSize + 1 - i].index = index[i];
-        }
-    } 
 
+    Serial.println();
+    
+    // if (indexReceived) {
+    //     for (int i = 0; this->newMetadataSize > i; i++) {
+    //         Serial.print(F("index: "));
+    //         Serial.println(index[i]);
+            
+    //         Serial.println(this->metadataPosition);
+    //     }
+    // } 
+
+    Serial.print(F("Metadata length: "));
+    Serial.println(this->metadataPosition);
     Serial.print(F("Last index value of metadata: "));
     Serial.println(metadata[this->metadataPosition-1].index);
 }

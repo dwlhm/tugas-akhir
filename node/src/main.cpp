@@ -45,10 +45,10 @@ void loop() {
     Serial.print(F("IndexOrder: "));
     Serial.println(deduplication.indexOrder);
 
-    // // Serial2.println(deduplication.indexOrder);
+    Serial2.println(deduplication.indexOrder);
 
     delay(1000);
 
-    // deduplication.write(Serial2);
+    deduplication.write(Serial2);
 
 }
