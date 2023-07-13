@@ -10,6 +10,7 @@ class Deduplication {
         int metadataSize;
         int metadataPosition;
         MetadataStruct metadata[10];
+        FingerprintStruct newMetadata[4];
         int newMetadataSize;
     public:
         String indexOrder;
