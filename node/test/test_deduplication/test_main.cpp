@@ -2,22 +2,20 @@
 #include <unity.h>
 
 #include <struct/StartDeduplicationStruct.h>
-#include <deduplication/deduplication.h>
+#include <deduplication/Deduplication.h>
 #include <struct/MetadataStruct.h>
 
 void test_start_deduplication() {
     
-    MetadataStruct* metadata;
-    String data = "{\"id\": \"s22frr\",\"data\": \"avth120|10,20,30,40,50,60,70\"}";
-    size_t metadataMaxSize = 10;
-    size_t metadataCurrentSize = 0;
+    String data1 = "{\"id\": \"s22frr\",\"data\": \"avth120|10,20,30,40,50,60,70\"}";
 
-    size_t expectedSize = 2;
+    size_t expectedPosition = 2;
 
-    StartDeduplicationStruct startDeduplication = start_deduplication(metadata, data, metadataCurrentSize, metadataMaxSize);
+    Deduplication* deduplication = new Deduplication(10);
 
+    deduplication->start(data1);
     
-    TEST_ASSERT_EQUAL(expectedSize, startDeduplication.newMetadataSize);
+    TEST_ASSERT_EQUAL(expectedPosition, deduplication->metadataPosition);
 };
 
 int runUnityTests(void) {

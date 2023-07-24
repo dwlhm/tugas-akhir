@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <struct/SensorStruct.h>
 #include <sensor/pm/PMDFRobot.h>
-#include <sensor/pm/pm100.h>
+#include <sensor/pm/PM100.h>
 #include <sensor/dht/DHTDFRobot.h>
 #include <sensor/angin/KecepatanAngin.h>
 #include <sensor/angin/ArahAngin.h>
@@ -10,6 +10,7 @@ PMDFRobot pmDFRobot(Serial1);
 DHTDFRobot dht(new DHT_Unified(23, DHT22));
 ArahAngin arahAngin(52, A7);
 KecepatanAngin kecepatanAngin(53, A6);
+PM100 pm100(Serial3);
 
 void initSensor() {
     
@@ -17,6 +18,7 @@ void initSensor() {
     dht.init();
     arahAngin.init();
     kecepatanAngin.init();
+    pm100.init();
 
 }
 
@@ -24,7 +26,7 @@ SensorStruct readSensor() {
 
     return SensorStruct{
         pmDFRobot.read(),
-        readPM100(),
+        pm100.read(),
         dht.read(),
         kecepatanAngin.read(),
         arahAngin.read()
@@ -57,7 +59,7 @@ String stringifySensor(String deviceId, SensorStruct data) {
     
     if (data.pmDFRobot.pm25 >= 0) {
         sensorName += "2";
-        sensorValue += data.pmDFRobot.pm1;
+        sensorValue += data.pmDFRobot.pm25;
         sensorValue += ",";
     }
     
