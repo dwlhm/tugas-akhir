@@ -75,6 +75,8 @@ void Deduplication::write(HardwareSerial& lora) {
         delay(2); 
         char c = Serial2.read();
 
+        if (c == 'r') this->metadataPosition = 0;
+
         if (c == ';') indexReceived = true;
 
         if (
@@ -106,14 +108,14 @@ void Deduplication::write(HardwareSerial& lora) {
 
     Serial.println();
     
-    if (indexReceived) {
-        for (int i = 0; this->newMetadataSize > i; i++) {
-            Serial.print(F("index: "));
-            Serial.println(index[i]);
+    // if (indexReceived) {
+    //     for (int i = 0; this->newMetadataSize > i; i++) {
+    //         Serial.print(F("index: "));
+    //         Serial.println(index[i]);
             
-            Serial.println(this->metadataPosition);
-        }
-    } 
+    //         Serial.println(this->metadataPosition);
+    //     }
+    // } 
 
     // Serial.print(F("Metadata length: "));
     // Serial.println(this->metadataPosition);
