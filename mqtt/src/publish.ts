@@ -13,7 +13,8 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
 
     // get the message
     const message = packet.payload.toString("ascii");
-    console.log('[RCV MSG] ', message)
+    console.log('[RCV MSG] ', message);
+    if (message.lastIndexOf(";") !== message.length-1) return;
 
     // do for loop
     let pk_order = ""
@@ -21,10 +22,11 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
     let complete_message = ""
     let arr_message = message.split(';')
     
-    for (let i = 0; i < arr_message.length; i++) {
+    for (let i = 0; i < arr_message.length-1; i++) {
       const element = arr_message[i];
       // console.log('[msg for] ', element)
       // get the new chunk
+      console.log(element)
       if (!Number(element)) {
         // store the new chunk in metadata table
         let metadata = await Metadata.create({
@@ -35,7 +37,20 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
         complete_message += element
       } else {
         pk_order += element + ","
+        console.log(element)
         let data_chunk = await Metadata.findByPk(element)
+        if (!data_chunk) {
+          aedes.publish({
+            cmd: 'publish',
+              messageId: 42,
+              qos: 2,
+              dup: false,
+              topic: `node/${client.id}/prod/action`,
+              payload: Buffer.from("r"),
+              retain: false
+          }, () => {})
+          throw new Error("not synchronized");
+        }
         complete_message += data_chunk.dataValues.value
       }
     }

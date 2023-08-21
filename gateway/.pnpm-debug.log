@@ -1,0 +1,20 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1,
+    "workspacePrefix": "C:\\Users\\LENOVO\\sandbox\\tugas-akhir"
+  },
+  "1 error pnpm": {
+    "errno": 1,
+    "code": "ELIFECYCLE",
+    "pkgid": "monorepo@1.0.0",
+    "stage": "start",
+    "script": "node server.js",
+    "pkgname": "monorepo",
+    "err": {
+      "name": "pnpm",
+      "message": "monorepo@1.0.0 start: `node server.js`\nExit status 1",
+      "code": "ELIFECYCLE",
+      "stack": "pnpm: monorepo@1.0.0 start: `node server.js`\nExit status 1\n    at EventEmitter.<anonymous> (C:\\Users\\LENOVO\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:105044:20)\n    at EventEmitter.emit (node:events:514:28)\n    at ChildProcess.<anonymous> (C:\\Users\\LENOVO\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:92984:18)\n    at ChildProcess.emit (node:events:514:28)\n    at maybeClose (node:internal/child_process:1091:16)\n    at ChildProcess._handle.onexit (node:internal/child_process:302:5)"
+    }
+  }
+}
