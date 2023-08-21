@@ -9,6 +9,8 @@ MCUFRIEND_kbv tft;
 const PROGMEM int BLACK = 0x0000;
 const PROGMEM int WHITE = 0xFFFF;
 
+uint32_t tempat = 0;
+
 void initLCD() {
     uint16_t ID = tft.readID();
     if (ID == 0xD3D3) ID = 0x9481; 
@@ -29,8 +31,8 @@ void initLCD() {
     tft.print("Humidity");
     tft.setCursor(50, 230);
     tft.print("Kecepatan Angin");
-    tft.setCursor(250, 230);
-    tft.print("Arah Angin");
+    // tft.setCursor(250, 230);
+    // tft.print("Proses ke-");
 };
 
 void writeLCD(SensorStruct data) {
@@ -57,6 +59,7 @@ void writeLCD(SensorStruct data) {
     tft.fillRect(50, 280, 380, 320, WHITE);
     tft.setCursor(50, 280);
     tft.print(data.kecepatanAngin);
-    tft.setCursor(250, 280);
-    tft.print(data.arahAngin);
+    // tft.setCursor(250, 280);
+    // tft.print(tempat);
+    // tempat++;
 };

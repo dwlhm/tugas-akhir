@@ -52,6 +52,9 @@ PMDFRobotStruct PMDFRobot::read()
   }
   else {
     return PMDFRobotStruct{
-        -1, -1, -1};
+      int16_t(-1), 
+      int16_t(-1), 
+      int16_t(-1)
+    };
   }
 }

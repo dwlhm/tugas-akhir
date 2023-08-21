@@ -4,9 +4,9 @@
 #include <struct/SensorStruct.h>
 #include <deduplication/Deduplication.h>
 
-Deduplication deduplication(10);
+Deduplication deduplication(4);
 
-String deviceId = "7d80e4e0";
+String deviceId = "759b21ae";
 
 void setup() {
 
@@ -33,8 +33,15 @@ void loop() {
 
     deduplication.start(dataString);
 
-    delay(60000);
+    Serial.println();
+    Serial.print(F("IndexOrder: "));
+    Serial.println(deduplication.indexOrder);
+    Serial2.println(deduplication.indexOrder);
+
+    delay(3000);
 
     deduplication.write(Serial2);
+
+    delay(60000);
 
 }
