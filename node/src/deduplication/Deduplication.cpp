@@ -75,6 +75,8 @@ void Deduplication::write(HardwareSerial& lora) {
         delay(2); 
         char c = Serial2.read();
 
+        if (c == 'r') this->metadataPosition = 0;
+
         if (c == ';') indexReceived = true;
 
         if (
@@ -115,8 +117,8 @@ void Deduplication::write(HardwareSerial& lora) {
     //     }
     // } 
 
-    Serial.print(F("Metadata length: "));
-    Serial.println(this->metadataPosition);
-    Serial.print(F("Last index value of metadata: "));
-    Serial.println(metadata[this->metadataPosition-1].index);
+    // Serial.print(F("Metadata length: "));
+    // Serial.println(this->metadataPosition);
+    // Serial.print(F("Last index value of metadata: "));
+    // Serial.println(metadata[this->metadataPosition-1].index);
 }

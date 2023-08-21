@@ -8,11 +8,11 @@
 class Deduplication {
     private:
         int metadataSize;
-        int metadataPosition;
         MetadataStruct metadata[10];
         FingerprintStruct newMetadata[4];
         int newMetadataSize;
     public:
+        int metadataPosition;
         String indexOrder;
         Deduplication(int metadataSize) {
             this->metadataSize = metadataSize;

@@ -1,11 +1,8 @@
 #include <Arduino.h>
-#include <Servo.h>
 #include <sensor/sensor.h>
 #include <lcd/lcd.h>
 #include <struct/SensorStruct.h>
 #include <deduplication/Deduplication.h>
-
-Servo myServo;
 
 Deduplication deduplication(10);
 
@@ -17,8 +14,6 @@ void setup() {
 
     initSensor();
 
-    myServo.attach(44);
-
     initLCD();
 
     Serial2.begin(9600);
@@ -29,8 +24,6 @@ void loop() {
 
     SensorStruct data = readSensor();
 
-    myServo.write(data.arahAngin/2);
-
     writeLCD(data);
 
     String dataString = stringifySensor(deviceId, data);
@@ -40,14 +33,7 @@ void loop() {
 
     deduplication.start(dataString);
 
-    Serial.println();
-
-    Serial.print(F("IndexOrder: "));
-    Serial.println(deduplication.indexOrder);
-
-    Serial2.println(deduplication.indexOrder);
-
-    delay(1000);
+    delay(60000);
 
     deduplication.write(Serial2);
 
