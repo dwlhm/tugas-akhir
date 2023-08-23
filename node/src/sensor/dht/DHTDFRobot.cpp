@@ -20,7 +20,7 @@ DHTDFRobotStruct DHTDFRobot::read() {
 
     this->dht->humidity().getEvent(&event);
     if (isnan(event.relative_humidity)) {
-        result.humidity = 75;
+        result.humidity = -1;
     } else {
         result.humidity = event.relative_humidity;
     }
