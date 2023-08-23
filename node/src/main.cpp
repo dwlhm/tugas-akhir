@@ -42,6 +42,6 @@ void loop() {
 
     deduplication.write(Serial2);
 
-    delay(60000);
+    delay(300000);
 
 }
