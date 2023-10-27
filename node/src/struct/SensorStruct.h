@@ -7,10 +7,10 @@
 
 struct SensorStruct {
     PMDFRobotStruct pmDFRobot;
-    int16_t pm100;
     DHTDFRobotStruct dht;
     float kecepatanAngin;
-    int16_t arahAngin;
+    // int16_t arahAngin;
+    // int32_t pm100;
 };
 
 #endif

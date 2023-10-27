@@ -32,7 +32,7 @@ PMDFRobotStruct PMDFRobot::read()
 {
 
   unsigned char buf[31];
-
+  
   this->serial->flush();
   if (this->serial->find(0x42))
   {

@@ -8,17 +8,17 @@
 
 PMDFRobot pmDFRobot(Serial1);
 DHTDFRobot dht(new DHT_Unified(23, DHT22));
-ArahAngin arahAngin(52, A7);
-KecepatanAngin kecepatanAngin(53, A6);
+ArahAngin arahAngin(A7);
+KecepatanAngin kecepatanAngin(A6);
 PM100 pm100(Serial3);
 
 void initSensor() {
     
+    // arahAngin.init();
+    kecepatanAngin.init();
     pmDFRobot.init();
     dht.init();
-    arahAngin.init();
-    kecepatanAngin.init();
-    pm100.init();
+    // pm100.init();
 
 }
 
@@ -26,10 +26,10 @@ SensorStruct readSensor() {
 
     return SensorStruct{
         pmDFRobot.read(),
-        pm100.read(),
         dht.read(),
         kecepatanAngin.read(),
-        arahAngin.read()
+        // arahAngin.read(),
+        // pm100.read()
     };
 
 }
@@ -69,17 +69,17 @@ String stringifySensor(String deviceId, SensorStruct data) {
         sensorValue += ",";
     }
     
-    if (data.pm100 >= 0) {
-        sensorName += "3";
-        sensorValue += data.pm100;
-        sensorValue += ",";
-    }
+    // if (data.pm100 >= 0) {
+    //     sensorName += "3";
+    //     sensorValue += data.pm100;
+    //     sensorValue += ",";
+    // }
     
-    if (data.arahAngin >= 0) {
-        sensorName += "a";
-        sensorValue += data.arahAngin;
-        sensorValue += ",";
-    }
+    // if (data.arahAngin >= 0) {
+    //     sensorName += "a";
+    //     sensorValue += data.arahAngin;
+    //     sensorValue += ",";
+    // }
     
     if (data.kecepatanAngin >= 0) {
         sensorName += "v";

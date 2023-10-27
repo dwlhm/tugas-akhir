@@ -6,13 +6,11 @@
 class KecepatanAngin {
 private:
     uint8_t data;
-    uint8_t echo;
 public:
-    KecepatanAngin(uint8_t echo, uint8_t data) {
+    KecepatanAngin(uint8_t data) {
         this->data = data;
-        this->echo = echo;
     };
-    void init() { pinMode(this->echo, INPUT_PULLUP); }
+    void init() { pinMode(this->data, INPUT); }
     float read();
 };
 

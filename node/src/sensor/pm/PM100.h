@@ -15,7 +15,7 @@ public:
         this->serial->begin(9600);
         this->serial->setTimeout(1500);
     };
-    int16_t read();
+    int32_t read();
     
 };
 

@@ -10,6 +10,8 @@ void DHTDFRobot::init() {
 DHTDFRobotStruct DHTDFRobot::read() {
 
     DHTDFRobotStruct result;
+    
+    delay(50);
 
     this->dht->temperature().getEvent(&event);
     if (isnan(event.temperature)) {

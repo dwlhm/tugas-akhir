@@ -6,15 +6,12 @@
 class ArahAngin {
 private:
     uint8_t data;
-    uint8_t echo;
 public:
-    ArahAngin(uint8_t echo, uint8_t data) {
+    ArahAngin(uint8_t data) {
         this->data = data;
-        this->echo = echo;
     };
-    void init() { pinMode(this->echo, INPUT_PULLUP); };
+    void init() { pinMode(this->data, INPUT); };
     int16_t read();
-    bool isUnplugged() { return digitalRead(this->echo) > 0; }
 };
 
 #endif

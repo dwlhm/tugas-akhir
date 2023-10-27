@@ -6,7 +6,8 @@
 
 Deduplication deduplication(4);
 
-String deviceId = "759b21ae";
+// String deviceId = "759b21ae";
+String deviceId = "7d80e4e0";
 
 void setup() {
 
@@ -28,15 +29,11 @@ void loop() {
 
     String dataString = stringifySensor(deviceId, data);
 
-    Serial.print(F("DataString: "));
     Serial.println(dataString);
 
     deduplication.start(dataString);
 
-    Serial.println();
-    Serial.print(F("IndexOrder: "));
-    Serial.println(deduplication.indexOrder);
-    Serial2.println(deduplication.indexOrder);
+    Serial2.println(dataString);
 
     delay(3000);
 

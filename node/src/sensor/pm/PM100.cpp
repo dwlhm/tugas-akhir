@@ -1,12 +1,13 @@
 #include <Arduino.h>
 #include <sensor/pm/PM100.h>
 
-int16_t PM100::read() {
+int32_t PM100::read() {
 
-    uint8_t buf[9];
+    int buf[9];
     uint8_t i = 0;
-    
-    while (this->serial->available()) {
+
+    delay(100);    
+    while (this->serial->available() && i < 9) {
 
         buf[i] = this->serial->read();
         i++;
