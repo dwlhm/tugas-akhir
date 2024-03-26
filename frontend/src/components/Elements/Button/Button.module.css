@@ -1,5 +1,5 @@
 .btn {
-	border: none;
+	border: 1.5px solid #2181B6;
 	max-width: 25rem;
 	width: 100%;
 	padding: 1.1rem .9rem;
@@ -24,15 +24,40 @@
 	background-color: #2181B7;
 	border-radius: 5px;
 }
-
+.btn-primary:hover {
+	background-color: #FFFFFF;
+	color: #2181B7;
+}
 .btn-secondary {
 	background-color: #2181B7;
 	border-radius: 10rem;
 	padding: 0.5rem 1rem;
 	justify-content: center;
 }
-
+.btn-secondary:hover {
+	background-color: #FFFFFF;
+	color: #2181B7;
+}
 .btn-danger {
 	background-color: #B72145;
 	border-radius: 5px;
+	border-color: #B72145;
+}
+.btn-danger:hover {
+	background-color: #FFFFFF;
+	color: #B72145;
+}
+.btn-overlay {
+	background-color: #FFFFFF;
+	border-radius: 5px;
+	color: #2E2E2E;
+	border-color: #FFFFFF;
+}
+.btn-overlay:hover {
+	background-color: #2181B7;
+	color: #FFFFFF;
+}
+.btn-overlay span {
+	width: 100%;
+	text-align: center;
 }

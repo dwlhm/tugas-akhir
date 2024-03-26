@@ -6,6 +6,7 @@ const variants = {
  primary: "btn-primary",
  secondary: "btn-secondary",
  danger: "btn-danger",
+ overlay: "btn-overlay",
 }
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -21,7 +22,11 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
 	return(<button
 		type={type}
-		className={`${styles.btn} ${styles[variants[variant]]}`}
+		className={`${styles.btn} ${styles[variants[variant]]} ${props.className}`}
 		{...props}
-		><span>{props.children}</span>{icon}</button>)
+		>
+			{variant != "overlay" ? "" : icon}
+			<span>{props.children}</span>
+			{variant == "overlay" ? "" : icon}
+		</button>)
 }

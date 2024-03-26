@@ -14,6 +14,7 @@ function App() {
 			<Button variant="secondary" onClick={() => console.log("Clicked")}>Ini Button Secondary</Button>
 			<Button icon={<Plus />} onClick={() => console.log("Clicked")}>Ini Button w/ Icon</Button>
 			<Button variant="danger" icon={<Plus />} onClick={() => console.log("Clicked")}>Ini Button danger</Button>
+			<Button variant="overlay" icon={<Plus />} onClick={() => console.log("Clicked")}>Tambah</Button>
 		</>
   )
 }
