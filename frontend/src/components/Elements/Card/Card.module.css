@@ -1,0 +1,11 @@
+.card {
+	padding: 2rem 1.5rem 2.2rem 1.5rem;
+	border-radius: 5px;
+	color: #FFFFFF;
+	background-color: #2181B7;
+	max-width: 25rem;
+	margin: .5rem .5rem 1rem .5rem;
+	background: linear-gradient(#2181B7 69%, #2181b794);
+	line-height: 1.4rem;
+	font-size: 13px;
+}
