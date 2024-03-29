@@ -1,13 +1,15 @@
-import { Slider } from "@/components/Slider"
+import { Maps } from "@/components/Maps"
+import { Judul } from "@/components/Elements/Judul/Judul"
+
+import styles from "./Overview.module.css"
+
 export const Overview = () => {
     return(
-        <div>
-            Overview
-            <Slider>
-                <p>1</p>
-                <p>2</p>
-                <p>3</p>
-            </Slider>
+        <div className={styles.panel}>
+            <Judul>Monitoring TSP</Judul>
+            <div className={styles.maps_container}>
+                <Maps className={styles.maps} />
+            </div>
         </div>
     )
 }
