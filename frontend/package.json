@@ -15,10 +15,12 @@
     "@tanstack/react-query-devtools": "^5.28.10",
     "@tanstack/router-devtools": "^1.23.1",
     "axios": "^1.6.8",
+    "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.13",
     "react-feather": "^2.0.10",
+    "react-leaflet": "^4.2.1",
     "react-query-auth": "^2.3.0",
     "react-router-dom": "^6.22.3",
     "type-fest": "^4.14.0"
