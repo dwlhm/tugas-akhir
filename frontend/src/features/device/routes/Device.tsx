@@ -42,6 +42,26 @@ export const Device = () => {
                         <p className={`${styles.judul} ${styles.jc}`}>40 µg/m³</p>
                     </Card>
                 </div>
+                <div className={styles.card_container} style={{marginTop: "20px"}}>
+                    <Card size="square" className={styles.card}>
+                        <p className={styles.label}>Suhu:</p>
+                        <p className={`${styles.judul} ${styles.jc}`}>30°C</p>
+                    </Card>
+                    <Card size="square" className={styles.card}>
+                        <p className={styles.label}>Kelembaban Udara:</p>
+                        <p className={`${styles.judul} ${styles.jc}`}>40% RH</p>
+                    </Card>
+                </div>
+                <div className={styles.card_container}>
+                    <Card size="square" className={styles.card}>
+                        <p className={styles.label}>Arah Angin:</p>
+                        <p className={`${styles.judul} ${styles.jc}`}>30°</p>
+                    </Card>
+                    <Card size="square" className={styles.card}>
+                        <p className={styles.label}>Kecepatan Angin:</p>
+                        <p className={`${styles.judul} ${styles.jc}`}>1.2 m/s</p>
+                    </Card>
+                </div>
             </div>
         </div>
     )

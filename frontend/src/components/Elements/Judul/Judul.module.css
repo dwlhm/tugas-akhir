@@ -1,5 +1,10 @@
 .judul {
     text-align: center;
     font-size: 20px;
-    margin: 2rem 1rem;
+    padding: 2rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 9999999999;
+    width: 100%;
+    background: #FFFFFF;
 }
