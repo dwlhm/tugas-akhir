@@ -6,12 +6,12 @@ import { Maps, MapsMarker } from "@/components/Maps"
 import { Judul } from "@/components/Elements/Judul/Judul"
 
 import styles from "./Overview.module.css"
-import { Outlet } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 
 export const Overview = () => {
     return(
         <div className={styles.panel}>
-            <Judul>Monitoring TSP</Judul>
+            <Judul><Link className={styles.link} to="/">Monitoring TSP</Link></Judul>
             <div className={styles.container}>
                 <div className={styles.maps_container}>
                     <Maps className={styles.maps}>

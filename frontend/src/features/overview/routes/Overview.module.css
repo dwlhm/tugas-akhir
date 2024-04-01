@@ -21,3 +21,12 @@
     width: 100%;
     border-radius: 1rem;
 }
+.link {
+    text-decoration: none;
+    color: #2e2e2e;
+    font-weight: bold;
+    transition: .2s all ease-in;
+}
+.link:hover {
+    color: #2181B6;
+}

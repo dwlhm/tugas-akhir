@@ -1,7 +1,7 @@
 import styles from "./Judul.module.css"
 
 export type JudulProps = {
-    children: string,
+    children: React.ReactNode | string,
     className?: string 
 }
 
