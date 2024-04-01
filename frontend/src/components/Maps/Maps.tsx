@@ -1,11 +1,11 @@
 import { MapContainer } from "react-leaflet/MapContainer"
-import { TileLayer } from "react-leaflet/TileLayer"
-import { Marker } from "react-leaflet/Marker"
-import { Popup } from "react-leaflet/Popup"
+import { TileLayer } from "react-leaflet/TileLayer"             
 
 import "leaflet/dist/leaflet.css"
 import { LatLngExpression } from "leaflet"
-import React from "react"
+import React, { Suspense, lazy } from "react"
+
+const MapsPopup = lazy(() => import("./MapsPopup"))
 
 export type MapsProps = {
     className?: string,
@@ -23,11 +23,6 @@ export const Maps = ({
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={coordinate}>
-                <Popup>
-                    Dwi Ilham Maulana
-                </Popup>
-            </Marker>
             {props.children}
         </MapContainer>
     )
