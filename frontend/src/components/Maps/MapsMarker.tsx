@@ -17,7 +17,7 @@ export const MapsMarker = ({position, data, name}: MapsMarkerProps) => {
     return(
         <Marker position={position} eventHandlers={{click() {
             navigate(`/${data}`)
-            set({position: position, id: data, name: name})
+            set({position: position, data: data, name: name})
         }}}>
             <Tooltip direction="top" offset={[-15, 0]}>
                 <>{name}</>

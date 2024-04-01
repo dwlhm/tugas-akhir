@@ -2,3 +2,32 @@
     max-width: 80vh;
     width: 100%;
 }
+.label {
+    font-size: 12px;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+.judul {
+    font-size: 22px;
+    font-weight: semibold;
+    padding-bottom: 20px;
+}
+.container {
+    margin-bottom: 15px
+}
+.device_id {
+    font-style: normal;
+    padding-left: 5px;
+    font-style: italic;
+}
+.jc {
+    font-size: 25px;
+    font-weight: bold;
+}
+.card_container {
+    display: flex;
+    flex-direction: row;
+}
+.card {
+    flex-grow: 1;
+}
