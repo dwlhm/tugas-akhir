@@ -4,17 +4,18 @@ import { useNavigate } from "react-router-dom"
 
 export type MapsMarkerProps = {
     position: LatLngExpression
-    data: string
+    data: string,
+    name: string
 }
 
-export const MapsMarker = ({position, data}: MapsMarkerProps) => {
+export const MapsMarker = ({position, data, name}: MapsMarkerProps) => {
 
     const navigate = useNavigate()
 
     return(
         <Marker position={position} eventHandlers={{click() {navigate(`/${data}`)}}}>
             <Tooltip direction="top" offset={[-15, 0]}>
-                <>{data}</>
+                <>{name}</>
             </Tooltip>
         </Marker>
     )
