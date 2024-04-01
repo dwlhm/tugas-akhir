@@ -1,10 +1,16 @@
 import { Overview } from "@/features/overview"
-import { useRoutes } from "react-router-dom"
+import { lazyImport } from "@/utils/lazyImport"
+import { RouteObject, useRoutes } from "react-router-dom"
+
+const { Device } = lazyImport(() => import('@/features/device'), 'Device')
 
 export const AppRouter = () => {
-    const commonRoute = [{
+    const commonRoute: RouteObject[] = [{
         path: "/",
-        element: <Overview />
+        element: <Overview />,
+        children: [
+            { path: ":deviceId", element: <Device /> }
+        ]
     }]
 
     const element = useRoutes([...commonRoute])

@@ -4,10 +4,16 @@
     flex-direction: column;
     height: 100vh;
 }
-.maps_container {
+.container {
     flex-grow: 1;
+    display: flex;
+    flex-direction: row;
     width: 100%;
-    padding: 0 1rem 1rem;
+    padding: 1rem;
+    gap: 1rem;
+}
+.maps_container {
+    width: 100%;
     display: flex;
 }
 .maps {
