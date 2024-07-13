@@ -19,7 +19,7 @@ router.get("/:id/history", Authorization, get_history);
 
 router.post("/", Authorization, register);
 router.delete("/:id", Authorization, destroy);
-router.get("/", Authorization, get_all_devices);
+router.get("/", get_all_devices);
 
 
 export default router;

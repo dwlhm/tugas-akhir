@@ -1,5 +1,6 @@
 import express, { Errback, Express, NextFunction, Response } from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import User from "./user";
 import Sq_Start from "database";
@@ -16,6 +17,7 @@ Sq_Start();
 
 app.use(express.json());
 app.use(express.static("public"));
+app.use(cors())
 
 app.use("/device", Device);
 app.use("/user", User);
