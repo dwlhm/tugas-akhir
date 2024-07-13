@@ -3,25 +3,19 @@ export type Location = {
   longitude?: number,
   error?: any,
 }
-export const useLocation = (): Location => {
+export const useLocation = (onChange: (longitude, latitude, error) => void): Location => {
   if (navigator.geolocation) {
-    let result: Location = {
-      error: "loading"
-    }
     navigator.geolocation.getCurrentPosition(
       position => {
         const { latitude, longitude } = position.coords
 
-        result =  { latitude, longitude }
+        onChange(latitude, longitude, null)
       },
       error => {
-        result = { error: error }
+        onChange(null, null, error)
       }    
     )
-    return result
   } else {
-    return {
-      error: "geolocation is not supported by this browser"
-    }
+    onChange(null, null, "geolocation is not supported by this browser")
   }
 }
