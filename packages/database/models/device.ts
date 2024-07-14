@@ -7,9 +7,11 @@ import {
   AllowNull,
   Unique,
   PrimaryKey,
+  HasMany
 } from "sequelize-typescript";
 import { Gateway } from "./gateway";
 import { User } from "./user";
+import { Latest_Device_Value } from "./Latest_Device_Value";
 
 @Table
 export class Device extends Model {
@@ -40,4 +42,7 @@ export class Device extends Model {
   @BelongsTo(() => User) user: User;
 
   @BelongsTo(() => Gateway) gateway: Gateway;
+
+  @HasMany(() => Latest_Device_Value) latest_device_value: Latest_Device_Value;
 }
+
