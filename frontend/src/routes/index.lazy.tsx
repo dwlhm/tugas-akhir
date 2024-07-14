@@ -1,7 +1,7 @@
 import React from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { DeviceDetail, DeviceValue, useDevices } from "../utils/useDevices";
+import { DeviceDetail, useDevices } from "../utils/useDevices";
 import { DataCard } from "../components/data.card";
 import { Location, useLocation } from "../utils/useLocation";
 

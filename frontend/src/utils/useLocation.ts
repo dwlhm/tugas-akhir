@@ -1,21 +1,27 @@
 export type Location = {
-  latitude?: number,
-  longitude?: number,
-  error?: any,
-}
-export const useLocation = (onChange: (longitude, latitude, error) => void): Location => {
+  latitude?: number;
+  longitude?: number;
+  error?: any;
+};
+export const useLocation = (
+  onChange: (longitude?: number, latitude?: number, error?: any) => void
+): void => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
-      position => {
-        const { latitude, longitude } = position.coords
+      (position) => {
+        const { latitude, longitude } = position.coords;
 
-        onChange(latitude, longitude, null)
+        onChange(latitude, longitude, null);
       },
-      error => {
-        onChange(null, null, error)
-      }    
-    )
+      (error) => {
+        onChange(undefined, undefined, error);
+      }
+    );
   } else {
-    onChange(null, null, "geolocation is not supported by this browser")
+    onChange(
+      undefined,
+      undefined,
+      "geolocation is not supported by this browser"
+    );
   }
-}
+};

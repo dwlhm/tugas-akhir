@@ -7,7 +7,6 @@ import {
   UseProfilDevice,
   useProfilDevice,
 } from "../utils/useDevices";
-import { DataCard } from "../components/data.card";
 import { Box } from "../assets/box";
 import { Back } from "../assets/chevron-left";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis,Tooltip } from "recharts";
