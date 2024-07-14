@@ -1,3 +1,7 @@
+import { Link } from "@tanstack/react-router"
+
+import { Open } from "../assets/open"
+
 export const DataCard = (props: {
   data: any
 }) => {
@@ -58,7 +62,9 @@ export const DataCard = (props: {
           </p>
         </div>
       }
-
+        <Link to="/$deviceId" params={{ deviceId: item.id }}>
+          <Open />
+        </Link>
 
     </div>
   </>

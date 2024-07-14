@@ -120,12 +120,12 @@ const destroy = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const get_all_devices = async (
-  req: Request,
+  _: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const devices = await Device.findAll();
+    const devices = await Device.findAll({ include: Latest_Device_Value });
 
     res.status(200).json({
       code: 200,
