@@ -7,3 +7,41 @@
 body {
  font-family: "Open Sans", sans-serif;
 }
+.leaflet-popup-content {
+  width: 20rem!important;
+}
+.card-title {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: .5rem 0
+}
+.sensor-value {
+  display: grid;
+  margin: .5rem 0;
+  gap: .5rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  text-align:center;
+}
+.sensor-value div {
+  border-radius: .3rem;
+  background-color: rgb(8 51 68);
+  color: #fefefe;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.sensor-value div p {
+  margin: .5rem  0;
+  font-size: .9rem;
+  font-weight: bold;
+  }
+.sensor-value div p.value {
+  font-weight: 500;
+  font-size: 1.8rem;
+}
+.sensor-value div p span {
+  font-size: .8rem;
+  display: block;
+  margin-top: -.3rem;
+  padding-bottom: .5rem;
+}
