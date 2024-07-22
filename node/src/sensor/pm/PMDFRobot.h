@@ -17,7 +17,7 @@ public:
     };
     void init() { 
         this->serial->begin(9600);
-        this->serial->setTimeout(1500);
+        // this->serial->setTimeout(1500);
     }
     PMDFRobotStruct read();
 };

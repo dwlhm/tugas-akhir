@@ -2,13 +2,14 @@
 #define pm100_H
 
 #include <Arduino.h>
+#include <SoftwareSerial.h>
 
 class PM100
 {
 private:
-    HardwareSerial* serial;
+    SoftwareSerial* serial;
 public:
-    PM100(HardwareSerial& serial) {
+    PM100(SoftwareSerial& serial) {
         this->serial = &serial;
     };
     void init() {

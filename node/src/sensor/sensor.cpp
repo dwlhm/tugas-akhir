@@ -1,24 +1,38 @@
 #include <Arduino.h>
+#include <AltSoftSerial.h>
+#include <SoftwareSerial.h>
+
 #include <struct/SensorStruct.h>
 #include <sensor/pm/PMDFRobot.h>
 #include <sensor/pm/PM100.h>
 #include <sensor/dht/DHTDFRobot.h>
 #include <sensor/angin/KecepatanAngin.h>
 #include <sensor/angin/ArahAngin.h>
+#include <sensor/gps/gps.h>
+#include <sensor/angin/ArahAnginRS.h>
+#include <sensor/angin/KecepatanAnginRS.h>
 
 PMDFRobot pmDFRobot(Serial1);
 DHTDFRobot dht(new DHT_Unified(23, DHT22));
-ArahAngin arahAngin(A7);
-KecepatanAngin kecepatanAngin(A6);
-PM100 pm100(Serial3);
+// ArahAngin arahAngin(A7);
+//KecepatanAngin kecepatanAngin(A6);
+SoftwareSerial serial(50, 51);
+PM100 pm100(serial);
+AltSoftSerial altser;
+GPS gps(altser);
+ArahAnginRS arahanginrs(Serial2, 40, 41);
+KecepatanAnginRS kecepatanAnginRS(Serial3, 42, 43);
 
 void initSensor() {
     
-    // arahAngin.init();
-    kecepatanAngin.init();
+    //kecepatanAngin.init();
     pmDFRobot.init();
     dht.init();
-    // pm100.init();
+    //arahAngin.init();
+    pm100.init();
+    gps.init();
+    arahanginrs.init();
+    kecepatanAnginRS.init();
 
 }
 
@@ -27,9 +41,11 @@ SensorStruct readSensor() {
     return SensorStruct{
         pmDFRobot.read(),
         dht.read(),
-        kecepatanAngin.read(),
-        // arahAngin.read(),
-        // pm100.read()
+        //kecepatanAngin.read(),
+        kecepatanAnginRS.read(),
+        arahanginrs.read(),
+        pm100.read(),
+        gps.read(),
     };
 
 }
@@ -69,23 +85,36 @@ String stringifySensor(String deviceId, SensorStruct data) {
         sensorValue += ",";
     }
     
-    // if (data.pm100 >= 0) {
-    //     sensorName += "3";
-    //     sensorValue += data.pm100;
-    //     sensorValue += ",";
-    // }
-    
-    // if (data.arahAngin >= 0) {
-    //     sensorName += "a";
-    //     sensorValue += data.arahAngin;
-    //     sensorValue += ",";
-    // }
-    
     if (data.kecepatanAngin >= 0) {
         sensorName += "v";
         sensorValue += data.kecepatanAngin;
         sensorValue += ",";
     }
+
+    // if (data.pm100 >= 0) {
+    sensorName += "3";
+    sensorValue += data.pm100;
+    sensorValue += ",";
+    // }
+    
+    // if (data.arahAngin >= 0) {
+    sensorName += "a";
+    sensorValue += data.arahAngin;
+    sensorValue += ",";
+    // }
+    
+
+    // if (data.gps.lat) {
+    sensorName += "l";
+    sensorValue += String(data.gps.lat, 8);
+    sensorValue += ",";
+    // }
+    
+    // if (data.gps.lon >= 0) {
+    sensorName += "o";
+    sensorValue += String(data.gps.lon, 8);
+    sensorValue += ",";
+    // }
 
     return "{\"id\": \"" + deviceId + "\",\"data\": \"" + sensorName + "|" + sensorValue + "\"}";
 

@@ -11,7 +11,7 @@ topic_action = 'node/c85e7441/prod/action'
 client_id = 'c85e7441'
 username = '13a6e232'
 password = '88e60ac85b1f2b09'
-
+{"id": "759b21ae","data": "ht120;v|69,28,18,26,49,2.11,"};
 q = Queue()
 
 node = lora.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=0,power=22,rssi=True,air_speed=2400,relay=False)

@@ -2,43 +2,57 @@
 #include <sensor/sensor.h>
 #include <lcd/lcd.h>
 #include <struct/SensorStruct.h>
+#include <sim/Sim.h>
+#include <struct/GatewayStruct.h>
 #include <deduplication/Deduplication.h>
 
-Deduplication deduplication(4);
+Deduplication deduplication(10);
 
-// String deviceId = "759b21ae";
-String deviceId = "7d80e4e0";
+// // String deviceId = "759b21ae";
+GatewayStruct gateway = GatewayStruct{
+    "83930168",
+    "b8e3d85f",
+    "f101ceaab24e3dc7",
+};
+String deviceId = "c1151e2a";
+
+Sim sim(Serial, gateway, "103.150.197.37");
 
 void setup() {
 
-    Serial.begin(9600);
+  initSensor();
 
-    initSensor();
+  initLCD();
 
-    initLCD();
+  sim.init();
 
-    Serial2.begin(9600);
+    //Serial2.begin(9600);
 
 }
 
 void loop() {
 
-    SensorStruct data = readSensor();
+  SensorStruct data = readSensor();
 
-    writeLCD(data);
+  writeLCD(data);
 
-    String dataString = stringifySensor(deviceId, data);
+  String dataString = stringifySensor(deviceId, data);
 
-    Serial.println(dataString);
+    // Serial.println(dataString);
 
-    deduplication.start(dataString);
+    //deduplication.start(dataString);
 
-    Serial2.println(dataString);
+  //Serial.println(dataString);
+  String response = sim.sendMqtt(dataString);
 
-    delay(3000);
+    // Serial.println("RESPONSE: " + response);
+    //Serial2.println(deduplication.indexOrder);
 
-    deduplication.write(Serial2);
+    //delay(5000);
 
-    delay(300000);
+    //deduplication.write(Serial2);
+
+  //delay(300000);
+  delay(5000);
 
 }

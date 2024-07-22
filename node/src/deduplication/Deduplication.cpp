@@ -11,8 +11,8 @@ void Deduplication::start(String& data) {
     this->newMetadataSize = 0;
     this->indexOrder = "";
     int dataLength = data.length();
-    Serial.print("this->metadataPosition: ");
-    Serial.println(this->metadataPosition);
+    // Serial.print("this->metadataPosition: ");
+    // Serial.println(this->metadataPosition);
 
     // if (dataLength > 0) {
         if (dataLength >> 5) {
