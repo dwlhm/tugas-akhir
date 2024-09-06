@@ -13,8 +13,8 @@ import {
 const router: Router = Router();
 
 router.get("/:id/values", Authorization, get_values);
-router.get("/:id", Authorization, profil);
-router.get("/:id/la", Authorization, get_latest_value);
+router.get("/:id", profil);
+router.get("/:id/la", get_latest_value);
 router.get("/:id/history", Authorization, get_history);
 
 router.post("/", Authorization, register);

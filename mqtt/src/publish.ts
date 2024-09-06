@@ -26,8 +26,15 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
     d.write(dayjs().format("YYYY-MM-DDTHH:mm:ss.SSSZ[Z]"));
     d.write("&");
     d.write(message);
-    d.end("\n");*/
-    /*const timestamp = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
+    d.end("\n");
+    const timestamp = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
+    console.log('[json_parse] ', message);
+    const d = fs.createWriteStream("../backend/public/data-dengan-bigint.csv", { flags: "a" })
+    d.write(dayjs().format("YYYY-MM-DDTHH:mm:ss.SSSZ[Z]"));
+    d.write("&");
+    d.write(message);
+    d.end("\n");
+    const timestamp = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
      const dataIoT = {timestamp: timestamp, message: message};
 	console.log(dataIoT);
 	function isValidJson(str){
@@ -74,10 +81,10 @@ writeHeaderIfNotExists(csvFile)
     .then(() => {
         // Tambahkan data baru ke file CSV
         appendDataToCsv(csvFile, dataIoT);
-    });*/
+    });
    
-    let complete_message = message
-    /*
+    });*/
+    //let complete_message = message
     // do for loop
     let pk_order = ""
     let new_pk = ""
@@ -86,7 +93,6 @@ writeHeaderIfNotExists(csvFile)
     
     for (let i = 0; i < arr_message.length-1; i++) {
       const element = arr_message[i];
-      // console.log('[msg for] ', element)
       // get the new chunk
       console.log(element)
       if (!Number(element)) {
@@ -116,15 +122,12 @@ writeHeaderIfNotExists(csvFile)
         complete_message += data_chunk.dataValues.value
       }
     }
-    // console.log('[pk_order] ', pk_order)
-    // console.log('[new_pk] ', new_pk)
-
     const lastIndex = complete_message.lastIndexOf(";")
 
     if ((lastIndex + 1) >= complete_message.length) {
       complete_message = complete_message.slice(0, lastIndex);
     }
-   
+    /* 
     console.log("Complete Message: ", complete_message);
     const de = fs.createWriteStream("../backend/public/data-acak-normal.csv", { flags: "a" })
     de.write(dayjs().format("YYYY-MM-DDTHH:mm:ss.SSSZ[Z]"));
@@ -135,6 +138,7 @@ writeHeaderIfNotExists(csvFile)
     de.end("\n");
     */
     const json_parse = JSON.parse(complete_message);
+
     console.log('[json_parse] ', complete_message);
     // get the device id
     const device_id = json_parse.id;
@@ -212,7 +216,8 @@ writeHeaderIfNotExists(csvFile)
     csvStream.write(";");
     csvStream.write(archive.v);
     csvStream.end("\n");
-    
+    */
+
     // store the pk_order to Duplication_Orders
     await Duplication_Order.create({
       value: pk_order,
@@ -238,7 +243,6 @@ writeHeaderIfNotExists(csvFile)
         payload: Buffer.from("0"),
         retain: false
     }, () => {})
-   */
   } catch (err) {
     console.error("[Publish_Packet] ", err);
   }
