@@ -29,12 +29,12 @@ void initLCD() {
     tft.print("Suhu");
     tft.setCursor(180, 130);
     tft.print("Humidity");
-    // tft.setCursor(340, 130);
-    // tft.print("Humidity");
+    tft.setCursor(340, 130);
+    tft.print("PM 100");
     tft.setCursor(20, 230);
     tft.print("Kecepatan Angin");
-    // tft.setCursor(340, 230);
-    // tft.print("Arah Angin");
+    tft.setCursor(340, 230);
+    tft.print("Arah Angin");
 };
 
 void writeLCD(SensorStruct data) {
@@ -54,31 +54,13 @@ void writeLCD(SensorStruct data) {
     tft.print(data.dht.temperature);
     tft.setCursor(180, 180);
     tft.print(data.dht.humidity);
-    // tft.setCursor(340, 180);
-    // tft.print(data.dht.humidity);
+    tft.setCursor(340, 180);
+    tft.print(data.pm100);
 
     tft.fillRect(20, 280, 380, 320, WHITE);
     tft.setCursor(20, 280);
     tft.print(data.kecepatanAngin);
-    // tft.setCursor(340, 280);
-    // tft.print(data.arahAngin);
+    tft.setCursor(340, 280);
+    tft.print(data.arahAngin);
 
-    // debug
-    Serial.println("");
-    Serial.print(data.pmDFRobot.pm1);
-    Serial.print(";");
-    Serial.print(data.pmDFRobot.pm25);
-    Serial.print(";");
-    Serial.print(data.pmDFRobot.pm10);
-    Serial.print(";");
-    // Serial.print(data.pm100);
-    // Serial.print(";");
-    Serial.print(data.dht.temperature);
-    Serial.print(";");
-    Serial.print(data.dht.humidity);
-    Serial.print(";");
-    // Serial.print(data.arahAngin);
-    // Serial.print(";");
-    Serial.print(data.kecepatanAngin);
-    Serial.println(";");
 };
