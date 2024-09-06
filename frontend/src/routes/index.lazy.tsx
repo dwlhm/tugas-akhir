@@ -44,7 +44,7 @@ function Index() {
       if (error) console.error(error);
     });
 
-    setInterval(() => {
+    const intv1 = setInterval(() => {
       useDevices((data, error) => {
         if (data) {
           setDevices(
@@ -73,6 +73,10 @@ function Index() {
         if (error) console.error(error);
       });
     }, 60000);
+
+    return () => {
+	clearInterval(intv1);	
+    }
   }, []);
   React.useEffect(() => {
     useLocation((longitude, latitude, error) => {

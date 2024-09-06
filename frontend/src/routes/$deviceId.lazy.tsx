@@ -34,6 +34,22 @@ function Detail() {
       });
     });
   }, []);
+  React.useEffect(() => {
+    const intv2 = setInterval(() => {
+    useDeviceValue(deviceId, (data?: DeviceValue) => {
+      setData((prev) => {
+        if (prev[prev.length - 1]?.timestamp !== data?.timestamp)
+          return [...prev, data as DeviceValue];
+        return prev;
+      });
+    });
+    }, 60000)
+
+    return () => {
+	clearInterval(intv2);
+    }
+  }, []);
+
   if (data.length <= 0) return <p>Loading...</p>;
   return (
     <div className="detail">

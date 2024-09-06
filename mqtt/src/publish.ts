@@ -20,20 +20,32 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
     // get the message
     const message = packet.payload.toString("ascii");
     console.log('[RCV MSG] ', message);
-    if (message.lastIndexOf(";") !== message.length-1) return;
+    //if (message.lastIndexOf(";") !== message.length-1) return;
 
-    console.log('[json_parse] ', message);
-    const d = fs.createWriteStream("../backend/public/data-dengan-bigint.csv", { flags: "a" })
+    /*const d = fs.createWriteStream("../backend/public/data-dengan-bigint.csv", { flags: "a" })
     d.write(dayjs().format("YYYY-MM-DDTHH:mm:ss.SSSZ[Z]"));
     d.write("&");
     d.write(message);
-    d.end("\n");
+    d.end("\n");*/
     /*const timestamp = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
      const dataIoT = {timestamp: timestamp, message: message};
 	console.log(dataIoT);
+	function isValidJson(str){
+		try{
+		JSON.parse(str);
+		return true;
+	}
+	catch (e){
+	return false
+	}
+}
 	async function appendDataToCsv(file, data){
 	try{
-		const csvString = await fastCsv.writeToString([data],{headers: false});
+		if(!isValidJson(data.message)){
+		console.log('Data message bukan JSON. Tidak akan disimpan.');
+	return;	
+		}
+			const csvString = await fastCsv.writeToString([data],{headers: false});
 		fs.appendFile(file, csvString + '\n',(err) =>{
 			if (err){
 				console.error('terjadi kesalahan saat menyimpan data:', err);
@@ -57,15 +69,15 @@ async function writeHeaderIfNotExists(file) {
     }
 }
 
-const csvFile = '3menit.csv';
+const csvFile = 'akhir.csv';
 writeHeaderIfNotExists(csvFile)
     .then(() => {
         // Tambahkan data baru ke file CSV
         appendDataToCsv(csvFile, dataIoT);
-    });
-   */
-    //let complete_message = message
-    
+    });*/
+   
+    let complete_message = message
+    /*
     // do for loop
     let pk_order = ""
     let new_pk = ""
@@ -114,21 +126,23 @@ writeHeaderIfNotExists(csvFile)
     }
    
     console.log("Complete Message: ", complete_message);
-    const de = fs.createWriteStream("../backend/public/data-dengan-bigint.csv", { flags: "a" })
+    const de = fs.createWriteStream("../backend/public/data-acak-normal.csv", { flags: "a" })
     de.write(dayjs().format("YYYY-MM-DDTHH:mm:ss.SSSZ[Z]"));
     de.write("&");
     de.write(message);
     de.write("&");
     de.write(complete_message);
     de.end("\n");
-    
+    */
     const json_parse = JSON.parse(complete_message);
     console.log('[json_parse] ', complete_message);
     // get the device id
     const device_id = json_parse.id;
+    console.log("ggug: ", device_id)
 
     if (!device_id) throw new Error("device id not recognized")
     // save json_parse var to latest_device_value
+    console.log("ggughiuh iuhu: ", device_id)
     await Latest_Device_Value.update({
       value: complete_message,
       updatedAt: new Date()
@@ -137,7 +151,7 @@ writeHeaderIfNotExists(csvFile)
         device_id: device_id
       }
     });
-   
+  /* 
     const currentDate = new Date();
     const currMonth = currentDate.getMonth();
     const currYear = currentDate.getFullYear();
@@ -224,7 +238,7 @@ writeHeaderIfNotExists(csvFile)
         payload: Buffer.from("0"),
         retain: false
     }, () => {})
-   
+   */
   } catch (err) {
     console.error("[Publish_Packet] ", err);
   }
