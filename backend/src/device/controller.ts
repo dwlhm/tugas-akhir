@@ -217,6 +217,41 @@ const get_history = async (
   }
 }
 
+const update_device_profil = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.body.name && !req.body.address) 
+      return res.status(400).json({
+        code: 400,
+        error: ["No field to be updated"]
+      })
+    await Device.update(
+      {
+        ...req.body,
+      },
+      {
+        where: {
+          id: req.params["id"]
+        }
+      }
+    )
+
+    return res.status(200).json({
+      code: 200,
+      body: {
+        ...req.body
+      }
+    })
+  } catch (error) {
+    console.error("[update_device_profil] ", error.message)    
+    
+    next(error)
+  }
+}
+
 export {
   register,
   profil,
@@ -224,5 +259,6 @@ export {
   get_all_devices,
   get_values,
   get_latest_value,
-  get_history
+  get_history,
+  update_device_profil
 };

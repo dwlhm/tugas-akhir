@@ -8,6 +8,7 @@ import {
   get_values,
   get_latest_value,
   get_history,
+  update_device_profil
 } from "./controller";
 
 const router: Router = Router();
@@ -19,6 +20,7 @@ router.get("/:id/history", Authorization, get_history);
 
 router.post("/", Authorization, register);
 router.delete("/:id", Authorization, destroy);
+router.put("/:id", Authorization, update_device_profil);
 router.get("/", get_all_devices);
 
 

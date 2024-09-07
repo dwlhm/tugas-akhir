@@ -177,4 +177,37 @@ const get_gateway_mqtt = async (
   }
 };
 
-export { register, profil, destroy, get_all_gateway, get_gateway_mqtt };
+const update_gateway_profil = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.body.name && !req.body.address)
+      return res.status(400).json({
+        code: 400,
+        error: ["No field to be updated"],
+      });
+    await Gateway.update(
+      {
+        ...req.body,
+      },
+      {
+        where: {
+          id: req.params["id"],
+        },
+      }
+    );
+
+    return res.status(200).json({
+      code: 200,
+      body: {
+        ...req.body,
+      },
+    });
+  } catch (err) {
+    console.error("[update_gateway_profil] ", err.message);
+  }
+};
+
+export { register, profil, destroy, get_all_gateway, get_gateway_mqtt, update_gateway_profil };
