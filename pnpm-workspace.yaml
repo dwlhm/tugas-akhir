@@ -1,4 +1,5 @@
-package:
+packages:
+  - 'packages/*'
   - backend
+  - frontend
   - mqtt
-  - packages/*
