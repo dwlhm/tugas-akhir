@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "@tanstack/react-router";
 import { Dashboard, Gateway, NodeIc, User } from "../components/icons";
+import { ChevronRight } from "react-feather";
 
 export const Route = createFileRoute("/__auth")({
   beforeLoad: ({ context, location }) => {
@@ -78,7 +79,10 @@ function AuthLayout() {
               </Link>
             </nav>
           </div>
-          <Link className="bg-blue-100 p-5 rounded border-2 border-solid border-blue-100 hover:border-blue-900" to="/user">
+          <Link
+            className="bg-blue-100 p-5 rounded border-2 border-solid border-blue-100 hover:border-blue-900"
+            to="/user"
+          >
             <div className="flex gap-4">
               <div>
                 <div className="bg-blue-200 p-1 rounded">
@@ -86,14 +90,36 @@ function AuthLayout() {
                 </div>
               </div>
               <div>
-                <p className="text-poppins text-blue-900 font-semibold">{auth.user?.name}</p>
-                <p className="text-poppins text-blue-900 text-sm">{auth.user?.email}</p>
+                <p className="text-poppins text-blue-900 font-semibold">
+                  {auth.user?.name}
+                </p>
+                <p className="text-poppins text-blue-900 text-sm">
+                  {auth.user?.email}
+                </p>
               </div>
             </div>
           </Link>
         </div>
       </nav>
-      <div className="flex-grow p-5">
+      <div className="flex-grow py-5 pr-5">
+        <header className="text-xl font-poppins text-blue-900 flex mb-4">
+          <div className="flex items-center gap-2 bg-white/50 p-2 pr-5 rounded border-2 border-solid border-white hover:border-blue-900 capitalize">
+            <span className="p-2 bg-blue-100 rounded">
+              <User className="size-5 stroke-blue-900" />
+            </span>
+            {location.pathname.split("/").map((item, index) =>
+              index > 1 ? (
+                <span className="flex gap-2 items-center" key={`name.${index}`}>
+                  <ChevronRight />
+                  {item}
+                </span>
+              ) : (
+                <span className="font-semibold" key={`name.${index}`}>{item}</span>
+              )
+            )}
+          </div>
+          <div className="grow"></div>
+        </header>
         <Outlet />
       </div>
     </div>

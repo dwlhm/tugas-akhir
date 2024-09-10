@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { getStoredContext, setStoredContext } from "./utils";
-import { getProfile, postLogin, Profile } from "./api";
+import { getProfile, postLogin, postLogout, Profile } from "./api";
 import { API } from "../utils";
 
 export interface User {
@@ -32,9 +32,31 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     if (user)
       getProfile(user)
         .then((data) => {
-          if (data.body) setUser({ ...data.body, isAuthenticated: true });
+          if (data.body) {
+            setStoredContext({ ...data.body, isAuthenticated: true });
+            setUser({ ...data.body, isAuthenticated: true });
+          } else {
+            setStoredContext({
+              name: "",
+              email: "",
+              authentication_token: "",
+              isAuthenticated: false,
+            });
+            setUser({
+              name: "",
+              email: "",
+              authentication_token: "",
+              isAuthenticated: false,
+            });
+          }
         })
         .catch(() => {
+          setStoredContext({
+            name: "",
+            email: "",
+            authentication_token: "",
+            isAuthenticated: false,
+          });
           setUser({
             name: "",
             email: "",
@@ -66,7 +88,26 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     return data;
   };
 
-  const logout = async () => {};
+  const logout = async () => {
+    if (user) {
+      const data = await postLogout(user);
+
+      if (data.body) {
+        setUser({
+          name: "",
+          email: "",
+          authentication_token: "",
+          isAuthenticated: false,
+        });
+        setStoredContext({
+          name: "",
+          email: "",
+          authentication_token: "",
+          isAuthenticated: false,
+        });
+      }
+    }
+  };
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

@@ -2,7 +2,7 @@ import {
   createFileRoute,
   redirect,
 } from "@tanstack/react-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { useAuth } from "../auth/context";
 
@@ -18,7 +18,6 @@ const formSchema = z.object({
 export const Route = createFileRoute("/login")({
   validateSearch: loginSchema,
   beforeLoad: ({ context, search }) => {
-    console.log(context.auth)
     if (context.auth.user?.isAuthenticated) {
       throw redirect({
         to: search.redirect || "/dashboard"
@@ -46,7 +45,6 @@ function Login() {
       };
       const data = formSchema.parse(rawData);
       const response = await auth.login(data.username, data.password);
-      console.log("response", response);
 
       if (response.code >= 400 && response.error) {
         const err_list = response.error.map((item, index) => (
@@ -62,10 +60,6 @@ function Login() {
 
       if (response.code == 202) {
         setErrorMessage([]);
-        navigate({
-          to: "/dashboard",
-        });
-        console.log("DJKDJK")
       }
     } catch (error) {
       console.error("error", error);
@@ -73,6 +67,10 @@ function Login() {
       setIsSubmitted(false);
     }
   };
+
+  useEffect(() => {
+    if (auth.user?.isAuthenticated) navigate({ to: redirect_url || "/dashboard" })
+  }, [auth.user?.isAuthenticated])
 
   return (
     <div className="flex items-center flex-col justify-center h-screen bg-gray-200">
