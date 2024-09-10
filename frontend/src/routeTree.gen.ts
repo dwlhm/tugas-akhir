@@ -20,6 +20,9 @@ import { Route as authImport } from './routes/__auth'
 
 const DeviceIdLazyImport = createFileRoute('/$deviceId')()
 const IndexLazyImport = createFileRoute('/')()
+const authUserLazyImport = createFileRoute('/__auth/user')()
+const authNodeLazyImport = createFileRoute('/__auth/node')()
+const authGatewayLazyImport = createFileRoute('/__auth/gateway')()
 const authDashboardLazyImport = createFileRoute('/__auth/dashboard')()
 
 // Create/Update Routes
@@ -43,6 +46,27 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const authUserLazyRoute = authUserLazyImport
+  .update({
+    path: '/user',
+    getParentRoute: () => authRoute,
+  } as any)
+  .lazy(() => import('./routes/__auth/user.lazy').then((d) => d.Route))
+
+const authNodeLazyRoute = authNodeLazyImport
+  .update({
+    path: '/node',
+    getParentRoute: () => authRoute,
+  } as any)
+  .lazy(() => import('./routes/__auth/node.lazy').then((d) => d.Route))
+
+const authGatewayLazyRoute = authGatewayLazyImport
+  .update({
+    path: '/gateway',
+    getParentRoute: () => authRoute,
+  } as any)
+  .lazy(() => import('./routes/__auth/gateway.lazy').then((d) => d.Route))
 
 const authDashboardLazyRoute = authDashboardLazyImport
   .update({
@@ -90,6 +114,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authDashboardLazyImport
       parentRoute: typeof authImport
     }
+    '/__auth/gateway': {
+      id: '/__auth/gateway'
+      path: '/gateway'
+      fullPath: '/gateway'
+      preLoaderRoute: typeof authGatewayLazyImport
+      parentRoute: typeof authImport
+    }
+    '/__auth/node': {
+      id: '/__auth/node'
+      path: '/node'
+      fullPath: '/node'
+      preLoaderRoute: typeof authNodeLazyImport
+      parentRoute: typeof authImport
+    }
+    '/__auth/user': {
+      id: '/__auth/user'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof authUserLazyImport
+      parentRoute: typeof authImport
+    }
   }
 }
 
@@ -97,10 +142,16 @@ declare module '@tanstack/react-router' {
 
 interface authRouteChildren {
   authDashboardLazyRoute: typeof authDashboardLazyRoute
+  authGatewayLazyRoute: typeof authGatewayLazyRoute
+  authNodeLazyRoute: typeof authNodeLazyRoute
+  authUserLazyRoute: typeof authUserLazyRoute
 }
 
 const authRouteChildren: authRouteChildren = {
   authDashboardLazyRoute: authDashboardLazyRoute,
+  authGatewayLazyRoute: authGatewayLazyRoute,
+  authNodeLazyRoute: authNodeLazyRoute,
+  authUserLazyRoute: authUserLazyRoute,
 }
 
 const authRouteWithChildren = authRoute._addFileChildren(authRouteChildren)
@@ -111,6 +162,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/$deviceId': typeof DeviceIdLazyRoute
   '/dashboard': typeof authDashboardLazyRoute
+  '/gateway': typeof authGatewayLazyRoute
+  '/node': typeof authNodeLazyRoute
+  '/user': typeof authUserLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -119,6 +173,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/$deviceId': typeof DeviceIdLazyRoute
   '/dashboard': typeof authDashboardLazyRoute
+  '/gateway': typeof authGatewayLazyRoute
+  '/node': typeof authNodeLazyRoute
+  '/user': typeof authUserLazyRoute
 }
 
 export interface FileRoutesById {
@@ -128,13 +185,32 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/$deviceId': typeof DeviceIdLazyRoute
   '/__auth/dashboard': typeof authDashboardLazyRoute
+  '/__auth/gateway': typeof authGatewayLazyRoute
+  '/__auth/node': typeof authNodeLazyRoute
+  '/__auth/user': typeof authUserLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/login' | '/$deviceId' | '/dashboard'
+  fullPaths:
+    | '/'
+    | ''
+    | '/login'
+    | '/$deviceId'
+    | '/dashboard'
+    | '/gateway'
+    | '/node'
+    | '/user'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/login' | '/$deviceId' | '/dashboard'
+  to:
+    | '/'
+    | ''
+    | '/login'
+    | '/$deviceId'
+    | '/dashboard'
+    | '/gateway'
+    | '/node'
+    | '/user'
   id:
     | '__root__'
     | '/'
@@ -142,6 +218,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/$deviceId'
     | '/__auth/dashboard'
+    | '/__auth/gateway'
+    | '/__auth/node'
+    | '/__auth/user'
   fileRoutesById: FileRoutesById
 }
 
@@ -183,7 +262,10 @@ export const routeTree = rootRoute
     "/__auth": {
       "filePath": "__auth.tsx",
       "children": [
-        "/__auth/dashboard"
+        "/__auth/dashboard",
+        "/__auth/gateway",
+        "/__auth/node",
+        "/__auth/user"
       ]
     },
     "/login": {
@@ -194,6 +276,18 @@ export const routeTree = rootRoute
     },
     "/__auth/dashboard": {
       "filePath": "__auth/dashboard.lazy.tsx",
+      "parent": "/__auth"
+    },
+    "/__auth/gateway": {
+      "filePath": "__auth/gateway.lazy.tsx",
+      "parent": "/__auth"
+    },
+    "/__auth/node": {
+      "filePath": "__auth/node.lazy.tsx",
+      "parent": "/__auth"
+    },
+    "/__auth/user": {
+      "filePath": "__auth/user.lazy.tsx",
       "parent": "/__auth"
     }
   }

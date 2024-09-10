@@ -1,15 +1,101 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  redirect,
+  useLocation,
+} from "@tanstack/react-router";
+import { Dashboard, Gateway, NodeIc, User } from "../components/icons";
 
-export const Route = createFileRoute('/__auth')({
+export const Route = createFileRoute("/__auth")({
   beforeLoad: ({ context, location }) => {
     if (!context.auth.user?.isAuthenticated) {
       throw redirect({
-        to: '/login',
+        to: "/login",
         search: {
-          redirect: location.href
-        }
-      })
+          redirect: location.href,
+        },
+      });
     }
   },
-  component: () => <div>Hello /__auth!</div>
-})
+  component: AuthLayout,
+});
+
+const isMenuActive = (location: string, path: string): string => {
+  return location.includes(path) ? "bg-blue-500 text-gray-100" : "";
+};
+
+function AuthLayout() {
+  const location = useLocation();
+  const { auth } = Route.useRouteContext();
+
+  return (
+    <div className="flex min-h-screen bg-gray-100">
+      <nav className="rounded p-5 w-full max-w-xs flex flex-col justify-between h-screen">
+        <div className="rounded bg-white p-2 h-full border-4 box-shadow flex justify-between flex-col">
+          <div>
+            <header>
+              <h1 className="text-2xl text-blue-900 font-poppins font-semibold text-center py-5">
+                Monitoring Udara
+              </h1>
+            </header>
+            <nav className="my-5 flex flex-col gap-2 text-poppins">
+              <Link
+                to="/dashboard"
+                className={`py-3 pr-5 pl-3 hover:bg-blue-500 rounded hover:text-blue-100 flex gap-4 items-center ${isMenuActive(location.href, "/dashboard")}`}
+              >
+                <span className="p-2 bg-blue-100 rounded">
+                  <Dashboard className="size-5 stroke-blue-900" />
+                </span>
+                Dashboard
+              </Link>
+              <Link
+                to="/node"
+                className={`py-3 pr-5 pl-3 hover:bg-blue-500 rounded hover:text-blue-100 flex gap-4 items-center ${isMenuActive(location.href, "/node")}`}
+              >
+                <span className="p-2 bg-blue-100 rounded">
+                  <NodeIc className="size-5 stroke-blue-900" />
+                </span>
+                Node
+              </Link>
+              <Link
+                to="/gateway"
+                className={`py-3 pr-5 pl-3 hover:bg-blue-500 rounded hover:text-blue-100 flex gap-4 items-center ${isMenuActive(location.href, "/gateway")}`}
+              >
+                <span className="p-2 bg-blue-100 rounded">
+                  <Gateway className="size-5 stroke-blue-900" />
+                </span>
+                Gateway
+              </Link>
+              <Link
+                to="/user"
+                className={`py-3 pr-5 pl-3 hover:bg-blue-500 rounded hover:text-blue-100 flex gap-4 items-center ${isMenuActive(location.href, "/user")}`}
+              >
+                <span className="p-2 bg-blue-100 rounded">
+                  <User className="size-5 stroke-blue-900" />
+                </span>
+                User
+              </Link>
+            </nav>
+          </div>
+          <Link className="bg-blue-100 p-5 rounded border-2 border-solid border-blue-100 hover:border-blue-900" to="/user">
+            <div className="flex gap-4">
+              <div>
+                <div className="bg-blue-200 p-1 rounded">
+                  <User className="size-5 stroke-blue-900" />
+                </div>
+              </div>
+              <div>
+                <p className="text-poppins text-blue-900 font-semibold">{auth.user?.name}</p>
+                <p className="text-poppins text-blue-900 text-sm">{auth.user?.email}</p>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </nav>
+      <div className="flex-grow p-5">
+        <Outlet />
+      </div>
+    </div>
+  );
+}
