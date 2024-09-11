@@ -30,8 +30,8 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
       id: device_id,
     });
     const latest_table = await Latest_Device_Value.create({
-      device_id: device_id
-    })
+      device_id: device_id,
+    });
 
     return res.status(200).json({
       code: 200,
@@ -67,12 +67,20 @@ const profil = async (req: Request, res: Response, next: NextFunction) => {
     const device_id: number = req.params["id"] as unknown as number;
 
     const device = await Device.findByPk(device_id, {
-      include: {
-        model: User,
-        attributes: {
-          exclude: [ "id", "password"]
-        }
-      }
+      include: [
+        {
+          model: User,
+          attributes: {
+            exclude: ["id", "password"],
+          },
+        },
+        {
+          model: Latest_Device_Value,
+          attributes: {
+            exclude: ["id", "device_id", "createdAt"]
+          }
+        },
+      ],
     });
 
     if (!device) throw new Error("404#device");
@@ -91,12 +99,12 @@ const profil = async (req: Request, res: Response, next: NextFunction) => {
 const destroy = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id = req.params["id"];
-    
+
     let destroying = await Device_Value.destroy({
-        where: {
-            device_id: device_id
-        }
-    })
+      where: {
+        device_id: device_id,
+      },
+    });
 
     destroying = await Device.destroy({
       where: {
@@ -174,7 +182,7 @@ const get_latest_value = async (
     const value = await Latest_Device_Value.findOne({
       where: {
         device_id: device_id,
-      }
+      },
     });
 
     if (!value) throw new Error("404#devicevalue");
@@ -190,11 +198,7 @@ const get_latest_value = async (
   }
 };
 
-const get_history = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const get_history = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id = req.params["id"];
     const list_db = await Csv_List.findByPk(device_id);
@@ -207,15 +211,15 @@ const get_history = async (
       code: 200,
       body: {
         id: device_id,
-        list: list
-      }
-    })
+        list: list,
+      },
+    });
   } catch (error) {
     console.error("[get_history] ", error.message);
-    
+
     next(error);
   }
-}
+};
 
 const update_device_profil = async (
   req: Request,
@@ -223,34 +227,34 @@ const update_device_profil = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.body.name && !req.body.address) 
+    if (!req.body.name && !req.body.address)
       return res.status(400).json({
         code: 400,
-        error: ["No field to be updated"]
-      })
+        error: ["No field to be updated"],
+      });
     await Device.update(
       {
         ...req.body,
       },
       {
         where: {
-          id: req.params["id"]
-        }
+          id: req.params["id"],
+        },
       }
-    )
+    );
 
     return res.status(200).json({
       code: 200,
       body: {
-        ...req.body
-      }
-    })
+        ...req.body,
+      },
+    });
   } catch (error) {
-    console.error("[update_device_profil] ", error.message)    
-    
-    next(error)
+    console.error("[update_device_profil] ", error.message);
+
+    next(error);
   }
-}
+};
 
 export {
   register,
@@ -260,5 +264,5 @@ export {
   get_values,
   get_latest_value,
   get_history,
-  update_device_profil
+  update_device_profil,
 };

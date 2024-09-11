@@ -32,7 +32,7 @@ function AuthLayout() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <nav className="rounded p-5 w-full max-w-xs flex flex-col justify-between h-screen">
+      <nav className="rounded p-5 w-full max-w-xs flex flex-col justify-between h-screen sticky top-0 bottom-0 left-0">
         <div className="rounded bg-white p-2 h-full border-4 box-shadow flex justify-between flex-col">
           <div>
             <header>
@@ -105,16 +105,29 @@ function AuthLayout() {
         <header className="text-xl font-poppins text-blue-900 flex mb-4">
           <div className="flex items-center gap-2 bg-white/50 p-2 pr-5 rounded border-2 border-solid border-white hover:border-blue-900 capitalize">
             <span className="p-2 bg-blue-100 rounded">
-              <User className="size-5 stroke-blue-900" />
+              {location.pathname.includes("dashboard") && (
+                <Dashboard className="size-5 stroke-blue-900" />
+              )}
+              {location.pathname.includes("node") && (
+                <NodeIc className="size-5 stroke-blue-900" />
+              )}
+              {location.pathname.includes("gateway") && (
+                <Gateway className="size-5 stroke-blue-900" />
+              )}
+              {location.pathname.includes("user") && (
+                <User className="size-5 stroke-blue-900" />
+              )}
             </span>
             {location.pathname.split("/").map((item, index) =>
               index > 1 ? (
                 <span className="flex gap-2 items-center" key={`name.${index}`}>
                   <ChevronRight />
-                  {item}
+                  {item != "edit" ? "Detail" : item }
                 </span>
               ) : (
-                <span className="font-semibold" key={`name.${index}`}>{item}</span>
+                <span className="font-semibold" key={`name.${index}`}>
+                  {item}
+                </span>
               )
             )}
           </div>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { LatestDeviceValue } from "../node/api";
 
 export type DeviceDetail = {
   id: string;
@@ -40,6 +41,7 @@ export type UseProfilDevice = {
   name?: string;
   address?: string;
   createdAt?: string;
+  latest_device_value: LatestDeviceValue[]
 };
 
 export const useProfilDevice = async (

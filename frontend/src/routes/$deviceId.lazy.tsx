@@ -11,6 +11,7 @@ import { Box } from "../assets/box";
 import { Back } from "../assets/chevron-left";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis,Tooltip } from "recharts";
 import { Sensor } from "../assets/sensor";
+import { ValueByGraph } from "../node/component";
 
 export const Route = createLazyFileRoute("/$deviceId")({
   component: Detail,
@@ -24,7 +25,7 @@ function Detail() {
 
   React.useEffect(() => {
     useProfilDevice(deviceId, (data?: UseProfilDevice) => {
-      setProfil({ ...data });
+      if (data) setProfil({ ...data });
     });
     useDeviceValue(deviceId, (data?: DeviceValue) => {
       setData((prev) => {
@@ -88,36 +89,16 @@ function Detail() {
         <p className="update">Terakhir diperbaharui pada: {new Date(data[data.length - 1]?.timestamp as string).toString()}</p>
         <DataView item={data[data.length - 1]} />
         <div className="grid">
-          <Grafik item={data} title="PM 1.0" dataKey="1" />
-          <Grafik item={data} title="PM 2.5" dataKey="2" />
-          <Grafik item={data} title="PM 10" dataKey="0" />
-          <Grafik item={data} title="PM 100" dataKey="3" />
+          <ValueByGraph item={data} title="PM 1.0" dataKey="1" />
+          <ValueByGraph item={data} title="PM 2.5" dataKey="2" />
+          <ValueByGraph item={data} title="PM 10" dataKey="0" />
+          <ValueByGraph item={data} title="PM 100" dataKey="3" />
         </div>
       </div>
     </div>
   );
 }
 
-function Grafik(props: { title: string, item: DeviceValue[], dataKey: string} ) {
-  return(
-    <div className="grafik">
-    <h3><Sensor />{props.title}</h3>
-    <ResponsiveContainer>
-      <LineChart
-      width={500}
-      height={300}
-      data={props.item.map(v => ({...v, timestamp: new Date(v?.timestamp as string).toLocaleTimeString()}))}
-      >
-        <CartesianGrid strokeOpacity={.5} />
-        <XAxis dataKey="timestamp" />
-        <YAxis />
-        <Tooltip formatter={(v) => [v , props.title]} />
-        <Line type={"monotone"} dataKey={props.dataKey} />
-      </LineChart>
-    </ResponsiveContainer>
-    </div>
-  )
-}
 
 function DataView(props: { item: DeviceValue }) {
   if (props.item == undefined) return <p>Loading...</p>;
