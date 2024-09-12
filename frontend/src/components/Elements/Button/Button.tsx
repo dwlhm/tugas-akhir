@@ -53,6 +53,7 @@ export const BasicButton: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={props.onClick}
+      type={type}
       className={`flex items-center gap-4 py-2 px-3 text-xs rounded border hover:text-blue-900 hover:border-blue-900 hover:bg-blue-100 ${props.className}`}
     >
       {icon && <span className="p-2 bg-blue-100 rounded">{icon}</span>}

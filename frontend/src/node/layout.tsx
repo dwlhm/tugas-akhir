@@ -1,5 +1,74 @@
-import { MapPin } from "react-feather";
-import { Node } from "./api";
+import { Edit2, MapPin } from "react-feather";
+import { Node, updateNode } from "./api";
+import { Input } from "../components/Elements/Forms";
+import { BasicButton } from "../components/Elements";
+import { usePopup } from "../popup";
+import React, { useState } from "react";
+import { useAuth, User } from "../auth/context";
+
+export const EditInfromasiNode = (props: {
+  id: string;
+  name: string;
+  address: string;
+}) => {
+  const auth = useAuth();
+  const popup = usePopup();
+  const putNode = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const rawData = {
+      name: (e.target as any)[0].value as string,
+      address: (e.target as any)[1].value as string,
+    };
+
+    const response = await updateNode(
+      auth.user as User,
+      rawData.name,
+      rawData.address,
+      props.id
+    );
+
+    if (response.body) {
+      popup.close(true);
+      location.reload();
+    }
+  };
+  return (
+    <div className="bg-white max-w-lg p-5 rounded">
+      <h3 className="flex items-center gap-4 mb-5">
+        <span className="p-2 bg-blue-100 rounded">
+          <Edit2 className="size-2" />
+        </span>
+        Edit Informasi Node
+      </h3>
+      <form onSubmit={putNode} className="max-w-xs">
+        <Input
+          name="nama"
+          label="Nama Node"
+          placeholder="Masukan nama node"
+          defaultValue={props.name}
+          type="text"
+        />
+        <Input
+          name="alamat"
+          label="Alamat Node"
+          placeholder="Masukan alamat node"
+          defaultValue={props.address}
+          type="text"
+        />
+        <div className="flex justify-center gap-2">
+          <BasicButton type="submit">Simpan Perubahan</BasicButton>
+          <BasicButton
+            onClick={() => popup.close(true)}
+            className="flex-grow flex justify-center bg-red-100 border-red-900 hover:bg-red-200"
+          >
+            Batalkan
+          </BasicButton>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export const DeviceCard = (props: { item: Node }) => {
   console.log(props.item);
@@ -15,7 +84,9 @@ export const DeviceCard = (props: { item: Node }) => {
               {props.item.address}
             </p>
           </div>
-          <div className="bg-red-100 py-2 px-5 mt-2 rounded border border-red-900 text-center text-sm italic">hasil pembacaan sensor belum tersedia, mohon segera aktifkan node.</div>
+          <div className="bg-red-100 py-2 px-5 mt-2 rounded border border-red-900 text-center text-sm italic">
+            hasil pembacaan sensor belum tersedia, mohon segera aktifkan node.
+          </div>
         </div>
       </div>
     );

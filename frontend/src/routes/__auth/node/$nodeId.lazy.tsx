@@ -2,12 +2,13 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { BackButton, BasicButton } from "../../../components/Elements";
 import { useEffect, useState } from "react";
 import { DeviceValue, UseProfilDevice, useProfilDevice } from "../../../utils";
-import { DeviceCard } from "../../../node/layout";
+import { DeviceCard, EditInfromasiNode } from "../../../node/layout";
 import { Node } from "../../../node/api";
 import { ValueByGraph } from "../../../node/component";
 import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
 import { Edit2 } from "react-feather";
 import { usePopup } from "../../../popup";
+import { useAuth, User } from "../../../auth/context";
 
 export const Route = createLazyFileRoute("/__auth/node/$nodeId")({
   component: NodeDetail,
@@ -19,7 +20,8 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 function NodeDetail() {
   const { nodeId } = Route.useParams();
-  const popup = usePopup()
+  const popup = usePopup();
+  const auth = useAuth()
   const [data, setData] = useState<UseProfilDevice | null>(null);
   const [dataChart, setDataChart] = useState<DeviceValue[]>([]);
   const [realtimeMode, setRealtimeMode] = useState<boolean>(true);
@@ -86,7 +88,15 @@ function NodeDetail() {
       <div className="flex justify-between">
         <BackButton />
         <BasicButton
-        onClick={() => popup.setPopup(<div>Hah</div>)}
+          onClick={() =>
+            popup.setPopup(
+              <EditInfromasiNode
+                id={data?.id as string}
+                name={data?.name as string}
+                address={data?.address as string}
+              />
+            )
+          }
           className="bg-white border-white p-1"
           icon={<Edit2 className="size-2" />}
         >

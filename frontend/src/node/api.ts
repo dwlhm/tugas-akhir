@@ -33,3 +33,35 @@ export const getAllNodes = async (auth: User): Promise<API<Node[]>> => {
     };
   }
 };
+
+export const updateNode = async (
+  auth: User,
+  name: string,
+  address: string,
+  id: string
+): Promise<API<Node>> => {
+  try {
+    console.log("auth", auth)
+    const { data } = await axios.put<API<Node>>(
+      `${import.meta.env.VITE_API_URL}/device/${id}`,
+      JSON.stringify({
+        name: name,
+        address: address,
+      }),
+      {
+        headers: {
+          Authorization: `Bearer ${auth.authentication_token}`,
+          "Content-Type": "application/json"
+        },
+      }
+    );
+
+    return data;
+  } catch (error) {
+    console.error("updateNode", error)
+    return {
+      code: 500,
+      error: ["system error"],
+    };
+  }
+};
