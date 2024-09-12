@@ -1,23 +1,27 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { BackButton } from "../../../components/Elements";
+import { BackButton, BasicButton } from "../../../components/Elements";
 import { useEffect, useState } from "react";
-import {
-  DeviceValue,
-  UseProfilDevice,
-  useProfilDevice,
-} from "../../../utils";
+import { DeviceValue, UseProfilDevice, useProfilDevice } from "../../../utils";
 import { DeviceCard } from "../../../node/layout";
 import { Node } from "../../../node/api";
 import { ValueByGraph } from "../../../node/component";
+import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
 
 export const Route = createLazyFileRoute("/__auth/node/$nodeId")({
   component: NodeDetail,
 });
 
+type ValuePiece = Date | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
+
 function NodeDetail() {
   const { nodeId } = Route.useParams();
-  const [data, setData] = useState<UseProfilDevice>();
+  const [data, setData] = useState<UseProfilDevice | null>(null);
   const [dataChart, setDataChart] = useState<DeviceValue[]>([]);
+  const [realtimeMode, setRealtimeMode] = useState<boolean>(true);
+  const [dateRange, setDateRange] = useState<Value>([new Date(), new Date()]);
+
   useEffect(() => {
     useProfilDevice(nodeId, (raw, error) => {
       if (raw) {
@@ -76,14 +80,94 @@ function NodeDetail() {
     <div>
       <BackButton />
       <div className="my-2">{data && <DeviceCard item={data as Node} />}</div>
-      <div className="grid grid-cols-3 gap-2">
-        <ValueByGraph item={dataChart} title="PM 1.0" dataKey="1" />
-        <ValueByGraph item={dataChart} title="PM 2.5" dataKey="2" />
-        <ValueByGraph item={dataChart} title="PM 10" dataKey="0" />
-        <ValueByGraph item={dataChart} title="PM 100" dataKey="3" />
-        <ValueByGraph item={dataChart} title="Suhu" dataKey="t" />
-        <ValueByGraph item={dataChart} title="Kelembaban Udara" dataKey="h" />
+      <div className="flex justify-center">
+        <div className="flex gap-1 m-2 mx-auto bg-blue-100 p-1 rounded">
+          <BasicButton
+            onClick={() => setRealtimeMode(true)}
+            className={
+              realtimeMode
+                ? "bg-white border-white"
+                : `bg-transparent border-transparent`
+            }
+          >
+            Realtime
+          </BasicButton>
+          <BasicButton
+            onClick={() => setRealtimeMode(false)}
+            className={
+              !realtimeMode
+                ? "bg-white border-white"
+                : `bg-transparent border-transparent`
+            }
+          >
+            Arsip
+          </BasicButton>
+        </div>
       </div>
+      {realtimeMode ? (
+        <div className="grid grid-cols-3 gap-2 my-2">
+          <ValueByGraph item={dataChart} title="PM 1.0" dataKey="1" />
+          <ValueByGraph item={dataChart} title="PM 2.5" dataKey="2" />
+          <ValueByGraph item={dataChart} title="PM 10" dataKey="0" />
+          <ValueByGraph item={dataChart} title="PM 100" dataKey="3" />
+          <ValueByGraph item={dataChart} title="Suhu" dataKey="t" />
+          <ValueByGraph item={dataChart} title="Kelembaban Udara" dataKey="h" />
+        </div>
+      ) : (
+        <div>
+          <DateTimeRangePicker onChange={setDateRange} value={dateRange} />
+          <TableData dataChart={dataChart} />
+        </div>
+      )}
     </div>
+  );
+}
+
+function TableData(props: { dataChart: DeviceValue[] }) {
+  return (
+    <table className="border-collapse w-full">
+      <thead>
+        <tr className="grid grid-cols-10 w-full">
+          <th className="px-3 py-2 bg-blue-100 text-sm rounded-tl col-span-3">
+            Waktu
+          </th>
+          <th className="px-3 py-2 bg-blue-100 text-sm">PM 1.0</th>
+          <th className="px-3 py-2 bg-blue-100 text-sm">PM 2.5</th>
+          <th className="px-3 py-2 bg-blue-100 text-sm">PM 10</th>
+          <th className="px-3 py-2 bg-blue-100 text-sm">PM 100</th>
+          <th className="px-3 py-2 bg-blue-100 text-sm">Suhu</th>
+          <th className="px-3 py-2 bg-blue-100 text-sm rounded-tr col-span-2">
+            Kelembaban Udara
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {props.dataChart.map((item, index) => (
+          <tr key={`data.table.${index}`} className="grid grid-cols-10 w-full">
+            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100 col-span-3">
+              {new Date(item["timestamp"] || 0).toLocaleString()}
+            </td>
+            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+              {item["1"]}
+            </td>
+            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+              {item["2"]}
+            </td>
+            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+              {item["0"]}
+            </td>
+            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+              {item["3"] || 0}
+            </td>
+            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+              {item["t"]}
+            </td>
+            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100 col-span-2">
+              {item["h"]}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }

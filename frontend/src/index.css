@@ -156,3 +156,72 @@ body {
   display: flex;
   align-items: center;
 }
+.react-datetimerange-picker {
+  @apply flex justify-center mb-2
+}
+.react-datetimerange-picker__wrapper {
+  @apply flex justify-center gap-1 bg-white p-1 rounded w-auto
+}
+.react-datetimerange-picker__inputGroup {
+  @apply p-1 bg-gray-100 rounded
+}
+
+
+.react-datetimerange-picker__inputGroup__input {
+  width: 2.5rem!important;
+  @apply pl-2 text-center rounded bg-white/80 h-full
+}
+.react-datetimerange-picker__button {
+  @apply p-2 rounded
+}
+.react-datetimerange-picker--open .react-datetimerange-picker__calendar-button {
+  @apply bg-blue-100
+}
+.react-datetimerange-picker__clear-button {
+  @apply bg-red-100 border border-red-100 hover:border-red-900
+}
+.react-datetimerange-picker__calendar-button {
+  @apply border border-gray-100 hover:border-blue-900
+}
+.react-datetimerange-picker__inputGroup__year, .react-datetimerange-picker__inputGroup__amPm {
+  width: 3.5rem!important;
+}
+
+.react-calendar__navigation {
+  @apply flex gap-2 mb-2
+}
+
+.react-calendar__navigation__arrow {
+  @apply p-2 bg-gray-100 mb-0 size-8 border border-gray-100 hover:border-blue-900 flex items-center justify-center rounded
+}
+
+.react-datetimerange-picker__calendar--open {
+  @apply w-full
+}
+.react-datetimerange-picker__calendar--closed {
+  @apply hidden
+}
+
+.react-calendar__month-view__weekdays {
+  @apply bg-blue-100 text-center text-sm rounded
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  @apply p-2 hover:bg-blue-500 hover:text-gray-100 rounded 
+}
+
+.react-calendar__tile {
+  @apply p-2 border border-white hover:border-blue-900 rounded
+}
+.react-calendar__tile--rangeStart {
+  @apply border-blue-900 rounded-none rounded-l bg-blue-100
+}
+.react-calendar__tile--rangeEnd {
+  @apply rounded-none rounded-r border-blue-900 bg-blue-100
+}
+.react-calendar__tile--active {
+  @apply bg-blue-100 border-blue-100 rounded-none
+}
+.react-calendar {
+  @apply bg-white max-w-xl mx-auto p-2 rounded my-2 border border-solid border-blue-900
+}

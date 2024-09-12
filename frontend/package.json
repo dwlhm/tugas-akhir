@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/open-sans": "^5.0.27",
     "@tanstack/react-router": "^1.45.0",
+    "@wojtekmaj/react-datetimerange-picker": "^6.0.0",
     "axios": "^1.7.2",
     "leaflet": "^1.9.4",
     "react": "^18.2.0",

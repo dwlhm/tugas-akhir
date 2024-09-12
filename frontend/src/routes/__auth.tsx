@@ -32,7 +32,7 @@ function AuthLayout() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <nav className="rounded p-5 w-full max-w-xs flex flex-col justify-between h-screen sticky top-0 bottom-0 left-0">
+      <nav className="rounded p-5 w-64 flex flex-col justify-between h-screen sticky top-0 bottom-0 left-0">
         <div className="rounded bg-white p-2 h-full border-4 box-shadow flex justify-between flex-col">
           <div>
             <header>
