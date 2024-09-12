@@ -1,11 +1,26 @@
 import { MapPin } from "react-feather";
 import { Node } from "./api";
 
-export const DeviceCard = (props: {item: Node}) => {
-  console.log(props.item)
-  const item_parsed = JSON.parse(
-    props.item.latest_device_value[0].value || ""
-  );
+export const DeviceCard = (props: { item: Node }) => {
+  console.log(props.item);
+  if (!props.item.latest_device_value[0].value)
+    return (
+      <div className="mb-2 p-2 bg-white flex gap-2 rounded border-2 border-solid border-white hover:border-blue-900">
+        <div className="bg-blue-100 p-1 rounded"></div>
+        <div>
+          <div className="flex gap-4">
+            <p className="text-lg">{props.item.name}</p>
+            <p className="text-sm text-gray-700 mt-1">
+              <MapPin className="size-3 stroke-blue-900 inline-block mr-2" />
+              {props.item.address}
+            </p>
+          </div>
+          <div className="bg-red-100 py-2 px-5 mt-2 rounded border border-red-900 text-center text-sm italic">hasil pembacaan sensor belum tersedia, mohon segera aktifkan node.</div>
+        </div>
+      </div>
+    );
+
+  const item_parsed = JSON.parse(props.item.latest_device_value[0].value || "");
   const [header, body] = item_parsed.data.split("|");
   const body_arr = body.split(",");
   let res: any = {
@@ -13,9 +28,7 @@ export const DeviceCard = (props: {item: Node}) => {
       props.item.latest_device_value[0].updatedAt
     ).toLocaleString(),
   };
-  header
-    .split("")
-    .forEach((v: any, i: number) => (res[v] = body_arr[i]));
+  header.split("").forEach((v: any, i: number) => (res[v] = body_arr[i]));
 
   return (
     <div className="mb-2 p-2 bg-white flex gap-2 rounded border-2 border-solid border-white hover:border-blue-900">
@@ -27,7 +40,7 @@ export const DeviceCard = (props: {item: Node}) => {
             <MapPin className="size-3 stroke-blue-900 inline-block mr-2" />
             {props.item.address}
           </p>
-          <p className="text-gray-700 text-sm flex props.items-center">
+          <p className="text-gray-700 text-sm flex items-center">
             Last update: {res["timestamp"]}
           </p>
         </div>

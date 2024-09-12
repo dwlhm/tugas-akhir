@@ -6,6 +6,8 @@ import { DeviceCard } from "../../../node/layout";
 import { Node } from "../../../node/api";
 import { ValueByGraph } from "../../../node/component";
 import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
+import { Edit2 } from "react-feather";
+import { usePopup } from "../../../popup";
 
 export const Route = createLazyFileRoute("/__auth/node/$nodeId")({
   component: NodeDetail,
@@ -17,6 +19,7 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 function NodeDetail() {
   const { nodeId } = Route.useParams();
+  const popup = usePopup()
   const [data, setData] = useState<UseProfilDevice | null>(null);
   const [dataChart, setDataChart] = useState<DeviceValue[]>([]);
   const [realtimeMode, setRealtimeMode] = useState<boolean>(true);
@@ -28,6 +31,7 @@ function NodeDetail() {
         setData(raw);
 
         setDataChart((prev) => {
+          if (!raw.latest_device_value[0].value) return prev;
           if (
             prev[prev.length - 1]?.timestamp !==
             raw.latest_device_value[0].updatedAt
@@ -53,6 +57,7 @@ function NodeDetail() {
           console.log(raw);
           setData(raw);
           setDataChart((prev) => {
+            if (!raw.latest_device_value[0].value) return prev;
             if (
               prev[prev.length - 1]?.timestamp !==
               raw.latest_device_value[0].updatedAt
@@ -78,46 +83,63 @@ function NodeDetail() {
   }, []);
   return (
     <div>
-      <BackButton />
-      <div className="my-2">{data && <DeviceCard item={data as Node} />}</div>
-      <div className="flex justify-center">
-        <div className="flex gap-1 m-2 mx-auto bg-blue-100 p-1 rounded">
-          <BasicButton
-            onClick={() => setRealtimeMode(true)}
-            className={
-              realtimeMode
-                ? "bg-white border-white"
-                : `bg-transparent border-transparent`
-            }
-          >
-            Realtime
-          </BasicButton>
-          <BasicButton
-            onClick={() => setRealtimeMode(false)}
-            className={
-              !realtimeMode
-                ? "bg-white border-white"
-                : `bg-transparent border-transparent`
-            }
-          >
-            Arsip
-          </BasicButton>
-        </div>
+      <div className="flex justify-between">
+        <BackButton />
+        <BasicButton
+        onClick={() => popup.setPopup(<div>Hah</div>)}
+          className="bg-white border-white p-1"
+          icon={<Edit2 className="size-2" />}
+        >
+          Edit Informasi Node
+        </BasicButton>
       </div>
-      {realtimeMode ? (
-        <div className="grid grid-cols-3 gap-2 my-2">
-          <ValueByGraph item={dataChart} title="PM 1.0" dataKey="1" />
-          <ValueByGraph item={dataChart} title="PM 2.5" dataKey="2" />
-          <ValueByGraph item={dataChart} title="PM 10" dataKey="0" />
-          <ValueByGraph item={dataChart} title="PM 100" dataKey="3" />
-          <ValueByGraph item={dataChart} title="Suhu" dataKey="t" />
-          <ValueByGraph item={dataChart} title="Kelembaban Udara" dataKey="h" />
-        </div>
-      ) : (
-        <div>
-          <DateTimeRangePicker onChange={setDateRange} value={dateRange} />
-          <TableData dataChart={dataChart} />
-        </div>
+      <div className="my-2">{data && <DeviceCard item={data as Node} />}</div>
+      {dataChart.length > 0 && (
+        <>
+          <div className="flex justify-center">
+            <div className="flex gap-1 m-2 mx-auto bg-blue-100 p-1 rounded">
+              <BasicButton
+                onClick={() => setRealtimeMode(true)}
+                className={
+                  realtimeMode
+                    ? "bg-white border-white"
+                    : `bg-transparent border-transparent`
+                }
+              >
+                Realtime
+              </BasicButton>
+              <BasicButton
+                onClick={() => setRealtimeMode(false)}
+                className={
+                  !realtimeMode
+                    ? "bg-white border-white"
+                    : `bg-transparent border-transparent`
+                }
+              >
+                Arsip
+              </BasicButton>
+            </div>
+          </div>
+          {realtimeMode ? (
+            <div className="grid grid-cols-3 gap-2 my-2">
+              <ValueByGraph item={dataChart} title="PM 1.0" dataKey="1" />
+              <ValueByGraph item={dataChart} title="PM 2.5" dataKey="2" />
+              <ValueByGraph item={dataChart} title="PM 10" dataKey="0" />
+              <ValueByGraph item={dataChart} title="PM 100" dataKey="3" />
+              <ValueByGraph item={dataChart} title="Suhu" dataKey="t" />
+              <ValueByGraph
+                item={dataChart}
+                title="Kelembaban Udara"
+                dataKey="h"
+              />
+            </div>
+          ) : (
+            <div>
+              <DateTimeRangePicker onChange={setDateRange} value={dateRange} />
+              <TableData dataChart={dataChart} />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

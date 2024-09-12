@@ -22,8 +22,8 @@ function NodeLayout() {
     <div>
       {Object.keys(param).length == 0 ? (
         dataNode?.map((item) => {
-          if (!item.latest_device_value[0].value)
-            return <div key={item.id}></div>;
+          // if (!item.latest_device_value[0].value)
+          //   return <div key={item.id}></div>;
           // return (<div key={item.id}>{JSON.stringify(item.latest_device_value[0])}</div>)
           
           return (

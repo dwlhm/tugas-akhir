@@ -2,6 +2,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 
 import { routeTree } from "./routeTree.gen";
 import { AuthProvider, useAuth, AuthContextInterface } from "./auth/context";
+import { PopupProvider } from "./popup";
 
 const router = createRouter({
   routeTree,
@@ -25,7 +26,9 @@ const InnerApp = () => {
 function App() {
   return (
     <AuthProvider>
-      <InnerApp />
+      <PopupProvider>
+        <InnerApp />
+      </PopupProvider>
     </AuthProvider>
   );
 }
