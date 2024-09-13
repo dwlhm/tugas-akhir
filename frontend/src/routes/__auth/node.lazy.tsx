@@ -17,6 +17,15 @@ function NodeLayout() {
       getAllNodes(auth.user).then((data) => {
         if (data.body) setDataNode(data.body);
       });
+
+    let devicePolling = setInterval(() => {
+      if (auth.user)
+        getAllNodes(auth.user).then((data) => {
+          if (data.body) setDataNode(data.body);
+        });
+    }, 60000);
+
+    return () => clearInterval(devicePolling);
   }, []);
   return (
     <div>
@@ -25,7 +34,7 @@ function NodeLayout() {
           // if (!item.latest_device_value[0].value)
           //   return <div key={item.id}></div>;
           // return (<div key={item.id}>{JSON.stringify(item.latest_device_value[0])}</div>)
-          
+
           return (
             <Link
               to="/node/$nodeId"

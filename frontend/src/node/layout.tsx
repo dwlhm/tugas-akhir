@@ -1,5 +1,5 @@
 import { Edit2, MapPin } from "react-feather";
-import { Node, updateNode } from "./api";
+import { Node, NodeUpdateResponse, updateNode } from "./api";
 import { Input } from "../components/Elements/Forms";
 import { BasicButton } from "../components/Elements";
 import { usePopup } from "../popup";
@@ -12,7 +12,7 @@ export const EditInfromasiNode = (props: {
   address: string;
 }) => {
   const auth = useAuth();
-  const popup = usePopup();
+  const popup = usePopup<NodeUpdateResponse>();
   const putNode = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -29,7 +29,7 @@ export const EditInfromasiNode = (props: {
     );
 
     if (response.body) {
-      popup.close(true);
+      popup.close(response.body);
       location.reload();
     }
   };
@@ -59,7 +59,12 @@ export const EditInfromasiNode = (props: {
         <div className="flex justify-center gap-2">
           <BasicButton type="submit">Simpan Perubahan</BasicButton>
           <BasicButton
-            onClick={() => popup.close(true)}
+            onClick={() =>
+              popup.close({
+                name: props.name,
+                address: props.address,
+              })
+            }
             className="flex-grow flex justify-center bg-red-100 border-red-900 hover:bg-red-200"
           >
             Batalkan

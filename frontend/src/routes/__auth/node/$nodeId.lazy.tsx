@@ -3,7 +3,7 @@ import { BackButton, BasicButton } from "../../../components/Elements";
 import { useEffect, useState } from "react";
 import { DeviceValue, UseProfilDevice, useProfilDevice } from "../../../utils";
 import { DeviceCard, EditInfromasiNode } from "../../../node/layout";
-import { Node } from "../../../node/api";
+import { Node, NodeUpdateResponse } from "../../../node/api";
 import { ValueByGraph } from "../../../node/component";
 import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
 import { Edit2 } from "react-feather";
@@ -20,13 +20,12 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 function NodeDetail() {
   const { nodeId } = Route.useParams();
-  const popup = usePopup();
-  const auth = useAuth()
+  const popup = usePopup<NodeUpdateResponse>();
+  const auth = useAuth();
   const [data, setData] = useState<UseProfilDevice | null>(null);
   const [dataChart, setDataChart] = useState<DeviceValue[]>([]);
   const [realtimeMode, setRealtimeMode] = useState<boolean>(true);
   const [dateRange, setDateRange] = useState<Value>([new Date(), new Date()]);
-
   useEffect(() => {
     useProfilDevice(nodeId, (raw, error) => {
       if (raw) {
@@ -81,8 +80,21 @@ function NodeDetail() {
       });
     }, 60000);
 
-    return clearInterval(polling);
+    return () => clearInterval(polling);
   }, []);
+
+  useEffect(() => {
+    console.log("popup.data", popup.data);
+    if (!!popup.data)
+      setData((prev_data) => {
+        if (prev_data?.name) prev_data.name = popup.data.name;
+        if (prev_data?.address) prev_data.address = popup.data.address;
+        return {
+          ...prev_data,
+        } as UseProfilDevice;
+      });
+  }, [popup.data]);
+
   return (
     <div>
       <div className="flex justify-between">

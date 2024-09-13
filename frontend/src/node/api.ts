@@ -2,6 +2,11 @@ import axios from "axios";
 import { User } from "../auth/context";
 import { API } from "../utils";
 
+export interface NodeUpdateResponse {
+  name: string;
+  address: string;
+}
+
 export interface Node {
   id: string;
   name: string;
@@ -39,10 +44,10 @@ export const updateNode = async (
   name: string,
   address: string,
   id: string
-): Promise<API<Node>> => {
+): Promise<API<NodeUpdateResponse>> => {
   try {
-    console.log("auth", auth)
-    const { data } = await axios.put<API<Node>>(
+    console.log("auth", auth);
+    const { data } = await axios.put<API<NodeUpdateResponse>>(
       `${import.meta.env.VITE_API_URL}/device/${id}`,
       JSON.stringify({
         name: name,
@@ -51,14 +56,14 @@ export const updateNode = async (
       {
         headers: {
           Authorization: `Bearer ${auth.authentication_token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       }
     );
 
     return data;
   } catch (error) {
-    console.error("updateNode", error)
+    console.error("updateNode", error);
     return {
       code: 500,
       error: ["system error"],

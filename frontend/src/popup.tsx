@@ -1,39 +1,50 @@
 import { PropsWithChildren, createContext, useContext, useState } from "react";
+import { Node } from "./node/api";
 
-export interface PopupContextInterface {
-  el: JSX.Element | null;
-  setPopup: (el: JSX.Element) => void;
-  close: (state: boolean) => void;
+export interface PopupData<T> {
+  data: T;
 }
 
-const PopupContext = createContext<PopupContextInterface | null>(null);
+export interface PopupContextInterface<T> {
+  el: JSX.Element | null;
+  data: T;
+  setPopup: (el: JSX.Element) => void;
+  close(item: T): T;
+}
 
-export const PopupProvider = ({ children }: PropsWithChildren) => {
+const PopupContext = createContext<PopupContextInterface<any> | null>(null);
+
+export function PopupProvider<T>({ children }: PropsWithChildren) {
   const [el, setEl] = useState<JSX.Element | null>(null);
+  const [data, setData] = useState<T | null>(null);
 
   const setPopup = (item: JSX.Element) => {
     setEl(
       <div className="fixed inset-0 flex justify-center items-center">
-        <div className="absolute inset-0 bg-black/50 z-0" onClick={() => close(true)}></div>
+        <div
+          className="absolute inset-0 bg-black/50 z-0"
+          onClick={() => setPopup(<></>)}
+        ></div>
         <div className="z-10">{item}</div>
       </div>
     );
   };
 
-  const close = (state: boolean) => {
-    if (state) setEl(<></>);
-  };
+  function close(data: T) {
+    setEl(<></>);
+    setData(data);
+  }
 
   return (
-    <PopupContext.Provider value={{ el, setPopup, close }}>
+    <PopupContext.Provider value={{ el, data, setPopup, close }}>
       {children}
     </PopupContext.Provider>
   );
-};
+}
 
-export function usePopup() {
+export function usePopup<T>(): PopupContextInterface<T> {
   const context = useContext(PopupContext);
   if (!context)
     throw new Error("usePopup must be used within an PopupProvider");
-  return context;
+  return context as PopupContextInterface<T>;
 }
