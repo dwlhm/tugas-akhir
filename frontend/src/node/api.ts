@@ -19,6 +19,12 @@ export interface LatestDeviceValue {
   updatedAt: string;
 }
 
+export interface HistoryDevice {
+  list: LatestDeviceValue[];
+  maximum: boolean;
+  total: number;
+}
+
 export const getAllNodes = async (auth: User): Promise<API<Node[]>> => {
   try {
     const { data } = await axios.get<API<Node[]>>(
@@ -64,6 +70,41 @@ export const updateNode = async (
     return data;
   } catch (error) {
     console.error("updateNode", error);
+    return {
+      code: 500,
+      error: ["system error"],
+    };
+  }
+};
+
+export const getHistoryDevice = async (
+  token: string,
+  id: string,
+  date: {
+    from: string;
+    to: string;
+  },
+  offset: number
+): Promise<API<HistoryDevice>> => {
+  try {
+    const { data } = await axios.get<API<HistoryDevice>>(
+      `${import.meta.env.VITE_API_URL}/device/${id}/history`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          limit: 100,
+          from: date.from,
+          to: date.to,
+          offset: offset,
+        },
+      }
+    );
+
+    return data;
+  } catch (error) {
+    console.error("getHistoryDevice", error);
     return {
       code: 500,
       error: ["system error"],

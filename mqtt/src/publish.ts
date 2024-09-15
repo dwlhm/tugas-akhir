@@ -6,6 +6,7 @@ import { Latest_Device_Value } from "database/models/Latest_Device_Value";
 import { Metadata } from "database/models/Metadata";
 import dayjs from "dayjs";
 import { Device_Value } from "database/models/Device_Value";
+import { Device_History } from "database/models/Device_History";
 const fastCsv = require("fast-csv");
 
 const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
@@ -88,10 +89,11 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
     for (let i = 0; i < devValueText[0].length; i++) {
       eFormat[devValueText[0].charAt(i)] = devValue[i];
     }
-    Device_Value.create({
+    Device_History.create({
       value: JSON.stringify(eFormat),
       device_id: device_id,
       gateway_id: client.id,
+      timestamp: new Date()
     });
 
     // store the pk_order to Duplication_Orders

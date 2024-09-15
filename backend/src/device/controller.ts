@@ -1,5 +1,6 @@
 import { Csv_List } from "database/models/Csv_List";
 import { Device } from "database/models/device";
+import { Device_History } from "database/models/Device_History";
 import { Device_Value } from "database/models/Device_Value";
 import { Latest_Device_Value } from "database/models/Latest_Device_Value";
 import { User } from "database/models/user";
@@ -203,15 +204,20 @@ const get_history = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id = req.params["id"];
     const req_limit = Number(req.query["limit"]) || 2;
-    const req_offset = Number(req.query["offset"]) || 1;
-    const {rows, count} = await Device_Value.findAndCountAll({
+    const req_offset = Number(req.query["offset"]) || 0;
+    const prev_date = new Date()
+    prev_date.setDate(prev_date.getDate() - 6)
+    const req_from = req.query["from"] ? new Date(String(req.query["from"])) : prev_date;
+    const req_to = req.query["to"] ? new Date(String(req.query["to"])) : new Date();
+    const {rows, count} = await Device_History.findAndCountAll({
       where: {
-        updatedAt: {
-          [Op.lte]: new Date()
+        timestamp: {
+          [Op.lte]: req_to,
+          [Op.gte]: req_from
         }
       },
-      limit: req_limit,
       offset: req_offset,
+      limit: req_limit,
       attributes: {
         exclude: ['id', 'createdAt', 'device_id', 'gateway_id'],
       }
@@ -222,9 +228,8 @@ const get_history = async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({
       code: 200,
       body: {
-        id: device_id,
         list: rows,
-        maximum: req_limit*req_offset >= count,
+        maximum: req_limit*(req_offset + 1) >= count,
         total: count
       },
     });

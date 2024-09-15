@@ -3,7 +3,12 @@ import { BackButton, BasicButton } from "../../../components/Elements";
 import { useEffect, useState } from "react";
 import { DeviceValue, UseProfilDevice, useProfilDevice } from "../../../utils";
 import { DeviceCard, EditInfromasiNode } from "../../../node/layout";
-import { Node, NodeUpdateResponse } from "../../../node/api";
+import {
+  getHistoryDevice,
+  HistoryDevice,
+  Node,
+  NodeUpdateResponse,
+} from "../../../node/api";
 import { ValueByGraph } from "../../../node/component";
 import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
 import { Edit2 } from "react-feather";
@@ -14,18 +19,22 @@ export const Route = createLazyFileRoute("/__auth/node/$nodeId")({
   component: NodeDetail,
 });
 
-type ValuePiece = Date | null;
+type ValuePiece = Date;
 
-type Value = ValuePiece | [ValuePiece, ValuePiece];
+type Value = [ValuePiece, ValuePiece];
 
 function NodeDetail() {
   const { nodeId } = Route.useParams();
-  const popup = usePopup<NodeUpdateResponse>();
   const auth = useAuth();
+  const popup = usePopup<NodeUpdateResponse>();
   const [data, setData] = useState<UseProfilDevice | null>(null);
   const [dataChart, setDataChart] = useState<DeviceValue[]>([]);
+  const [dataTable, setDataTable] = useState<HistoryDevice | null>(null);
   const [realtimeMode, setRealtimeMode] = useState<boolean>(true);
-  const [dateRange, setDateRange] = useState<Value>([new Date(), new Date()]);
+  const prevDate = new Date();
+  prevDate.setDate(prevDate.getDate() - 6);
+  const [dateRange, setDateRange] = useState<Value>([prevDate, new Date()]);
+  const [offset, setOffset] = useState<number>(0);
   useEffect(() => {
     useProfilDevice(nodeId, (raw, error) => {
       if (raw) {
@@ -84,16 +93,28 @@ function NodeDetail() {
   }, []);
 
   useEffect(() => {
-    console.log("popup.data", popup.data);
-    if (!!popup.data)
-      setData((prev_data) => {
-        if (prev_data?.name) prev_data.name = popup.data.name;
-        if (prev_data?.address) prev_data.address = popup.data.address;
-        return {
-          ...prev_data,
-        } as UseProfilDevice;
+    if (!realtimeMode && auth.user?.authentication_token) {
+      const prev_date = new Date()
+    prev_date.setDate(prev_date.getDate() - 6)
+    if (!dateRange) setDateRange([prevDate, new Date()])
+    console.log("dateRange", dateRange)
+      const raw = getHistoryDevice(
+        auth.user.authentication_token,
+        nodeId,
+        {
+          from: !dateRange ? prev_date.toISOString() : dateRange[0].toISOString(),
+          to: !dateRange ? new Date().toISOString() : dateRange[1].toISOString(),
+        },
+        offset
+      ).then((res) => {
+        if (res.body) {
+          setDataTable(res.body);
+        }
       });
-  }, [popup.data]);
+
+      console.log("dateRange", raw);
+    }
+  }, [dateRange, offset, realtimeMode]);
 
   return (
     <div>
@@ -157,8 +178,11 @@ function NodeDetail() {
             </div>
           ) : (
             <div>
-              <DateTimeRangePicker onChange={setDateRange} value={dateRange} />
-              <TableData dataChart={dataChart} />
+              <DateTimeRangePicker
+                onChange={(e) => setDateRange(e as Value)}
+                value={dateRange}
+              />
+              <TableData data={dataTable} />
             </div>
           )}
         </>
@@ -167,7 +191,8 @@ function NodeDetail() {
   );
 }
 
-function TableData(props: { dataChart: DeviceValue[] }) {
+function TableData(props: { data: HistoryDevice }) {
+  if (!props.data) return <p>no data.</p>
   return (
     <table className="border-collapse w-full">
       <thead>
@@ -186,31 +211,41 @@ function TableData(props: { dataChart: DeviceValue[] }) {
         </tr>
       </thead>
       <tbody>
-        {props.dataChart.map((item, index) => (
-          <tr key={`data.table.${index}`} className="grid grid-cols-10 w-full">
-            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100 col-span-3">
-              {new Date(item["timestamp"] || 0).toLocaleString()}
-            </td>
-            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
-              {item["1"]}
-            </td>
-            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
-              {item["2"]}
-            </td>
-            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
-              {item["0"]}
-            </td>
-            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
-              {item["3"] || 0}
-            </td>
-            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
-              {item["t"]}
-            </td>
-            <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100 col-span-2">
-              {item["h"]}
-            </td>
-          </tr>
-        ))}
+        {/* {JSON.stringify(props.data)} */}
+        {props.data.list &&
+          props.data.list.map((item, index) => {
+
+            const data = JSON.parse(item.value)
+
+            return (
+              <tr
+                key={`data.table.${index}`}
+                className="grid grid-cols-10 w-full"
+              >
+                <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100 col-span-3">
+                  {new Date(item.updatedAt || 0).toLocaleString()}
+                </td>
+                <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+                  {data["1"]}
+                </td>
+                <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+                  {data["2"]}
+                </td>
+                <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+                  {data["0"]}
+                </td>
+                <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+                  {data["3"] || 0}
+                </td>
+                <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+                  {data["t"]}
+                </td>
+                <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100 col-span-2">
+                  {data["h"]}
+                </td>
+              </tr>
+            );
+          })}
       </tbody>
     </table>
   );

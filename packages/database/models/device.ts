@@ -12,6 +12,7 @@ import {
 import { Gateway } from "./gateway";
 import { User } from "./user";
 import { Latest_Device_Value } from "./Latest_Device_Value";
+import { Device_History } from "./Device_History";
 
 @Table
 export class Device extends Model {
@@ -44,5 +45,7 @@ export class Device extends Model {
   @BelongsTo(() => Gateway) gateway: Gateway;
 
   @HasMany(() => Latest_Device_Value) latest_device_value: Latest_Device_Value;
+
+  @HasMany(() => Device_History) device_history: Device_History;
 }
 

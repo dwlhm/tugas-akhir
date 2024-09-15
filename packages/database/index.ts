@@ -9,14 +9,14 @@ async function Sq_Start(force: boolean = false): Promise<void> {
       .finally(() => {
         console.info("[sequelize] authenticated!");
       });
-    /*await sq_connection
+    await sq_connection
       .sync({ force: force })
       .then(() => {
         console.info("[sequelize] sync!");
       })
       .finally(() => {
         console.info("[sequelize] sync completed!");
-      });*/
+      });
 }
 
 export default Sq_Start;

@@ -10,6 +10,7 @@ import { User_Session } from "./models/user_session";
 import { Metadata } from "./models/Metadata";
 import { Duplication_Order } from "./models/Duplication_Order";
 import { Csv_List } from "./models/Csv_List";
+import { Device_History } from "./models/Device_History";
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ const connection = new Sequelize(db_name, db_user, db_password, {
   models: [
     User, Device, Device_Value, Gateway_Mqtt, Gateway, 
     User_Session, Latest_Device_Value, Metadata,
-    Duplication_Order, Csv_List
+    Duplication_Order, Csv_List, Device_History
   ],
 });
 
