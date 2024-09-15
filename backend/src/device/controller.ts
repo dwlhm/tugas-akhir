@@ -5,6 +5,7 @@ import { Latest_Device_Value } from "database/models/Latest_Device_Value";
 import { User } from "database/models/user";
 import { Request, Response, NextFunction } from "express";
 import crypto from "node:crypto";
+import { Op } from "sequelize"
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -201,17 +202,30 @@ const get_latest_value = async (
 const get_history = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id = req.params["id"];
-    const list_db = await Csv_List.findByPk(device_id);
+    const req_limit = Number(req.query["limit"]) || 2;
+    const req_offset = Number(req.query["offset"]) || 1;
+    const {rows, count} = await Device_Value.findAndCountAll({
+      where: {
+        updatedAt: {
+          [Op.lte]: new Date()
+        }
+      },
+      limit: req_limit,
+      offset: req_offset,
+      attributes: {
+        exclude: ['id', 'createdAt', 'device_id', 'gateway_id'],
+      }
+    })
 
-    if (!list_db) throw new Error("404#devicevalue");
-
-    const list = list_db.list.split(",");
+    if (!rows) throw new Error("404#devicevalue");
 
     res.status(200).json({
       code: 200,
       body: {
         id: device_id,
-        list: list,
+        list: rows,
+        maximum: req_limit*req_offset >= count,
+        total: count
       },
     });
   } catch (error) {
