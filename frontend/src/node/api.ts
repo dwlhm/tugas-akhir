@@ -84,7 +84,8 @@ export const getHistoryDevice = async (
     from: string;
     to: string;
   },
-  offset: number
+  offset: number,
+  limit: number
 ): Promise<API<HistoryDevice>> => {
   try {
     const { data } = await axios.get<API<HistoryDevice>>(
@@ -94,7 +95,7 @@ export const getHistoryDevice = async (
           Authorization: `Bearer ${token}`,
         },
         params: {
-          limit: 100,
+          limit: limit,
           from: date.from,
           to: date.to,
           offset: offset,

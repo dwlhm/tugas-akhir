@@ -35,6 +35,7 @@ function NodeDetail() {
   prevDate.setDate(prevDate.getDate() - 6);
   const [dateRange, setDateRange] = useState<Value>([prevDate, new Date()]);
   const [offset, setOffset] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(10);
   useEffect(() => {
     useProfilDevice(nodeId, (raw, error) => {
       if (raw) {
@@ -94,18 +95,23 @@ function NodeDetail() {
 
   useEffect(() => {
     if (!realtimeMode && auth.user?.authentication_token) {
-      const prev_date = new Date()
-    prev_date.setDate(prev_date.getDate() - 6)
-    if (!dateRange) setDateRange([prevDate, new Date()])
-    console.log("dateRange", dateRange)
+      const prev_date = new Date();
+      prev_date.setDate(prev_date.getDate() - 6);
+      if (!dateRange) setDateRange([prevDate, new Date()]);
+      console.log("dateRange", dateRange);
       const raw = getHistoryDevice(
         auth.user.authentication_token,
         nodeId,
         {
-          from: !dateRange ? prev_date.toISOString() : dateRange[0].toISOString(),
-          to: !dateRange ? new Date().toISOString() : dateRange[1].toISOString(),
+          from: !dateRange
+            ? prev_date.toISOString()
+            : dateRange[0].toISOString(),
+          to: !dateRange
+            ? new Date().toISOString()
+            : dateRange[1].toISOString(),
         },
-        offset
+        offset,
+        limit
       ).then((res) => {
         if (res.body) {
           setDataTable(res.body);
@@ -114,7 +120,7 @@ function NodeDetail() {
 
       console.log("dateRange", raw);
     }
-  }, [dateRange, offset, realtimeMode]);
+  }, [dateRange, offset, realtimeMode, limit]);
 
   return (
     <div>
@@ -182,7 +188,82 @@ function NodeDetail() {
                 onChange={(e) => setDateRange(e as Value)}
                 value={dateRange}
               />
-              <TableData data={dataTable} />
+              <TableData data={dataTable as HistoryDevice} />
+              <div className="flex justify-between items-center">
+                <form>
+                  <input
+                  className="pl-2 text-sm py-2 rounded w-16 text-center"
+                    type="number"
+                    defaultValue={limit}
+                    onChange={(e) =>
+                      setLimit(
+                        e.target.value == "" ? 1 : Number(e.target.value)
+                      )
+                    }
+                  />
+                </form>
+                <div>
+                  <button
+                    onClick={() => setOffset(0)}
+                    className={`bg-blue-100 rounded py-1 px-3 text-sm m-1 border ${offset + 1 == 1 ? "border-blue-500" : "border-blue-100"} hover:border-blue-900`}
+                  >
+                    1
+                  </button>
+                  {dataTable ? (
+                    Math.ceil(dataTable.total / limit) > 1 ? (
+                      <>
+                      
+                      {offset <
+                            3 ? (
+                              <></>
+                            ) : (
+                              <p className="m-1 inline-block">...</p>
+                            )}
+                        {Math.ceil(dataTable.total / limit) > 2 && (
+                          <>
+                            {[...Array(9)].map((v, i) => {
+                              const num =
+                                offset > 2
+                                  ? offset >
+                                    Math.ceil(dataTable.total / limit) - 10
+                                    ? i +
+                                      (Math.ceil(dataTable.total / limit) - 9)
+                                    : i + offset
+                                  : i + 2;
+                              return (
+                                <button
+                                  onClick={() => setOffset(num - 1)}
+                                  className={`bg-blue-100 rounded py-1 px-3 text-sm m-1 border ${offset + 1 == num ? "border-blue-500" : "border-blue-100"} hover:border-blue-900`}
+                                >
+                                  {num}
+                                </button>
+                              );
+                            })}
+                            {offset >
+                            Math.ceil(dataTable.total / limit) - 10 ? (
+                              <></>
+                            ) : (
+                              <p className="m-1 inline-block">...</p>
+                            )}
+                          </>
+                        )}
+                        <button
+                          onClick={() =>
+                            setOffset(Math.ceil(dataTable.total / limit) - 1)
+                          }
+                          className={`bg-blue-100 rounded py-1 px-3 text-sm m-1 border ${offset + 1 == Math.ceil(dataTable.total / limit) ? "border-blue-500" : "border-blue-100"} hover:border-blue-900`}
+                        >
+                          {Math.ceil(dataTable.total / limit)}
+                        </button>
+                      </>
+                    ) : (
+                      <></>
+                    )
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </>
@@ -192,7 +273,7 @@ function NodeDetail() {
 }
 
 function TableData(props: { data: HistoryDevice }) {
-  if (!props.data) return <p>no data.</p>
+  if (!props.data) return <p>no data.</p>;
   return (
     <table className="border-collapse w-full">
       <thead>
@@ -214,8 +295,7 @@ function TableData(props: { data: HistoryDevice }) {
         {/* {JSON.stringify(props.data)} */}
         {props.data.list &&
           props.data.list.map((item, index) => {
-
-            const data = JSON.parse(item.value)
+            const data = JSON.parse(item.value);
 
             return (
               <tr
