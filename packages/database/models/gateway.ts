@@ -8,8 +8,10 @@ import {
   AllowNull,
   PrimaryKey,
   Unique,
+  HasMany,
 } from "sequelize-typescript";
 import { User } from "./user";
+import { Device } from "./device";
 
 @Table
 export class Gateway extends Model {
@@ -38,4 +40,6 @@ export class Gateway extends Model {
   maintainer: number;
 
   @BelongsTo(() => User) user: User;
+
+  @HasMany(() => Device) device: Device;
 }

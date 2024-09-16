@@ -48,13 +48,14 @@ export const Select = (props: {
       <select
         className="bg-gray-100 border border-gray-400 text-sm rounded-md p-2 w-full"
         name={props.name}
+        defaultValue={props.defaultValue}
         required
       >
         {props.options &&
           props.options.map((item) => (
             <option
               value={item.value}
-              selected={item.value == props.defaultValue}
+              key={`gateway.option.${item}`}
             >
               {item.label}
             </option>

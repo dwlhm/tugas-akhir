@@ -6,6 +6,7 @@ import { Gateway_Mqtt } from "database/models/gateway-mqtt";
 import { Request, Response, NextFunction } from "express";
 import crypto from "node:crypto";
 import { Latest_Device_Value } from "database/models/Latest_Device_Value";
+import { Device } from "database/models/device";
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -127,7 +128,14 @@ const get_all_gateway = async (
   next: NextFunction
 ) => {
   try {
-    const gateways = await Gateway.findAll();
+    const gateways = await Gateway.findAll({
+      include: {
+        model: Device,
+        attributes: {
+          exclude: ["address", "maintainer", "gateway_id", "createdAt", "updatedAt"]
+        }
+      }
+    });
 
     res.status(200).json({
       code: 200,

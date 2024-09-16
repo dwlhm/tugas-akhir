@@ -7,6 +7,10 @@ export interface Gateway {
   address: string;
   maintainer: number;
   updatedAt: string;
+  device: {
+    id: string,
+    name: string
+  }[]
 }
 
 export const getAllGateway = async (token: string): Promise<API<Gateway[]>> => {
