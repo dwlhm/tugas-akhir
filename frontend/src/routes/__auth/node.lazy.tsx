@@ -1,8 +1,11 @@
 import { createLazyFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { getAllNodes, Node } from "../../node/api";
-import { Map, MapPin } from "react-feather";
-import { DeviceCard } from "../../node/layout";
+import { DeviceCard, NodeBaru } from "../../node/layout";
+import { usePopup } from "../../popup";
+import { BasicButton } from "../../components/Elements";
+import { Plus, PlusCircle, PlusSquare } from "react-feather";
+import { getAllGateway } from "../../gateway/api";
 
 export const Route = createLazyFileRoute("/__auth/node")({
   component: NodeLayout,
@@ -10,6 +13,7 @@ export const Route = createLazyFileRoute("/__auth/node")({
 
 function NodeLayout() {
   const { auth } = Route.useRouteContext();
+  const { setPopup } = usePopup();
   const param = Route.useParams();
   const [dataNode, setDataNode] = useState<Node[]>();
   useEffect(() => {
@@ -30,24 +34,45 @@ function NodeLayout() {
   return (
     <div>
       {Object.keys(param).length == 0 ? (
-        dataNode?.map((item) => {
-          // if (!item.latest_device_value[0].value)
-          //   return <div key={item.id}></div>;
-          // return (<div key={item.id}>{JSON.stringify(item.latest_device_value[0])}</div>)
-
-          return (
-            <Link
-              to="/node/$nodeId"
-              params={{ nodeId: item.id }}
-              key={`node.${item.id}`}
-            >
-              <DeviceCard item={item} />
-            </Link>
-          );
-        })
+        <>
+          <BasicButton
+            onClick={(e) =>
+              auth.user?.authentication_token &&
+              addNodeFunc(e, setPopup, auth.user?.authentication_token)
+            }
+            className="bg-white border-blue-100 mb-2 pr-5 text-blue-900 ml-auto mr-0"
+            icon={<PlusCircle className="size-4" />}
+          >
+            Node Baru
+          </BasicButton>
+          {dataNode?.map((item) => {
+            return (
+              <Link
+                to="/node/$nodeId"
+                params={{ nodeId: item.id }}
+                key={`node.${item.id}`}
+              >
+                <DeviceCard item={item} />
+              </Link>
+            );
+          })}
+        </>
       ) : (
         <Outlet />
       )}
     </div>
   );
 }
+
+const addNodeFunc = (
+  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  setPopup: (el: JSX.Element) => void,
+  token: string
+) => {
+  e.preventDefault();
+
+  getAllGateway(token).then((data) => {
+    console.log("Data gateway", data);
+    if (data.body) setPopup(<NodeBaru gateway={data.body} />);
+  });
+};

@@ -23,7 +23,7 @@ export function PopupProvider<T>({ children }: PropsWithChildren) {
       <div className="fixed inset-0 flex justify-center items-center">
         <div
           className="absolute inset-0 bg-black/50 z-0"
-          onClick={() => setPopup(<></>)}
+          onClick={() => setEl(<></>)}
         ></div>
         <div className="z-10">{item}</div>
       </div>

@@ -14,6 +14,13 @@ export interface Node {
   latest_device_value: LatestDeviceValue[];
 }
 
+export interface NodeInformation {
+  id: string;
+  name: string;
+  address: string;
+  gateway_id: string;
+}
+
 export interface LatestDeviceValue {
   value: string;
   updatedAt: string;
@@ -38,6 +45,38 @@ export const getAllNodes = async (auth: User): Promise<API<Node[]>> => {
 
     return data;
   } catch (error) {
+    return {
+      code: 500,
+      error: ["system error"],
+    };
+  }
+};
+
+export const addNode = async (
+  auth: User,
+  name: string,
+  address: string,
+  gateway_id: string
+): Promise<API<NodeInformation>> => {
+  try {
+    const { data } = await axios.post<API<NodeInformation>>(
+      `${import.meta.env.VITE_API_URL}/device`,
+      JSON.stringify({
+        name: name,
+        address: address,
+        gateway_id: gateway_id
+      }),
+      {
+        headers: {
+          Authorization: `Bearer ${auth.authentication_token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return data;
+  } catch (error) {
+    console.error("addNode", error);
     return {
       code: 500,
       error: ["system error"],

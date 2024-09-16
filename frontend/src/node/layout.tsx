@@ -1,10 +1,83 @@
-import { Edit2, MapPin } from "react-feather";
-import { Node, NodeUpdateResponse, updateNode } from "./api";
-import { Input } from "../components/Elements/Forms";
+import { Edit2, MapPin, PlusCircle } from "react-feather";
+import { addNode, Node, NodeUpdateResponse, updateNode } from "./api";
+import { Input, Select } from "../components/Elements/Forms";
 import { BasicButton } from "../components/Elements";
 import { usePopup } from "../popup";
 import React, { useState } from "react";
 import { useAuth, User } from "../auth/context";
+import { Gateway } from "../gateway/api";
+
+export const NodeBaru = (props: { gateway: Gateway[] }) => {
+  const auth = useAuth();
+  const popup = usePopup<NodeUpdateResponse>();
+  const putNode = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const rawData = {
+      name: (e.target as any)[0].value as string,
+      address: (e.target as any)[1].value as string,
+      gateway_id: (e.target as any)[2].value as string
+    };
+
+    const response = await addNode(
+      auth.user as User,
+      rawData.name,
+      rawData.address,
+      rawData.gateway_id
+    );
+
+    if (response.body) {
+      popup.close(response.body);
+      location.reload();
+    }
+  };
+  return (
+    <div className="bg-white max-w-lg p-5 rounded">
+      <h3 className="flex items-center gap-4 mb-5">
+        <span className="p-2 bg-blue-100 rounded">
+          <PlusCircle className="size-2" />
+        </span>
+        Tambah Node Baru
+      </h3>
+      <form onSubmit={putNode} className="max-w-xs">
+        <Input
+          name="nama"
+          label="Nama Node"
+          placeholder="Masukan nama node"
+          type="text"
+        />
+        <Input
+          name="alamat"
+          label="Alamat Node"
+          placeholder="Masukan alamat node"
+          type="text"
+        />
+        <Select
+          name="gateway"
+          label="Gateway"
+          options={props.gateway.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }))}
+        />
+        <div className="flex justify-center gap-2">
+          <BasicButton type="submit">Tambahkan</BasicButton>
+          <BasicButton
+            onClick={() =>
+              popup.close({
+                name: "props.name",
+                address: "props.address",
+              })
+            }
+            className="flex-grow flex justify-center bg-red-100 border-red-900 hover:bg-red-200"
+          >
+            Batalkan
+          </BasicButton>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export const EditInfromasiNode = (props: {
   id: string;
