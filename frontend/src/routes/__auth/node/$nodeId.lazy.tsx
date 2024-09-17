@@ -30,12 +30,12 @@ function NodeDetail() {
   const [data, setData] = useState<UseProfilDevice | null>(null);
   const [dataChart, setDataChart] = useState<DeviceValue[]>([]);
   const [dataTable, setDataTable] = useState<HistoryDevice | null>(null);
-  const [realtimeMode, setRealtimeMode] = useState<boolean>(true);
+  const [realtimeMode, setRealtimeMode] = useState<boolean>(false);
   const prevDate = new Date();
   prevDate.setDate(prevDate.getDate() - 6);
   const [dateRange, setDateRange] = useState<Value>([prevDate, new Date()]);
   const [offset, setOffset] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit, setLimit] = useState<number>(100);
   useEffect(() => {
     useProfilDevice(nodeId, (raw, error) => {
       if (raw) {

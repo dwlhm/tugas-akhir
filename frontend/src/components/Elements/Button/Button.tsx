@@ -13,6 +13,7 @@ const variants = {
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: keyof typeof variants;
   icon?: React.ReactElement;
+  padding?: string
 };
 
 export const Button: React.FC<ButtonProps> = ({
@@ -48,13 +49,14 @@ export const BasicButton: React.FC<ButtonProps> = ({
   type = "button",
   variant = "primary",
   icon = undefined,
+  padding = "py-2 px-3",
   ...props
 }) => {
   return (
     <button
       onClick={props.onClick}
       type={type}
-      className={`flex items-center gap-4 py-2 px-3 text-xs rounded border hover:text-blue-900 hover:border-blue-900 hover:bg-blue-100 ${props.className}`}
+      className={`flex items-center gap-4 text-xs rounded border hover:text-blue-900 hover:border-blue-900 hover:bg-blue-100 ${props.className} ${padding}`}
     >
       {icon && <span className="p-2 bg-blue-100 rounded">{icon}</span>}
       {props.children}

@@ -32,7 +32,7 @@ export interface HistoryDevice {
   total: number;
 }
 
-export const getAllNodes = async (auth: User): Promise<API<Node[]>> => {
+export const getAllNodes = async (auth: User, gatewayId?: string): Promise<API<Node[]>> => {
   try {
     const { data } = await axios.get<API<Node[]>>(
       `${import.meta.env.VITE_API_URL}/device`,
@@ -40,6 +40,9 @@ export const getAllNodes = async (auth: User): Promise<API<Node[]>> => {
         headers: {
           Authorization: `Bearer $${auth.authentication_token}`,
         },
+        params: {
+          gateway: gatewayId
+        }
       }
     );
 

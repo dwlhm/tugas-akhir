@@ -130,12 +130,15 @@ const destroy = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const get_all_devices = async (
-  _: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const devices = await Device.findAll({ include: Latest_Device_Value });
+    const gatewayId = req.query['gateway']
+    const devices = gatewayId ? await Device.findAll({ include: Latest_Device_Value, where: {
+      gateway_id: gatewayId
+    } }) : await Device.findAll({ include: Latest_Device_Value });
 
     res.status(200).json({
       code: 200,

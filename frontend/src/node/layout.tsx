@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { useAuth, User } from "../auth/context";
 import { Gateway } from "../gateway/api";
 
-export const NodeBaru = (props: { gateway: Gateway[] }) => {
+export const NodeBaru = (props: { gateway: Gateway[], defaultGatewayId?: string }) => {
   const auth = useAuth();
   const popup = usePopup<NodeUpdateResponse>();
   const putNode = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -55,6 +55,7 @@ export const NodeBaru = (props: { gateway: Gateway[] }) => {
         <Select
           name="gateway"
           label="Gateway"
+          defaultValue={props.defaultGatewayId}
           options={props.gateway.map((item) => ({
             value: item.id,
             label: item.name,

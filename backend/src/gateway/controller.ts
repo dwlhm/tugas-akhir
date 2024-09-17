@@ -68,12 +68,26 @@ const profil = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const gateway_id: string = req.params["id"];
     const gateway = await Gateway.findByPk(gateway_id, {
-      include: {
-        model: User,
-        attributes: {
-          exclude: [ "id", "password" ]
-        }
-      }
+      include: [
+        {
+          model: User,
+          attributes: {
+            exclude: ["id", "password"],
+          },
+        },
+        {
+          model: Device,
+          attributes: {
+            exclude: [
+              "address",
+              "maintainer",
+              "gateway_id",
+              "createdAt",
+              "updatedAt",
+            ],
+          },
+        },
+      ],
     });
 
     if (!gateway) throw new Error("404#gateway");
@@ -100,7 +114,7 @@ const destroy = async (req: Request, res: Response, next: NextFunction) => {
 
     destroying = await Gateway.destroy({
       where: {
-        id: gateway_id
+        id: gateway_id,
       },
     });
 
@@ -114,7 +128,7 @@ const destroy = async (req: Request, res: Response, next: NextFunction) => {
     });
   } catch (err) {
     if (err.message.lastIndexOf("Cannot delete or update a parent row:") > -1) {
-        err = new Error('412#gateway')
+      err = new Error("412#gateway");
     }
 
     console.error("[Gateway Destroy] ", err.message);
@@ -132,9 +146,15 @@ const get_all_gateway = async (
       include: {
         model: Device,
         attributes: {
-          exclude: ["address", "maintainer", "gateway_id", "createdAt", "updatedAt"]
-        }
-      }
+          exclude: [
+            "address",
+            "maintainer",
+            "gateway_id",
+            "createdAt",
+            "updatedAt",
+          ],
+        },
+      },
     });
 
     res.status(200).json({
@@ -154,7 +174,6 @@ const get_gateway_mqtt = async (
   next: NextFunction
 ) => {
   try {
-
     const gateway_id = req.params["id"];
 
     const mqtt_detail = await Gateway_Mqtt.findOne({
@@ -218,4 +237,11 @@ const update_gateway_profil = async (
   }
 };
 
-export { register, profil, destroy, get_all_gateway, get_gateway_mqtt, update_gateway_profil };
+export {
+  register,
+  profil,
+  destroy,
+  get_all_gateway,
+  get_gateway_mqtt,
+  update_gateway_profil,
+};
