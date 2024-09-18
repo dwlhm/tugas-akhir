@@ -7,7 +7,6 @@ import {
   Tooltip,
   Line,
 } from "recharts";
-import { Sensor } from "../assets/sensor";
 import { DeviceValue } from "../utils";
 import { BarChart2 } from "react-feather";
 

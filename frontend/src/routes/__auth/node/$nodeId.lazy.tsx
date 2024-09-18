@@ -17,7 +17,7 @@ import { ValueByGraph } from "../../../node/component";
 import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
 import { Edit2, Trash2 } from "react-feather";
 import { usePopup } from "../../../popup";
-import { useAuth, User } from "../../../auth/context";
+import { useAuth } from "../../../auth/context";
 
 export const Route = createLazyFileRoute("/__auth/node/$nodeId")({
   component: NodeDetail,
@@ -235,7 +235,7 @@ function NodeDetail() {
                         )}
                         {Math.ceil(dataTable.total / limit) > 2 && (
                           <>
-                            {[...Array(9)].map((v, i) => {
+                            {[...Array(9)].map((_, i) => {
                               const num =
                                 offset > 2
                                   ? offset >

@@ -1,5 +1,4 @@
 import { PropsWithChildren, createContext, useContext, useState } from "react";
-import { Node } from "./node/api";
 
 export interface PopupData<T> {
   data: T;

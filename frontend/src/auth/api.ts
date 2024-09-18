@@ -1,6 +1,6 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { API } from "../utils";
-import { AuthContextInterface, User } from "./context";
+import { User } from "./context";
 
 export interface Profile {
   name: string;

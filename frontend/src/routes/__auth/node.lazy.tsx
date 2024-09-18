@@ -4,7 +4,7 @@ import { getAllNodes, Node } from "../../node/api";
 import { DeviceCard, NodeBaru } from "../../node/layout";
 import { usePopup } from "../../popup";
 import { BasicButton } from "../../components/Elements";
-import { Plus, PlusCircle, PlusSquare } from "react-feather";
+import { PlusCircle } from "react-feather";
 import { getAllGateway } from "../../gateway/api";
 
 export const Route = createLazyFileRoute("/__auth/node")({

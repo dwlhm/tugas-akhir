@@ -9,8 +9,6 @@ import {
 } from "../utils/useDevices";
 import { Box } from "../assets/box";
 import { Back } from "../assets/chevron-left";
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis,Tooltip } from "recharts";
-import { Sensor } from "../assets/sensor";
 import { ValueByGraph } from "../node/component";
 
 export const Route = createLazyFileRoute("/$deviceId")({
