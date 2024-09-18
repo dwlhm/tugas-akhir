@@ -3,3 +3,7 @@ export interface API<T> {
     error?: string[],
     body?: T
 }
+
+export interface SuccessResponse {
+    success: string
+}

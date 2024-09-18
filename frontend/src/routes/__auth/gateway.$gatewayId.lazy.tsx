@@ -1,6 +1,6 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { BackButton, BasicButton } from "../../components/Elements";
-import { EditGateway, SeeCredentials } from "../../gateway/layout";
+import { DeleteGateway, EditGateway, SeeCredentials } from "../../gateway/layout";
 import React, { useEffect, useState } from "react";
 import {
   Gateway,
@@ -11,12 +11,12 @@ import {
 import { useAuth } from "../../auth/context";
 import { usePopup } from "../../popup";
 import {
-  ChevronRight,
   Cpu,
   Edit2,
   Eye,
   MapPin,
   PlusCircle,
+  Trash2,
 } from "react-feather";
 import { QuickViewCard } from "../../components/Elements/Card/component";
 import { NodeBaru } from "../../node/layout";
@@ -46,6 +46,14 @@ function GatewayDetailView() {
       getAllNodes(auth.user, gatewayId).then((data) => {
         if (data.body && data.body.length > 0) setNodes(data.body);
       });
+    const gnInterval = setInterval(() => {
+      if (auth.user && auth.user.authentication_token && gatewayId)
+        getAllNodes(auth.user, gatewayId).then((data) => {
+          if (data.body && data.body.length > 0) setNodes(data.body);
+        });
+    }, 60000);
+
+    return () => clearInterval(gnInterval);
   }, []);
 
   const nodeBaruFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -74,22 +82,39 @@ function GatewayDetailView() {
     <div>
       <div className="flex justify-between">
         <BackButton />
-        <BasicButton
-          onClick={() => {
-            if (profil != null)
-              popup.setPopup(
-                <EditGateway
-                  gatewayId={gatewayId}
-                  name={profil.name as string}
-                  address={profil.address as string}
-                />
-              );
-          }}
-          className="bg-white border-white p-1"
-          icon={<Edit2 className="size-2" />}
-        >
-          Edit Informasi Gateway
-        </BasicButton>
+        <div className="flex gap-2">
+          <BasicButton
+            onClick={() => {
+              if (profil != null)
+                popup.setPopup(
+                  <EditGateway
+                    gatewayId={gatewayId}
+                    name={profil.name as string}
+                    address={profil.address as string}
+                  />
+                );
+            }}
+            className="bg-white border-white p-1"
+            icon={<Edit2 className="size-2" />}
+          >
+            Edit Informasi Gateway
+          </BasicButton>
+          <BasicButton
+            onClick={() => {
+              if (profil != null)
+                popup.setPopup(
+                  <DeleteGateway
+                    gatewayId={gatewayId}
+                    name={profil.name as string}
+                  />
+                );
+            }}
+            className="bg-white border-red-900 p-1"
+          >
+            <Trash2 className="size-6 stroke-red-900 p-1 rounded" />
+            Hapus Gateway 
+          </BasicButton>
+        </div>
       </div>
       {profil != null ? (
         <div className="my-2">
@@ -130,7 +155,11 @@ function GatewayDetailView() {
       </p>
       {nodes != null ? (
         nodes.map((item) => (
-          <Link to="/node/$nodeId" params={{ nodeId: item.id }}>
+          <Link
+            to="/node/$nodeId"
+            params={{ nodeId: item.id }}
+            key={`g.n.l.${item.id}`}
+          >
             <QuickViewCard
               name={item.name}
               noLeftDecoration={true}

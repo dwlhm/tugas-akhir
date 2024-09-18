@@ -21,7 +21,7 @@ const Authorization = async (
       "utf8"
     );
 
-    const user = verify(access_token, public_key);
+    const user = await verify(access_token, public_key);
     console.log(user);
     const findUser = await User_Session.findOne({
       where: {
@@ -35,7 +35,7 @@ const Authorization = async (
 
     return next();
   } catch (error) {
-    console.error("[authorization]", error.message);
+    console.error("[authorization]", error);
 
     let errors: string[] = [];
 

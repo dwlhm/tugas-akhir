@@ -16,7 +16,7 @@ export const Route = createLazyFileRoute("/__auth/gateway")({
 function GatewayView() {
   const auth = useAuth();
   const param = Route.useParams();
-  const { setPopup } = usePopup()
+  const { setPopup } = usePopup();
   const [listGateway, setListGateway] = useState<Gateway[]>([]);
   useEffect(() => {
     if (auth.user && auth.user.authentication_token)
@@ -30,7 +30,7 @@ function GatewayView() {
   ) => {
     e.preventDefault();
 
-    setPopup(<GatewayBaru />)
+    setPopup(<GatewayBaru />);
   };
   return (
     <div>
@@ -38,8 +38,7 @@ function GatewayView() {
         <>
           <BasicButton
             onClick={(e) =>
-              auth.user?.authentication_token &&
-              addgatewayFunc(e, setPopup)
+              auth.user?.authentication_token && addgatewayFunc(e, setPopup)
             }
             className="bg-white border-blue-100 mb-2 pr-5 text-blue-900 ml-auto mr-0"
             icon={<PlusCircle className="size-4" />}
@@ -50,7 +49,11 @@ function GatewayView() {
             <></>
           ) : (
             listGateway.map((gateway) => (
-              <Link to="/gateway/$gatewayId" params={{ gatewayId: gateway.id }}>
+              <Link
+                to="/gateway/$gatewayId"
+                params={{ gatewayId: gateway.id }}
+                key={`g.l.${gateway.id}`}
+              >
                 <QuickViewCard
                   name={gateway.name}
                   topBar={
@@ -61,19 +64,24 @@ function GatewayView() {
                   }
                 >
                   <div className="flex gap-2 mt-2 flex-wrap">
-                    {!gateway.device ? (
-                      <></>
+                    {gateway.device ? (
+                      gateway.device?.length <= 0 ? (
+                        <div className="bg-red-100 py-2 px-3 rounded border border-red-900 text-center text-xs italic">
+                          Tidak ada node terdaftar dengan gateway
+                        </div>
+                      ) : (
+                        gateway.device.map((item) => (
+                          <div
+                            key={`g.n.l.m.${item.id}`}
+                            className="bg-blue-100 px-3 py-2 rounded text-xs text-blue-900 hover:bg-blue-100/50"
+                          >
+                            <NodeIc className="size-3 stroke-blue-900 inline-block mr-2" />
+                            {item.name}
+                          </div>
+                        ))
+                      )
                     ) : (
-                      gateway.device.map((item) => (
-                        <Link
-                          to="/node/$nodeId"
-                          params={{ nodeId: item.id }}
-                          className="bg-blue-100 px-3 py-2 rounded text-xs text-blue-900 hover:bg-blue-100/50"
-                        >
-                          <NodeIc className="size-3 stroke-blue-900 inline-block mr-2" />
-                          {item.name}
-                        </Link>
-                      ))
+                      <></>
                     )}
                   </div>
                 </QuickViewCard>

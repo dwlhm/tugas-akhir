@@ -1,5 +1,11 @@
 import { Edit2, MapPin, PlusCircle } from "react-feather";
-import { addNode, Node, NodeUpdateResponse, updateNode } from "./api";
+import {
+  addNode,
+  deleteNode,
+  Node,
+  NodeUpdateResponse,
+  updateNode,
+} from "./api";
 import { Input, Select } from "../components/Elements/Forms";
 import { BasicButton } from "../components/Elements";
 import { usePopup } from "../popup";
@@ -7,7 +13,10 @@ import React, { useState } from "react";
 import { useAuth, User } from "../auth/context";
 import { Gateway } from "../gateway/api";
 
-export const NodeBaru = (props: { gateway: Gateway[], defaultGatewayId?: string }) => {
+export const NodeBaru = (props: {
+  gateway: Gateway[];
+  defaultGatewayId?: string;
+}) => {
   const auth = useAuth();
   const popup = usePopup<NodeUpdateResponse>();
   const putNode = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -16,7 +25,7 @@ export const NodeBaru = (props: { gateway: Gateway[], defaultGatewayId?: string 
     const rawData = {
       name: (e.target as any)[0].value as string,
       address: (e.target as any)[1].value as string,
-      gateway_id: (e.target as any)[2].value as string
+      gateway_id: (e.target as any)[2].value as string,
     };
 
     const response = await addNode(
@@ -274,6 +283,65 @@ export const DeviceCard = (props: { item: Node }) => {
             </div>
           )}
         </div>
+      </div>
+    </div>
+  );
+};
+
+export const DeleteNode = (props: { nodeId: string; name: string }) => {
+  const auth = useAuth();
+  const popup = usePopup();
+  const [errorView, setErrorView] = useState<React.ReactNode | null>(null);
+
+  const deleteFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+
+    if (auth.user && auth.user.authentication_token)
+      deleteNode(auth.user, props.nodeId).then((res) => {
+        if (res.body) location.replace("/node");
+        if (res.error)
+          setErrorView(
+            <p className="bg-red-100 py-2 px-5 mt-2 rounded border border-red-900 text-center text-sm italic">
+              {res.error[0]}
+            </p>
+          );
+      });
+  };
+  return (
+    <div className="bg-white max-w-lg p-5 rounded">
+      <h3 className="flex items-center gap-4 mb-5">
+        <span className="p-2 bg-blue-100 rounded">
+          <PlusCircle className="size-2" />
+        </span>
+        Hapus Node
+      </h3>
+      <div className="w-80">
+        <p>
+          Anda yakin untuk menghapus node{" "}
+          <span className="bg-red-100 px-2 rounded hover:bg-red-300 italic text-sm py-1">
+            {props.name}
+          </span>{" "}
+          dengan id{" "}
+          <span className="bg-red-100 px-2 rounded mr-1 hover:bg-red-300 italic text-sm py-1">
+            {props.nodeId}
+          </span>
+          ?
+        </p>
+        <div className="flex gap-2 w-full mt-5">
+          <BasicButton
+            onClick={deleteFunc}
+            className="bg-red-900 text-white w-full flex justify-center "
+          >
+            Saya Yakin
+          </BasicButton>
+          <BasicButton
+            onClick={() => popup.close({})}
+            className="bg-blue-100 w-full flex justify-center"
+          >
+            Batalkan
+          </BasicButton>
+        </div>
+        {errorView}
       </div>
     </div>
   );

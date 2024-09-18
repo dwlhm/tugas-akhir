@@ -102,7 +102,7 @@ const destroy = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id = req.params["id"];
 
-    let destroying = await Device_Value.destroy({
+    let destroying = await Latest_Device_Value.destroy({
       where: {
         device_id: device_id,
       },

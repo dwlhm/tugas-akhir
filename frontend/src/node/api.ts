@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { User } from "../auth/context";
-import { API } from "../utils";
+import { API, SuccessResponse } from "../utils";
 
 export interface NodeUpdateResponse {
   name: string;
@@ -32,7 +32,10 @@ export interface HistoryDevice {
   total: number;
 }
 
-export const getAllNodes = async (auth: User, gatewayId?: string): Promise<API<Node[]>> => {
+export const getAllNodes = async (
+  auth: User,
+  gatewayId?: string
+): Promise<API<Node[]>> => {
   try {
     const { data } = await axios.get<API<Node[]>>(
       `${import.meta.env.VITE_API_URL}/device`,
@@ -41,8 +44,8 @@ export const getAllNodes = async (auth: User, gatewayId?: string): Promise<API<N
           Authorization: `Bearer $${auth.authentication_token}`,
         },
         params: {
-          gateway: gatewayId
-        }
+          gateway: gatewayId,
+        },
       }
     );
 
@@ -67,7 +70,7 @@ export const addNode = async (
       JSON.stringify({
         name: name,
         address: address,
-        gateway_id: gateway_id
+        gateway_id: gateway_id,
       }),
       {
         headers: {
@@ -80,6 +83,35 @@ export const addNode = async (
     return data;
   } catch (error) {
     console.error("addNode", error);
+    return {
+      code: 500,
+      error: ["system error"],
+    };
+  }
+};
+
+export const deleteNode = async (
+  auth: User,
+  nodeId: string
+): Promise<API<SuccessResponse>> => {
+  try {
+    const { data } = await axios.delete<API<SuccessResponse>>(
+      `${import.meta.env.VITE_API_URL}/device/${nodeId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.authentication_token}`,
+        },
+      }
+    );
+
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      console.error("deleteNode", error.response.data);
+      return error.response.data;
+    }
+
+    console.error("deleteNode", error);
     return {
       code: 500,
       error: ["system error"],

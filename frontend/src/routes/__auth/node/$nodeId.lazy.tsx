@@ -2,7 +2,11 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { BackButton, BasicButton } from "../../../components/Elements";
 import { useEffect, useState } from "react";
 import { DeviceValue, UseProfilDevice, useProfilDevice } from "../../../utils";
-import { DeviceCard, EditInfromasiNode } from "../../../node/layout";
+import {
+  DeleteNode,
+  DeviceCard,
+  EditInfromasiNode,
+} from "../../../node/layout";
 import {
   getHistoryDevice,
   HistoryDevice,
@@ -11,7 +15,7 @@ import {
 } from "../../../node/api";
 import { ValueByGraph } from "../../../node/component";
 import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
-import { Edit2 } from "react-feather";
+import { Edit2, Trash2 } from "react-feather";
 import { usePopup } from "../../../popup";
 import { useAuth, User } from "../../../auth/context";
 
@@ -126,21 +130,33 @@ function NodeDetail() {
     <div>
       <div className="flex justify-between">
         <BackButton />
-        <BasicButton
-          onClick={() =>
-            popup.setPopup(
-              <EditInfromasiNode
-                id={data?.id as string}
-                name={data?.name as string}
-                address={data?.address as string}
-              />
-            )
-          }
-          className="bg-white border-white p-1"
-          icon={<Edit2 className="size-2" />}
-        >
-          Edit Informasi Node
-        </BasicButton>
+        <div className="flex gap-2">
+          <BasicButton
+            onClick={() =>
+              popup.setPopup(
+                <EditInfromasiNode
+                  id={data?.id as string}
+                  name={data?.name as string}
+                  address={data?.address as string}
+                />
+              )
+            }
+            className="bg-white border-white p-1"
+            icon={<Edit2 className="size-2" />}
+          >
+            Edit Informasi Node
+          </BasicButton>
+          <BasicButton
+            onClick={() => {
+              if (data?.name != null)
+                popup.setPopup(<DeleteNode nodeId={nodeId} name={data.name} />);
+            }}
+            className="bg-white border-red-900 p-1"
+          >
+            <Trash2 className="size-6 stroke-red-900 p-1 rounded" />
+            Hapus Node
+          </BasicButton>
+        </div>
       </div>
       <div className="my-2">{data && <DeviceCard item={data as Node} />}</div>
       {dataChart.length > 0 && (
@@ -192,7 +208,7 @@ function NodeDetail() {
               <div className="flex justify-between items-center">
                 <form>
                   <input
-                  className="pl-2 text-sm py-2 rounded w-16 text-center"
+                    className="pl-2 text-sm py-2 rounded w-16 text-center"
                     type="number"
                     defaultValue={limit}
                     onChange={(e) =>
@@ -212,13 +228,11 @@ function NodeDetail() {
                   {dataTable ? (
                     Math.ceil(dataTable.total / limit) > 1 ? (
                       <>
-                      
-                      {offset <
-                            3 ? (
-                              <></>
-                            ) : (
-                              <p className="m-1 inline-block">...</p>
-                            )}
+                        {offset < 3 ? (
+                          <></>
+                        ) : (
+                          <p className="m-1 inline-block">...</p>
+                        )}
                         {Math.ceil(dataTable.total / limit) > 2 && (
                           <>
                             {[...Array(9)].map((v, i) => {
