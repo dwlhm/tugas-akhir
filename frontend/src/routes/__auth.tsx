@@ -43,9 +43,9 @@ function AuthLayout() {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:min-h-screen bg-gray-100">
+      <div className="flex flex-col sm:flex-row min-h-screen bg-gray-100">
         <nav
-          className={`rounded p-5 w-full sm:w-64 flex flex-col justify-between sm:h-screen sticky top-0 bottom-0 left-0 ${!menu ? "h-screen" : "h-full"}`}
+          className={`rounded p-5 w-full sm:w-64 flex flex-col justify-between sticky top-0 bottom-0 left-0 ${!menu ? "h-screen" : "h-full"} sm:h-screen`}
         >
           <div className="rounded bg-white p-2 h-full border-4 box-shadow flex justify-between flex-col">
             <div>
@@ -67,7 +67,7 @@ function AuthLayout() {
                 </header>
               </div>
               <nav
-                className={`my-5 flex flex-col gap-2 text-poppins sm:block ${!menu ? "block" : "hidden"}`}
+                className={`my-5 flex flex-col gap-2 text-poppins ${!menu ? "block" : "hidden"} sm:block`}
               >
                 <Link
                   to="/dashboard"
@@ -108,7 +108,7 @@ function AuthLayout() {
               </nav>
             </div>
             <Link
-              className={`bg-blue-100 p-5 rounded border-2 border-solid border-blue-100 hover:border-blue-900 sm:block ${!menu ? "block" : "hidden"}`}
+              className={`bg-blue-100 p-5 rounded border-2 border-solid border-blue-100 hover:border-blue-900 ${!menu ? "block" : "hidden"} sm:block`}
               to="/user"
             >
               <div className="flex gap-4">
@@ -130,7 +130,7 @@ function AuthLayout() {
           </div>
         </nav>
         <div
-          className={`flex-grow py-5 pr-5 pl-5 sm:pl-0 ${!menu ? "hidden" : "block"}`}
+          className={`flex-grow py-5 pr-5 pl-5 sm:pl-0 ${!menu ? "hidden" : "block"} sm:block`}
         >
           <header className="text-xl font-poppins text-blue-900 flex mb-4">
             <div className="flex items-center gap-2 bg-white/50 p-2 pr-5 rounded border-2 border-solid border-white hover:border-blue-900 capitalize">
