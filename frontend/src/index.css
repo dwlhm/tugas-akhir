@@ -225,3 +225,7 @@ body {
 .react-calendar {
   @apply bg-white max-w-xl mx-auto p-2 rounded my-2 border border-solid border-blue-900
 }
+
+#dashboard-map .leaflet-container {
+  @apply h-[calc(100vh-7rem)] rounded border-2 border-solid border-white
+}

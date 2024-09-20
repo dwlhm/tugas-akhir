@@ -37,7 +37,7 @@ function UserLayout() {
         onClick={(e: React.FormEvent) => {
           e.preventDefault();
           if (auth.user && auth.user.authentication_token)
-            popup.setPopup(<NewUser token={auth.user.authentication_token} />);
+            popup.setPopup(<NewUser />);
           // auth.logout();
           // window.location.reload()
         }}

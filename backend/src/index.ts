@@ -7,17 +7,36 @@ import Sq_Start from "database";
 import Device from "./device";
 import Gateway from "./gateway";
 import { middleware as ErrorMiddleware } from "./error_handler/middleware";
+import connection from "database/config";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 5423;
 
-Sq_Start();
+(async () => {
+  await connection
+    .authenticate()
+    .then(() => {
+      console.info("[sequelize] authenticate!");
+    })
+    .finally(() => {
+      console.info("[sequelize] authenticated!");
+    });
+  await connection
+    .sync({ force: false })
+    .then(() => {
+      console.info("[sequelize] sync!");
+    })
+    .finally(() => {
+      console.info("[sequelize] sync completed!");
+    });
+
+})();
 
 app.use(express.json());
 app.use(express.static("public"));
-app.use(cors())
+app.use(cors());
 
 app.use("/device", Device);
 app.use("/user", User);

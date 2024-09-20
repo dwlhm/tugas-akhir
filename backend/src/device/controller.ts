@@ -1,3 +1,4 @@
+import connection, { sqlz } from "database/config";
 import { Csv_List } from "database/models/Csv_List";
 import { Device } from "database/models/device";
 import { Device_History } from "database/models/Device_History";
@@ -6,7 +7,7 @@ import { Latest_Device_Value } from "database/models/Latest_Device_Value";
 import { User } from "database/models/user";
 import { Request, Response, NextFunction } from "express";
 import crypto from "node:crypto";
-import { Op } from "sequelize"
+import { Op } from "sequelize";
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -79,8 +80,8 @@ const profil = async (req: Request, res: Response, next: NextFunction) => {
         {
           model: Latest_Device_Value,
           attributes: {
-            exclude: ["id", "device_id", "createdAt"]
-          }
+            exclude: ["id", "device_id", "createdAt"],
+          },
         },
       ],
     });
@@ -135,10 +136,15 @@ const get_all_devices = async (
   next: NextFunction
 ) => {
   try {
-    const gatewayId = req.query['gateway']
-    const devices = gatewayId ? await Device.findAll({ include: Latest_Device_Value, where: {
-      gateway_id: gatewayId
-    } }) : await Device.findAll({ include: Latest_Device_Value });
+    const gatewayId = req.query["gateway"];
+    const devices = gatewayId
+      ? await Device.findAll({
+          include: Latest_Device_Value,
+          where: {
+            gateway_id: gatewayId,
+          },
+        })
+      : await Device.findAll({ include: Latest_Device_Value });
 
     res.status(200).json({
       code: 200,
@@ -208,23 +214,27 @@ const get_history = async (req: Request, res: Response, next: NextFunction) => {
     const device_id = req.params["id"];
     const req_limit = Number(req.query["limit"]) || 2;
     const req_offset = Number(req.query["offset"]) || 0;
-    const prev_date = new Date()
-    prev_date.setDate(prev_date.getDate() - 6)
-    const req_from = req.query["from"] ? new Date(String(req.query["from"])) : prev_date;
-    const req_to = req.query["to"] ? new Date(String(req.query["to"])) : new Date();
-    const {rows, count} = await Device_History.findAndCountAll({
+    const prev_date = new Date();
+    prev_date.setDate(prev_date.getDate() - 6);
+    const req_from = req.query["from"]
+      ? new Date(String(req.query["from"]))
+      : prev_date;
+    const req_to = req.query["to"]
+      ? new Date(String(req.query["to"]))
+      : new Date();
+    const { rows, count } = await Device_History.findAndCountAll({
       where: {
         timestamp: {
           [Op.lte]: req_to,
-          [Op.gte]: req_from
-        }
+          [Op.gte]: req_from,
+        },
       },
       offset: req_offset,
       limit: req_limit,
       attributes: {
-        exclude: ['id', 'createdAt', 'device_id', 'gateway_id'],
-      }
-    })
+        exclude: ["id", "createdAt", "device_id", "gateway_id"],
+      },
+    });
 
     if (!rows) throw new Error("404#devicevalue");
 
@@ -232,8 +242,8 @@ const get_history = async (req: Request, res: Response, next: NextFunction) => {
       code: 200,
       body: {
         list: rows,
-        maximum: req_limit*(req_offset + 1) >= count,
-        total: count
+        maximum: req_limit * (req_offset + 1) >= count,
+        total: count,
       },
     });
   } catch (error) {
@@ -278,6 +288,29 @@ const update_device_profil = async (
   }
 };
 
+const get_all_device_w_value = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const devices = await connection.query(
+      "SELECT d.name, d.id, v.value, v.createdAt FROM Devices d JOIN (SELECT device_id, MAX(createdAt) AS latest_value_date FROM Device_Histories GROUP BY device_id) latest_values ON d.id = latest_values.device_id JOIN Device_Histories v ON latest_values.device_id = d.id AND latest_values.latest_value_date = v.createdAt;"
+    );
+
+    console.log("dd", devices)
+
+    res.status(200).json({
+      code: 200,
+      body: devices[0],
+    });
+  } catch (err) {
+    console.error("[get_all_devices] ", err.message);
+
+    next(err);
+  }
+};
+
 export {
   register,
   profil,
@@ -287,4 +320,5 @@ export {
   get_latest_value,
   get_history,
   update_device_profil,
+  get_all_device_w_value,
 };

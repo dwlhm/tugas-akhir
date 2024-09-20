@@ -23,10 +23,26 @@ const connection = new Sequelize(db_name, db_user, db_password, {
   host: db_host,
   dialect: "mariadb",
   models: [
-    User, Device, Device_Value, Gateway_Mqtt, Gateway, 
-    User_Session, Latest_Device_Value, Metadata,
-    Duplication_Order, Csv_List, Device_History
+    User,
+    Device,
+    Device_Value,
+    Gateway_Mqtt,
+    Gateway,
+    User_Session,
+    Latest_Device_Value,
+    Metadata,
+    Duplication_Order,
+    Csv_List,
+    Device_History,
   ],
 });
+
+export const sqlz = async (query: string) => {
+  console.log("RAW QUERY", query)
+  // const res = await connection.query(query);
+  // console.log('RES', res)
+
+  return "hh"
+};
 
 export default connection;

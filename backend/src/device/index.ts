@@ -8,10 +8,13 @@ import {
   get_values,
   get_latest_value,
   get_history,
-  update_device_profil
+  update_device_profil,
+  get_all_device_w_value
 } from "./controller";
 
 const router: Router = Router();
+
+router.get("/la", Authorization, get_all_device_w_value)
 
 router.get("/:id/values", Authorization, get_values);
 router.get("/:id", profil);

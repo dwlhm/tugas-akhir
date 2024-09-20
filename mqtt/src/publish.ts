@@ -1,13 +1,9 @@
 import Aedes from "aedes";
 import { Client } from "aedes:client";
-import fs from "fs";
 import { Duplication_Order } from "database/models/Duplication_Order";
 import { Latest_Device_Value } from "database/models/Latest_Device_Value";
 import { Metadata } from "database/models/Metadata";
-import dayjs from "dayjs";
-import { Device_Value } from "database/models/Device_Value";
 import { Device_History } from "database/models/Device_History";
-const fastCsv = require("fast-csv");
 
 const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
   try {
@@ -93,7 +89,7 @@ const Publish_Packet = async (packet: any, client: Client, aedes: Aedes) => {
       value: JSON.stringify(eFormat),
       device_id: device_id,
       gateway_id: client.id,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     // store the pk_order to Duplication_Orders

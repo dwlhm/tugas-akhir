@@ -1,6 +1,7 @@
+import { Sequelize } from "sequelize";
 import sq_connection from "./config";
 
-async function Sq_Start(force: boolean = false): Promise<void> {
+async function Sq_Start(force: boolean = false): Promise<Sequelize> {
     await sq_connection
       .authenticate()
       .then(() => {
@@ -17,6 +18,8 @@ async function Sq_Start(force: boolean = false): Promise<void> {
       .finally(() => {
         console.info("[sequelize] sync completed!");
       });
+
+      return sq_connection
 }
 
 export default Sq_Start;

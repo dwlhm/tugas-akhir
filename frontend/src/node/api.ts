@@ -186,3 +186,57 @@ export const getHistoryDevice = async (
     };
   }
 };
+
+export interface LatestValueResponse {
+  id: string;
+  name: string;
+  value: string;
+  createdAt: string;
+}
+
+export const getAllLatestValue = async (
+  token: string
+): Promise<API<LatestValueResponse[]>> => {
+  try {
+    const { data } = await axios.get<API<LatestValueResponse[]>>(
+      `${import.meta.env.VITE_API_URL}/device/la`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      console.error("getAllLatestValue", error.response.data);
+      return error.response.data;
+    }
+    console.error("getHistoryDevice", error);
+    return {
+      code: 500,
+      error: ["system error"],
+    };
+  }
+};
+
+export const getAllLatestValueGeneral = async (): Promise<API<Node[]>> => {
+  try {
+    const { data } = await axios.get<API<Node[]>>(
+      `${import.meta.env.VITE_API_URL}/device`
+    );
+
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      console.error("getAllLatestValue", error.response.data);
+      return error.response.data;
+    }
+    console.error("getHistoryDevice", error);
+    return {
+      code: 500,
+      error: ["system error"],
+    };
+  }
+};

@@ -22,15 +22,13 @@ export type DeviceValue = {
   timestamp?: string;
 };
 
-export const useDevices = async (onChange: (data: any, error: any) => void) => {
+export const useDevices = async (onChange: (item: any, error: any) => void) => {
   try {
-    const { data, status } = await axios.get(
-      `${import.meta.env.VITE_API_URL}/device`
-    );
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/device`);
 
-    console.log("data: ", data, status);
+    console.log("DARTA 1", data);
 
-    onChange(data, null);
+    if (data) onChange(data, null);
   } catch (error) {
     onChange(null, error);
   }
@@ -41,7 +39,7 @@ export type UseProfilDevice = {
   name?: string;
   address?: string;
   createdAt?: string;
-  latest_device_value: LatestDeviceValue[]
+  latest_device_value: LatestDeviceValue[];
 };
 
 export const useProfilDevice = async (
@@ -49,11 +47,9 @@ export const useProfilDevice = async (
   onChange: (data?: UseProfilDevice, error?: any) => void
 ) => {
   try {
-    const { data, status } = await axios.get(
+    const { data } = await axios.get(
       `${import.meta.env.VITE_API_URL}/device/${id}`
     );
-
-    console.log("profil device: ", data, status);
 
     onChange(data.body, null);
   } catch (error) {
@@ -66,11 +62,9 @@ export const useDeviceValue = async (
   onChange: (data?: DeviceValue, error?: any) => void
 ) => {
   try {
-    const { data, status } = await axios.get(
+    const { data } = await axios.get(
       `${import.meta.env.VITE_API_URL}/device/${id}/la`
     );
-
-    console.log("value device: ", data, status);
 
     const item_parsed = JSON.parse(data.body.value);
     const [header, body] = item_parsed.data.split("|");

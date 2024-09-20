@@ -69,7 +69,6 @@ function NodeDetail() {
     const polling = setInterval(() => {
       useProfilDevice(nodeId, (raw, error) => {
         if (raw) {
-          console.log(raw);
           setData(raw);
           setDataChart((prev) => {
             if (!raw.latest_device_value[0].value) return prev;
@@ -102,8 +101,7 @@ function NodeDetail() {
       const prev_date = new Date();
       prev_date.setDate(prev_date.getDate() - 6);
       if (!dateRange) setDateRange([prevDate, new Date()]);
-      console.log("dateRange", dateRange);
-      const raw = getHistoryDevice(
+      getHistoryDevice(
         auth.user.authentication_token,
         nodeId,
         {
@@ -121,8 +119,6 @@ function NodeDetail() {
           setDataTable(res.body);
         }
       });
-
-      console.log("dateRange", raw);
     }
   }, [dateRange, offset, realtimeMode, limit]);
 

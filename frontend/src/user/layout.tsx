@@ -6,7 +6,7 @@ import { RegisterRequest, registUser } from "./api";
 import { useAuth } from "../auth/context";
 import { ReactNode, useState } from "react";
 
-export const NewUser = (props: { token: string }) => {
+export const NewUser = () => {
   const auth = useAuth();
   const popup = usePopup();
   const [resultView, setResultView] = useState<ReactNode | null>(null);
@@ -23,7 +23,6 @@ export const NewUser = (props: { token: string }) => {
       } as RegisterRequest;
       if (auth.user && auth.user.authentication_token)
         registUser(auth.user.authentication_token, req_data).then((data) => {
-    console.log(data)
           if (data.body)
             setResultView(
               <p className="capitalize bg-green-300 px-3 py-1 rounded border border-solid border-green-900 text-green-900 text-sm text-center mt-5 w-full">
@@ -40,10 +39,9 @@ export const NewUser = (props: { token: string }) => {
                 {item}
               </p>
             ));
-            setResultView(err_list)
+            setResultView(err_list);
           }
         });
-      console.log("formData", req_data);
     } catch (error) {
       console.error(error);
     }

@@ -72,7 +72,6 @@ const addNodeFunc = (
   e.preventDefault();
 
   getAllGateway(token).then((data) => {
-    console.log("Data gateway", data);
     if (data.body) setPopup(<NodeBaru gateway={data.body} />);
   });
 };
