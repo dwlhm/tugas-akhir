@@ -159,10 +159,6 @@ export const EditInfromasiNode = (props: {
 };
 
 export const DeviceCard = (props: { item: Node }) => {
-  console.log(
-    props.item.latest_device_value.length,
-    props.item.latest_device_value
-  );
   if (
     props.item.latest_device_value.length <= 0 ||
     !props.item.latest_device_value[0].value
@@ -171,7 +167,7 @@ export const DeviceCard = (props: { item: Node }) => {
       <div className="mb-2 p-2 bg-white flex gap-2 rounded border-2 border-solid border-white hover:border-blue-900">
         <div className="bg-blue-100 p-1 rounded"></div>
         <div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             <p className="text-lg">{props.item.name}</p>
             <p className="text-sm text-gray-700 mt-1">
               <MapPin className="size-3 stroke-blue-900 inline-block mr-2" />
@@ -199,7 +195,7 @@ export const DeviceCard = (props: { item: Node }) => {
     <div className="mb-2 p-2 bg-white flex gap-2 rounded border-2 border-solid border-white hover:border-blue-900">
       <div className="bg-blue-100 p-1 rounded"></div>
       <div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           <p className="text-lg">{props.item.name}</p>
           <p className="text-sm text-gray-700 mt-1">
             <MapPin className="size-3 stroke-blue-900 inline-block mr-2" />
@@ -209,7 +205,7 @@ export const DeviceCard = (props: { item: Node }) => {
             Last update: {res["timestamp"]}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {res["1"] ? (
             <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
               <p className="text-xs">PM 1.0</p>

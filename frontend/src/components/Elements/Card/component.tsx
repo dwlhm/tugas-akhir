@@ -14,7 +14,7 @@ export const QuickViewCard = (props: {
         <div className="bg-blue-100 p-1 rounded"></div>
       )}
       <div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           <p className="text-lg">{props.name}</p>
           {props.topBar}
         </div>

@@ -124,7 +124,7 @@ function NodeDetail() {
 
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex justify-between flex-wrap gap-2">
         <BackButton />
         <div className="flex gap-2">
           <BasicButton
@@ -182,7 +182,7 @@ function NodeDetail() {
             </div>
           </div>
           {realtimeMode ? (
-            <div className="grid grid-cols-3 gap-2 my-2">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2 my-2">
               <ValueByGraph item={dataChart} title="PM 1.0" dataKey="1" />
               <ValueByGraph item={dataChart} title="PM 2.5" dataKey="2" />
               <ValueByGraph item={dataChart} title="PM 10" dataKey="0" />
@@ -214,7 +214,7 @@ function NodeDetail() {
                     }
                   />
                 </form>
-                <div>
+                <div className="flex flex-wrap justify-end">
                   <button
                     onClick={() => setOffset(0)}
                     className={`bg-blue-100 rounded py-1 px-3 text-sm m-1 border ${offset + 1 == 1 ? "border-blue-500" : "border-blue-100"} hover:border-blue-900`}
@@ -285,7 +285,7 @@ function NodeDetail() {
 function TableData(props: { data: HistoryDevice }) {
   if (!props.data) return <p>no data.</p>;
   return (
-    <table className="border-collapse w-full">
+    <table className="border-collapse w-full min-w-96">
       <thead>
         <tr className="grid grid-cols-10 w-full">
           <th className="px-3 py-2 bg-blue-100 text-sm rounded-tl col-span-3">
