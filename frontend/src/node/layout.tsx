@@ -159,8 +159,14 @@ export const EditInfromasiNode = (props: {
 };
 
 export const DeviceCard = (props: { item: Node }) => {
-  console.log(props.item);
-  if (!props.item.latest_device_value[0].value)
+  console.log(
+    props.item.latest_device_value.length,
+    props.item.latest_device_value
+  );
+  if (
+    props.item.latest_device_value.length <= 0 ||
+    !props.item.latest_device_value[0].value
+  )
     return (
       <div className="mb-2 p-2 bg-white flex gap-2 rounded border-2 border-solid border-white hover:border-blue-900">
         <div className="bg-blue-100 p-1 rounded"></div>
