@@ -15,39 +15,53 @@
 PMDFRobot pmDFRobot(Serial1);
 DHTDFRobot dht(new DHT_Unified(23, DHT22));
 // ArahAngin arahAngin(A7);
-//KecepatanAngin kecepatanAngin(A6);
-SoftwareSerial serial(50, 51);
-PM100 pm100(serial);
-AltSoftSerial altser;
-GPS gps(altser);
-ArahAnginRS arahanginrs(Serial2, 40, 41);
-KecepatanAnginRS kecepatanAnginRS(Serial3, 42, 43);
+KecepatanAngin kecepatanAngin(A6);
+//SoftwareSerial serial(50, 51);
+//PM100 pm100(serial);
+//AltSoftSerial altser;
+//GPS gps(altser);
+//ArahAnginRS arahanginrs(Serial2, 40, 41);
+//KecepatanAnginRS kecepatanAnginRS(Serial3, 42, 43);
 
 void initSensor() {
     
-    //kecepatanAngin.init();
+    kecepatanAngin.init();
     pmDFRobot.init();
     dht.init();
     //arahAngin.init();
-    pm100.init();
-    gps.init();
-    arahanginrs.init();
-    kecepatanAnginRS.init();
+    //pm100.init();
+    //gps.init();
+    //arahanginrs.init();
+    //kecepatanAnginRS.init();
 
 }
 
 SensorStruct readSensor() {
 
     return SensorStruct{
-        pmDFRobot.read(),
-        dht.read(),
+      PMDFRobotStruct{
+        (int16_t)random(10,12),
+        (int16_t)random(20,22),
+        (int16_t)random(30,32),
+      },
+      DHTDFRobotStruct{
+        (int8_t)random(25,27),
+        (int8_t)random(60,62),
+      },
+      (int32_t)random(60,71),
+      GPSData{
+        (float)random(0,3),
+        (float)random(0,3),
+      }
+    
+        //pmDFRobot.read(),
+        //dht.read(),
         //kecepatanAngin.read(),
-        kecepatanAnginRS.read(),
-        arahanginrs.read(),
-        pm100.read(),
-        gps.read(),
+        //kecepatanAnginRS.read(),
+        //arahanginrs.read(),
+        //pm100.read(),
+        //gps.read(),
     };
-
 }
 
 String stringifySensor(String deviceId, SensorStruct data) {
@@ -85,22 +99,22 @@ String stringifySensor(String deviceId, SensorStruct data) {
         sensorValue += ",";
     }
     
-    if (data.kecepatanAngin >= 0) {
-        sensorName += "v";
-        sensorValue += data.kecepatanAngin;
-        sensorValue += ",";
-    }
+    // if (data.kecepatanAngin >= 0) {
+    //     sensorName += "v";
+    //     sensorValue += data.kecepatanAngin;
+    //     sensorValue += ",";
+    // }
 
-    // if (data.pm100 >= 0) {
+    if (data.pm100 >= 0) {
     sensorName += "3";
     sensorValue += data.pm100;
     sensorValue += ",";
-    // }
+    }
     
     // if (data.arahAngin >= 0) {
-    sensorName += "a";
-    sensorValue += data.arahAngin;
-    sensorValue += ",";
+    //sensorName += "a";
+    //sensorValue += data.arahAngin;
+    //sensorValue += ",";
     // }
     
 

@@ -16,21 +16,24 @@ GatewayStruct gateway = GatewayStruct{
 };
 String deviceId = "c1151e2a";
 
-Sim sim(Serial, gateway, "103.150.197.37");
+Sim sim(Serial1, gateway, "103.150.197.37");
 
-void setup() {
+void setup()
+{
+
+  Serial.begin(9600);
 
   initSensor();
 
   initLCD();
+  Serial.println("STARTING");
 
   sim.init();
-
-    //Serial2.begin(9600);
-
+  // Serial2.begin(9600);
 }
 
-void loop() {
+void loop()
+{
 
   SensorStruct data = readSensor();
 
@@ -38,21 +41,18 @@ void loop() {
 
   String dataString = stringifySensor(deviceId, data);
 
-    // Serial.println(dataString);
+  deduplication.start(dataString);
 
-    //deduplication.start(dataString);
+  Serial.println(dataString);
+  Serial.println(deduplication.indexOrder);
+  String response = sim.sendMqtt(deduplication.indexOrder);
 
-  //Serial.println(dataString);
-  String response = sim.sendMqtt(dataString);
+  Serial.println("RESPONSE: " + response);
 
-    // Serial.println("RESPONSE: " + response);
-    //Serial2.println(deduplication.indexOrder);
+  // delay(5000);
 
-    //delay(5000);
+  deduplication.write(response);
 
-    //deduplication.write(Serial2);
-
-  //delay(300000);
+  // delay(300000);
   delay(5000);
-
 }

@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
-#include <MCUFRIEND_kbv.h>  
+#include <MCUFRIEND_kbv.h>
 
-#include <struct/SensorStruct.h> 
+#include <struct/SensorStruct.h>
 
 MCUFRIEND_kbv tft;
 
@@ -11,9 +11,11 @@ const PROGMEM int WHITE = 0xFFFF;
 
 uint32_t tempat = 0;
 
-void initLCD() {
+void initLCD()
+{
     uint16_t ID = tft.readID();
-    if (ID == 0xD3D3) ID = 0x9481; 
+    if (ID == 0xD3D3)
+        ID = 0x9481;
     tft.begin(ID);
     tft.setRotation(1);
     tft.fillScreen(WHITE);
@@ -31,13 +33,14 @@ void initLCD() {
     tft.print("Humidity");
     tft.setCursor(340, 130);
     tft.print("PM 100");
-    tft.setCursor(20, 230);
-    tft.print("Kecepatan Angin");
-    tft.setCursor(340, 230);
-    tft.print("Arah Angin");
+    //  tft.setCursor(20, 230);
+    //  tft.print("Kecepatan Angin");
+    // tft.setCursor(340, 230);
+    // tft.print("Arah Angin");
 };
 
-void writeLCD(SensorStruct data) {
+void writeLCD(SensorStruct data)
+{
 
     tft.setTextSize(3);
 
@@ -57,10 +60,9 @@ void writeLCD(SensorStruct data) {
     tft.setCursor(340, 180);
     tft.print(data.pm100);
 
-    tft.fillRect(20, 280, 380, 320, WHITE);
-    tft.setCursor(20, 280);
-    tft.print(data.kecepatanAngin);
-    tft.setCursor(340, 280);
-    tft.print(data.arahAngin);
-
+    // tft.fillRect(20, 280, 380, 320, WHITE);
+    // tft.setCursor(20, 280);
+    // tft.print(data.kecepatanAngin);
+    // tft.setCursor(340, 280);
+    // tft.print(data.arahAngin);
 };
