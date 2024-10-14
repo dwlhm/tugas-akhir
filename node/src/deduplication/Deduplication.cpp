@@ -87,7 +87,7 @@ void Deduplication::write(HardwareSerial &lora)
 
         if (c == 'r')
         {
-            Serial.println("RELOAD!");
+            // Serial.println("RELOAD!");
             this->metadataPosition = 0;
             memset(this->metadata, 0, sizeof(this->metadataSize));
         }
@@ -109,7 +109,7 @@ void Deduplication::write(HardwareSerial &lora)
                 index[len] = c;
                 index[len + 1] = '\0';
             }
-            Serial.print(c);
+            // Serial.print(c);
         }
 
         if (c == ',')
@@ -118,7 +118,7 @@ void Deduplication::write(HardwareSerial &lora)
             strcpy(indexRepo[currentIndexPosition], index);
             currentIndexPosition++;
             memset(index, 0, sizeof(index));
-            Serial.print(",");
+            // Serial.print(",");
         }
     }
 
@@ -145,15 +145,15 @@ void Deduplication::write(HardwareSerial &lora)
     // Serial.println();
 
     // Serial.print("Index Metadata 1: ");
-    Serial.println(metadata[1].index);
+    // Serial.println(metadata[1].index);
 
     // Serial.println();
 }
 
 void Deduplication::write(String &data)
 {
-    Serial.print("ln: ");
-    Serial.println(data.length());
+    // Serial.print("ln: ");
+    // Serial.println(data.length());
     bool indexReceived = false;
     char index[20] = "";
     int currentIndexPosition = 0;
@@ -166,7 +166,7 @@ void Deduplication::write(String &data)
         char c = data[i];
         if (c == 'r')
         {
-            Serial.println("RELOAD!");
+            // Serial.println("RELOAD!");
             this->metadataPosition = 0;
             memset(this->metadata, 0, sizeof(this->metadataSize));
         }
@@ -188,7 +188,7 @@ void Deduplication::write(String &data)
                 index[len] = data[i];
                 index[len + 1] = '\0';
             }
-            Serial.print(data[i]);
+            // Serial.print(data[i]);
         }
 
         if (c == ',')
@@ -197,7 +197,7 @@ void Deduplication::write(String &data)
             strcpy(indexRepo[currentIndexPosition], index);
             currentIndexPosition++;
             memset(index, 0, sizeof(index));
-            Serial.print(",");
+            // Serial.print(",");
         }
     }
 
@@ -214,5 +214,5 @@ void Deduplication::write(String &data)
             this->metadataPosition++;
         }
     }
-    Serial.println(metadata[1].index);
+    // Serial.println(metadata[1].index);
 }

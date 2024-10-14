@@ -11,6 +11,7 @@
                 "/home/dwlhm/sandbox/tugas-akhir/node/include",
                 "/home/dwlhm/sandbox/tugas-akhir/node/src",
                 "/home/dwlhm/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                "/home/dwlhm/sandbox/tugas-akhir/node/.pio/libdeps/megaatmega2560/TinyGSM/src",
                 "/home/dwlhm/sandbox/tugas-akhir/node/.pio/libdeps/megaatmega2560/AltSoftSerial",
                 "/home/dwlhm/sandbox/tugas-akhir/node/.pio/libdeps/megaatmega2560/TinyGPSPlus/src",
                 "/home/dwlhm/sandbox/tugas-akhir/node/.pio/libdeps/megaatmega2560/MCUFRIEND_kbv",
@@ -36,6 +37,7 @@
                     "/home/dwlhm/sandbox/tugas-akhir/node/include",
                     "/home/dwlhm/sandbox/tugas-akhir/node/src",
                     "/home/dwlhm/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                    "/home/dwlhm/sandbox/tugas-akhir/node/.pio/libdeps/megaatmega2560/TinyGSM/src",
                     "/home/dwlhm/sandbox/tugas-akhir/node/.pio/libdeps/megaatmega2560/AltSoftSerial",
                     "/home/dwlhm/sandbox/tugas-akhir/node/.pio/libdeps/megaatmega2560/TinyGPSPlus/src",
                     "/home/dwlhm/sandbox/tugas-akhir/node/.pio/libdeps/megaatmega2560/MCUFRIEND_kbv",
@@ -57,7 +59,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=60115",
+                "PLATFORMIO=60116",
                 "ARDUINO_AVR_MEGA2560",
                 "F_CPU=16000000L",
                 "ARDUINO_ARCH_AVR",

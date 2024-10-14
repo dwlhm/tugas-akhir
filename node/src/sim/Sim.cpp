@@ -8,11 +8,17 @@ String Sim::sendMqtt(String msg) {
     for (size_t i = 0; i < 8; i++) {
         String response = sendData(commands[i], 1000);
 
+        if (response.indexOf("ERROR") > 0) {
+            Serial.println("RECONNECTING....");
+            this->connectMqtt();
+        }
+
         if (response.indexOf("+CMQTTRXPAYLOAD: 0,") > 0) {
            String r = response.substring(response.indexOf("+CMQTTRXPAYLOAD: 0,") + 19, response.indexOf("\n+CMQTTRXEND"));
            this->response = r.substring(r.indexOf("\n") + 1);
         }
     }
+    Serial.println(this->response);
 
     return this->response;
 }
