@@ -116,6 +116,7 @@ function NodeDetail() {
         limit
       ).then((res) => {
         if (res.body) {
+          console.log(res.body)
           setDataTable(res.body);
         }
       });
