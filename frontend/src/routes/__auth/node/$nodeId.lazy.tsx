@@ -197,12 +197,17 @@ function NodeDetail() {
             </div>
           ) : (
             <div>
-              <div>
+              <div className="flex justify-between items-center">
                 <DateTimeRangePicker
                   onChange={(e) => setDateRange(e as Value)}
                   value={dateRange}
                 />
-                <a href={`${import.meta.env.VITE_API_URL}/device/${nodeId}/history/csv?from=${dateRange[0].toISOString()}&to=${dateRange[1].toISOString()}`}>Download</a>
+                <a
+                className="text-blue-500 bg-white rounded-lg px-4 py-2 my-2 text-sm transition hover:bg-blue-100"
+                  href={`${import.meta.env.VITE_API_URL}/device/${nodeId}/history/csv?from=${dateRange[0].toISOString()}&to=${dateRange[1].toISOString()}`}
+                >
+                  Download
+                </a>
               </div>
 
               <TableData data={dataTable as HistoryDevice} />
