@@ -166,10 +166,12 @@ body {
   @apply p-1 bg-gray-100 rounded
 }
 
-
 .react-datetimerange-picker__inputGroup__input {
-  width: 2.5rem!important;
+  width: 3rem!important;
   @apply pl-2 text-center rounded bg-white/80 h-full
+}
+.react-datetimerange-picker__inputGroup__input.react-datetimerange-picker__inputGroup__year {
+  width: 5rem!important;
 }
 .react-datetimerange-picker__button {
   @apply p-2 rounded
