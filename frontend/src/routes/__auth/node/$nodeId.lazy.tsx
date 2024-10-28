@@ -1,4 +1,4 @@
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { BackButton, BasicButton } from "../../../components/Elements";
 import { useEffect, useState } from "react";
 import { DeviceValue, UseProfilDevice, useProfilDevice } from "../../../utils";
