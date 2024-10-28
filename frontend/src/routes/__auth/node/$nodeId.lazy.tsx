@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { BackButton, BasicButton } from "../../../components/Elements";
 import { useEffect, useState } from "react";
 import { DeviceValue, UseProfilDevice, useProfilDevice } from "../../../utils";
@@ -116,7 +116,7 @@ function NodeDetail() {
         limit
       ).then((res) => {
         if (res.body) {
-          console.log(res.body)
+          console.log(res.body);
           setDataTable(res.body);
         }
       });
@@ -197,10 +197,14 @@ function NodeDetail() {
             </div>
           ) : (
             <div>
-              <DateTimeRangePicker
-                onChange={(e) => setDateRange(e as Value)}
-                value={dateRange}
-              />
+              <div>
+                <DateTimeRangePicker
+                  onChange={(e) => setDateRange(e as Value)}
+                  value={dateRange}
+                />
+                <a href={`${import.meta.env.VITE_API_URL}/device/${nodeId}/history/csv?from=${dateRange[0].toISOString()}&to=${dateRange[1].toISOString()}`}>Download</a>
+              </div>
+
               <TableData data={dataTable as HistoryDevice} />
               <div className="flex justify-between items-center">
                 <form>

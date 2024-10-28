@@ -9,7 +9,8 @@ import {
   get_latest_value,
   get_history,
   update_device_profil,
-  get_all_device_w_value
+  get_all_device_w_value,
+  get_csv
 } from "./controller";
 
 const router: Router = Router();
@@ -20,6 +21,7 @@ router.get("/:id/values", Authorization, get_values);
 router.get("/:id", profil);
 router.get("/:id/la", get_latest_value);
 router.get("/:id/history", Authorization, get_history);
+router.get("/:id/history/csv", get_csv);
 
 router.post("/", Authorization, register);
 router.delete("/:id", Authorization, destroy);

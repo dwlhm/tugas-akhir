@@ -1,3 +1,4 @@
+import { createObjectCsvStringifier, createObjectCsvWriter } from "csv-writer";
 import connection, { sqlz } from "database/config";
 import { Csv_List } from "database/models/Csv_List";
 import { Device } from "database/models/device";
@@ -298,7 +299,7 @@ const get_all_device_w_value = async (
       "SELECT d.name, d.id, v.value, v.createdAt FROM Devices d JOIN (SELECT device_id, MAX(createdAt) AS latest_value_date FROM Device_Histories GROUP BY device_id) latest_values ON d.id = latest_values.device_id JOIN Device_Histories v ON latest_values.device_id = d.id AND latest_values.latest_value_date = v.createdAt;"
     );
 
-    console.log("dd", devices)
+    console.log("dd", devices);
 
     res.status(200).json({
       code: 200,
@@ -308,6 +309,65 @@ const get_all_device_w_value = async (
     console.error("[get_all_devices] ", err.message);
 
     next(err);
+  }
+};
+
+const get_csv = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const device_id = req.params["id"];
+    const req_limit = Number(req.query["limit"]) || 2;
+    const req_offset = Number(req.query["offset"]) || 0;
+    const prev_date = new Date();
+    prev_date.setDate(prev_date.getDate() - 6);
+    const req_from = req.query["from"]
+      ? new Date(String(req.query["from"]))
+      : prev_date;
+    const req_to = req.query["to"]
+      ? new Date(String(req.query["to"]))
+      : new Date();
+    const { rows, count } = await Device_History.findAndCountAll({
+      where: {
+        timestamp: {
+          [Op.lte]: req_to,
+          [Op.gte]: req_from,
+        },
+      },
+      attributes: {
+        exclude: ["id", "createdAt", "device_id", "gateway_id"],
+      },
+    });
+
+    if (!rows) throw new Error("404#devicevalue");
+
+    // set header untuk csv
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=data.csv");
+
+    const csvWriter = createObjectCsvStringifier({
+      header: [
+        { id: "value", title: "Value" },
+        { id: "timestamp", title: "Timestamp" },
+      ],
+    });
+
+    const resStr = csvWriter.stringifyRecords(rows);
+
+    // const data = json2
+
+    res.status(200).send(resStr);
+
+    // res.status(200).json({
+    //   code: 200,
+    //   body: {
+    //     list: rows,
+    //     maximum: req_limit * (req_offset + 1) >= count,
+    //     total: count,
+    //   },
+    // });
+  } catch (error) {
+    console.error("[get_history] ", error.message);
+
+    next(error);
   }
 };
 
@@ -321,4 +381,5 @@ export {
   get_history,
   update_device_profil,
   get_all_device_w_value,
+  get_csv,
 };
