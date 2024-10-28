@@ -230,7 +230,7 @@ const get_history = async (req: Request, res: Response, next: NextFunction) => {
           [Op.gte]: req_from,
         },
       },
-      offset: req_offset,
+      offset: req_offset * req_limit,
       limit: req_limit,
       attributes: {
         exclude: ["id", "createdAt", "device_id", "gateway_id"],
