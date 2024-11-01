@@ -345,12 +345,36 @@ const get_csv = async (req: Request, res: Response, next: NextFunction) => {
 
     const csvWriter = createObjectCsvStringifier({
       header: [
-        { id: "value", title: "Value" },
         { id: "timestamp", title: "Timestamp" },
+        { id: "0", title: "PM 1.0" },
+        { id: "1", title: "PM 2.5" },
+        { id: "2", title: "PM 10" },
+        { id: "3", title: "PM 100" },
+        { id: "h", title: "Humidity" },
+        { id: "t", title: "Temperature" },
+        { id: "o", title: "Longitude" },
+        { id: "l", title: "Latitude" },
       ],
     });
 
-    const resStr = csvWriter.stringifyRecords(rows);
+    const resStr = csvWriter.stringifyRecords(
+      rows.map((items) => {
+        const item  = items.dataValues
+        const data = JSON.parse(item.value);
+
+        return {
+          timestamp: item.timestamp,
+          0: Number(data["0"] || 0),
+          1: Number(data["1"] || 0),
+          2: Number(data["2"] || 0),
+          3: Number(data["3"] || 0),
+          h: Number(data["h"] || 0),
+          t: Number(data["t"] || 0),
+          l: Number(data["l"] || 0),
+          o: Number(data["o"] || 0),
+        };
+      })
+    );
 
     // const data = json2
 
