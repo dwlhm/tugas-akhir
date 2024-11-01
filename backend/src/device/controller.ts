@@ -331,6 +331,7 @@ const get_csv = async (req: Request, res: Response, next: NextFunction) => {
           [Op.lte]: req_to,
           [Op.gte]: req_from,
         },
+        device_id: device_id
       },
       attributes: {
         exclude: ["id", "createdAt", "device_id", "gateway_id"],
