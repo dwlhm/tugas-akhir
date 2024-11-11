@@ -229,6 +229,7 @@ const get_history = async (req: Request, res: Response, next: NextFunction) => {
           [Op.lte]: req_to,
           [Op.gte]: req_from,
         },
+        device: device_id
       },
       offset: req_offset * req_limit,
       limit: req_limit,
