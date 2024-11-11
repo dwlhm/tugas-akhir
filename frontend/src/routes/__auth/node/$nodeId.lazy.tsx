@@ -160,9 +160,17 @@ function NodeDetail() {
         <div className="col-span-2">
           {data && <DeviceCard item={data as Node} />}
         </div>
-        <div className="ml-2 h-44 lg:h-auto rounded mb-2 overflow-hidden border-2 shadow border-white border-solid">
+        <div className="ml-2 h-44 lg:h-auto rounded mb-2 bg-white overflow-hidden border-2 shadow border-white border-solid">
           {!dataChart[dataChart.length - 1]?.l ? (
-            <p>Gagal mendapatkan data posisi</p>
+            !data ? (
+              <p className="flex items-center justify-center h-full italic text-sm animate-pulse">
+                memuat data lokasi...
+              </p>
+            ) : (
+              <p className="flex items-center justify-center h-full italic text-sm bg-red-100 text-center p-2">
+                Gagal mendapatkan data lokasi, harap periksa gps pada node!
+              </p>
+            )
           ) : (
             <MapContainer
               className="detail"
