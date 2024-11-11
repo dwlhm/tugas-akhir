@@ -16,6 +16,9 @@ body {
 .leaflet-container {
   height: 100vh;
 }
+.leaflet-container.detail {
+  height: 100%;
+}
 .leaflet-popup-content {
   width: 20rem !important;
 }

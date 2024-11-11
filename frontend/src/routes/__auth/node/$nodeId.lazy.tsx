@@ -18,6 +18,7 @@ import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
 import { Edit2, Trash2 } from "react-feather";
 import { usePopup } from "../../../popup";
 import { useAuth } from "../../../auth/context";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 export const Route = createLazyFileRoute("/__auth/node/$nodeId")({
   component: NodeDetail,
@@ -155,7 +156,43 @@ function NodeDetail() {
           </BasicButton>
         </div>
       </div>
-      <div className="my-2">{data && <DeviceCard item={data as Node} />}</div>
+      <div className="my-2 lg:grid grid-cols-3">
+        <div className="col-span-2">
+          {data && <DeviceCard item={data as Node} />}
+        </div>
+        <div className="ml-2 h-44 lg:h-auto rounded mb-2 overflow-hidden border-2 shadow border-white border-solid">
+          {!dataChart[dataChart.length - 1]?.l ? (
+            <p>Gagal mendapatkan data posisi</p>
+          ) : (
+            <MapContainer
+              className="detail"
+              center={[
+                Number(dataChart[dataChart.length - 1]?.l),
+                Number(dataChart[dataChart.length - 1]?.o),
+              ]}
+              zoom={50}
+              scrollWheelZoom={true}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker
+                position={[
+                  Number(dataChart[dataChart.length - 1]?.l),
+                  Number(dataChart[dataChart.length - 1]?.o),
+                ]}
+              >
+                <Popup>
+                  <span className="capitalize italic m-0 font-semibold">
+                    {data?.name}
+                  </span>
+                </Popup>
+              </Marker>
+            </MapContainer>
+          )}
+        </div>
+      </div>
       {dataChart.length > 0 && (
         <>
           <div className="flex justify-center">
@@ -203,7 +240,7 @@ function NodeDetail() {
                   value={dateRange}
                 />
                 <a
-                className="text-blue-500 bg-white rounded-lg px-4 py-2 my-2 text-sm transition hover:bg-blue-100"
+                  className="text-blue-500 bg-white rounded-lg px-4 py-2 my-2 text-sm transition hover:bg-blue-100"
                   href={`${import.meta.env.VITE_API_URL}/device/${nodeId}/history/csv?from=${dateRange[0].toISOString()}&to=${dateRange[1].toISOString()}`}
                 >
                   Download

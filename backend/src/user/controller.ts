@@ -59,13 +59,13 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
     if (user == null) throw new Error("400#email");
 
-    const find_session = await User_Session.findOne({
-      where: {
-        user_id: user.dataValues.id,
-      },
-    });
+    // const find_session = await User_Session.findOne({
+    //   where: {
+    //     user_id: user.dataValues.id,
+    //   },
+    // });
 
-    if (find_session) throw new Error("409#login");
+    // if (find_session) throw new Error("409#login");
 
     const compare_password = bcrypt.compareSync(
       password,
@@ -164,6 +164,8 @@ const get_access_token = async (req: Request, res: Response) => {
     );
 
     const compare_token = verify(refresh_token, public_key);
+
+    console.log(compare_token)
 
     const find_session = await User_Session.findOne({
       where: {
