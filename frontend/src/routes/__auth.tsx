@@ -45,7 +45,7 @@ function AuthLayout() {
     <>
       <div className="flex flex-col sm:flex-row min-h-screen bg-gray-100">
         <nav
-          className={`rounded p-5 w-full sm:w-64 flex flex-col justify-between sticky top-0 bottom-0 left-0 ${!menu ? "h-screen" : "h-full"} sm:h-screen`}
+          className={`rounded p-5 w-full sm:w-64 flex flex-col justify-between sticky top-0 bottom-0 left-0 ${!menu ? "h-screen" : "h-full"} sm:h-screen z-[10000]`}
         >
           <div className="rounded bg-white p-2 h-full border-4 box-shadow flex justify-between flex-col">
             <div>
@@ -71,6 +71,7 @@ function AuthLayout() {
               >
                 <Link
                   to="/dashboard"
+                  onClick={() => setMenu((last) => !last)}
                   className={`py-3 pr-5 pl-3 hover:bg-blue-500 rounded hover:text-blue-100 flex gap-4 items-center ${isMenuActive(location.href, "/dashboard")}`}
                 >
                   <span className="p-2 bg-blue-100 rounded">
@@ -80,6 +81,7 @@ function AuthLayout() {
                 </Link>
                 <Link
                   to="/node"
+                  onClick={() => setMenu((last) => !last)}
                   className={`py-3 pr-5 pl-3 hover:bg-blue-500 rounded hover:text-blue-100 flex gap-4 items-center ${isMenuActive(location.href, "/node")}`}
                 >
                   <span className="p-2 bg-blue-100 rounded">
@@ -89,6 +91,7 @@ function AuthLayout() {
                 </Link>
                 <Link
                   to="/gateway"
+                  onClick={() => setMenu((last) => !last)}
                   className={`py-3 pr-5 pl-3 hover:bg-blue-500 rounded hover:text-blue-100 flex gap-4 items-center ${isMenuActive(location.href, "/gateway")}`}
                 >
                   <span className="p-2 bg-blue-100 rounded">
@@ -98,6 +101,7 @@ function AuthLayout() {
                 </Link>
                 <Link
                   to="/user"
+                  onClick={() => setMenu((last) => !last)}
                   className={`py-3 pr-5 pl-3 hover:bg-blue-500 rounded hover:text-blue-100 flex gap-4 items-center ${isMenuActive(location.href, "/user")}`}
                 >
                   <span className="p-2 bg-blue-100 rounded">
@@ -110,6 +114,7 @@ function AuthLayout() {
             <Link
               className={`bg-blue-100 p-5 rounded border-2 border-solid border-blue-100 hover:border-blue-900 ${!menu ? "block" : "hidden"} sm:block`}
               to="/user"
+              onClick={() => setMenu((last) => !last)}
             >
               <div className="flex gap-4">
                 <div>
@@ -122,7 +127,9 @@ function AuthLayout() {
                     {auth.user?.name}
                   </p>
                   <p className="text-poppins text-blue-900 text-sm">
-                    {auth.user?.email}
+                    {auth.user?.email?.length || 0 >= 13
+                      ? `${auth.user?.email?.slice(0, 13)} ..`
+                      : auth.user?.email}
                   </p>
                 </div>
               </div>
