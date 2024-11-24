@@ -205,9 +205,9 @@ export const DeviceCard = (props: { item: Node }) => {
             Last update: {res["timestamp"]}
           </p>
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className={`flex gap-2 flex-wrap`}>
           {res["1"] ? (
-            <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
+            <div className={`${getISPULevel(res["1"])} bg-blue-100 py-2 px-4 mt-2 rounded`}>
               <p className="text-xs">PM 1.0</p>
               <p className="text-base">
                 {res["1"]}
@@ -218,7 +218,7 @@ export const DeviceCard = (props: { item: Node }) => {
             <></>
           )}
           {res["2"] ? (
-            <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
+            <div className={`${getISPULevel(res["2"])} bg-blue-100 py-2 px-4 mt-2 rounded`}>
               <p className="text-xs">PM 2.5</p>
               <p className="text-base">
                 {res["2"]}
@@ -229,7 +229,7 @@ export const DeviceCard = (props: { item: Node }) => {
             <></>
           )}
           {res["0"] ? (
-            <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
+            <div className={`${getISPULevel(res["0"])} bg-blue-100 py-2 px-4 mt-2 rounded`}>
               <p className="text-xs">PM 10</p>
               <p className="text-base">
                 {res["0"]}
@@ -240,7 +240,7 @@ export const DeviceCard = (props: { item: Node }) => {
             <></>
           )}
           {res["3"] && (
-            <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
+            <div className={`${getISPULevel(res["3"])} bg-blue-100 py-2 px-4 mt-2 rounded`}>
               <p className="text-xs">PM 100</p>
               <p className="text-base">
                 {res["3"]}
@@ -289,6 +289,14 @@ export const DeviceCard = (props: { item: Node }) => {
     </div>
   );
 };
+
+function getISPULevel(value: number) {
+  if (value >= 301 ) return `!bg-black text-gray-100`
+  if (value > 200) return `bg-red-400 text-black`
+  if (value > 100) return `bg-yellow-400 text-black`
+  if (value > 50) return `bg-blue-400 text-black`
+  return `bg-green-400 text-black`
+}
 
 export const DeleteNode = (props: { nodeId: string; name: string }) => {
   const auth = useAuth();
