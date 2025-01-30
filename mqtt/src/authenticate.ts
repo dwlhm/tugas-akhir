@@ -11,8 +11,6 @@ export const Authenticate = async (
   try {
     const password_extracted: string = password.toString("hex");
 
-    console.log(username, password_extracted);
-
     const gateway = await Gateway_Mqtt.findOne({
       where: {
         credential: Buffer.from(`${username}:${password}`).toString("base64"),
