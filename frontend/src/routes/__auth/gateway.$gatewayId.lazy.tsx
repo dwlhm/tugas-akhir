@@ -171,9 +171,9 @@ function GatewayDetailView() {
               }
             >
               {(() => {
-                const parsedData = parseNodeData(
+                const parsedData = item.latest_device_value.length > 0 ? parseNodeData(
                   item.latest_device_value[0].value
-                );
+                ) : undefined;
                 if (!parsedData)
                   return (
                     <div className="bg-red-100 py-2 px-5 mt-2 rounded border border-red-900 text-center text-sm italic">
