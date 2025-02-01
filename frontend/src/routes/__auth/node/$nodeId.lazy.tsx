@@ -114,7 +114,7 @@ function NodeDetail() {
             : dateRange[1].toISOString(),
         },
         offset,
-        limit
+        limit,
       ).then((res) => {
         if (res.body) {
           console.log(res.body);
@@ -136,7 +136,7 @@ function NodeDetail() {
                   id={data?.id as string}
                   name={data?.name as string}
                   address={data?.address as string}
-                />
+                />,
               )
             }
             className="bg-white border-white p-1"
@@ -254,17 +254,15 @@ function NodeDetail() {
                   Download
                 </a>
               </div>
-
-              <TableData data={dataTable as HistoryDevice} />
-              <div className="flex justify-between items-center">
+              <div className="bg-gray-100 px-2 py-1 rounded mx-1 my-3 sticky top-5 flex justify-between items-center">
                 <form>
                   <input
-                    className="pl-2 text-sm py-2 rounded w-16 text-center"
+                    className="border border-blue-500 bg-[#fdfdfd] pl-2 text-sm py-2 rounded w-16 text-center"
                     type="number"
                     defaultValue={limit}
                     onChange={(e) =>
                       setLimit(
-                        e.target.value == "" ? 1 : Number(e.target.value)
+                        e.target.value == "" ? 1 : Number(e.target.value),
                       )
                     }
                   />
@@ -292,7 +290,7 @@ function NodeDetail() {
                                   ? offset >
                                     Math.ceil(dataTable.total / limit) - 10
                                     ? i +
-                                      (Math.ceil(dataTable.total / limit) - 9)
+                                    (Math.ceil(dataTable.total / limit) - 9)
                                     : i + offset
                                   : i + 2;
                               return (
@@ -305,7 +303,7 @@ function NodeDetail() {
                               );
                             })}
                             {offset >
-                            Math.ceil(dataTable.total / limit) - 10 ? (
+                              Math.ceil(dataTable.total / limit) - 10 ? (
                               <></>
                             ) : (
                               <p className="m-1 inline-block">...</p>
@@ -329,6 +327,8 @@ function NodeDetail() {
                   )}
                 </div>
               </div>
+
+              <TableData data={dataTable as HistoryDevice} />
             </div>
           )}
         </>
