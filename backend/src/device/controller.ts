@@ -69,6 +69,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 const profil = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id: number = req.params["id"] as unknown as number;
+    const max_data: string = req.query.len;
 
     const device = await Device.findByPk(device_id, {
       include: [
@@ -79,7 +80,9 @@ const profil = async (req: Request, res: Response, next: NextFunction) => {
           },
         },
         {
-          model: Latest_Device_Value,
+          model: Device_History,
+          limit: Number(max_data),
+          order: [["id", "DESC"]],
           attributes: {
             exclude: ["id", "device_id", "createdAt"],
           },
@@ -134,7 +137,7 @@ const destroy = async (req: Request, res: Response, next: NextFunction) => {
 const get_all_devices = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const gatewayId = req.query["gateway"];
@@ -187,10 +190,12 @@ const get_values = async (req: Request, res: Response, next: NextFunction) => {
 const get_latest_value = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const device_id = req.params["id"];
+    const data_length = req.query.len;
+    console.log("data_length", data_length);
     const value = await Latest_Device_Value.findOne({
       where: {
         device_id: device_id,
@@ -202,6 +207,7 @@ const get_latest_value = async (
     res.status(200).json({
       code: 200,
       body: value,
+      len: data_length,
     });
   } catch (err) {
     console.error("[get_latest_value] ", err.message);
@@ -229,7 +235,7 @@ const get_history = async (req: Request, res: Response, next: NextFunction) => {
           [Op.lte]: req_to,
           [Op.gte]: req_from,
         },
-        device_id: device_id
+        device_id: device_id,
       },
       offset: req_offset * req_limit,
       limit: req_limit,
@@ -258,7 +264,7 @@ const get_history = async (req: Request, res: Response, next: NextFunction) => {
 const update_device_profil = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     if (!req.body.name && !req.body.address)
@@ -274,7 +280,7 @@ const update_device_profil = async (
         where: {
           id: req.params["id"],
         },
-      }
+      },
     );
 
     return res.status(200).json({
@@ -293,11 +299,11 @@ const update_device_profil = async (
 const get_all_device_w_value = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const devices = await connection.query(
-      "SELECT d.name, d.id, v.value, v.createdAt FROM Devices d JOIN (SELECT device_id, MAX(createdAt) AS latest_value_date FROM Device_Histories GROUP BY device_id) latest_values ON d.id = latest_values.device_id JOIN Device_Histories v ON latest_values.device_id = d.id AND latest_values.latest_value_date = v.createdAt;"
+      "SELECT d.name, d.id, v.value, v.createdAt FROM Devices d JOIN (SELECT device_id, MAX(createdAt) AS latest_value_date FROM Device_Histories GROUP BY device_id) latest_values ON d.id = latest_values.device_id JOIN Device_Histories v ON latest_values.device_id = d.id AND latest_values.latest_value_date = v.createdAt;",
     );
 
     console.log("dd", devices);
@@ -332,7 +338,7 @@ const get_csv = async (req: Request, res: Response, next: NextFunction) => {
           [Op.lte]: req_to,
           [Op.gte]: req_from,
         },
-        device_id: device_id
+        device_id: device_id,
       },
       attributes: {
         exclude: ["id", "createdAt", "device_id", "gateway_id"],
@@ -361,7 +367,7 @@ const get_csv = async (req: Request, res: Response, next: NextFunction) => {
 
     const resStr = csvWriter.stringifyRecords(
       rows.map((items) => {
-        const item  = items.dataValues
+        const item = items.dataValues;
         const data = JSON.parse(item.value);
 
         return {
@@ -375,7 +381,7 @@ const get_csv = async (req: Request, res: Response, next: NextFunction) => {
           l: Number(data["l"] || 0),
           o: Number(data["o"] || 0),
         };
-      })
+      }),
     );
 
     // const data = json2

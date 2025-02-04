@@ -11,7 +11,7 @@ export interface Node {
   id: string;
   name: string;
   address: string;
-  latest_device_value: LatestDeviceValue[];
+  device_history: LatestDeviceValue[];
 }
 
 export interface NodeInformation {
@@ -34,7 +34,7 @@ export interface HistoryDevice {
 
 export const getAllNodes = async (
   auth: User,
-  gatewayId?: string
+  gatewayId?: string,
 ): Promise<API<Node[]>> => {
   try {
     const { data } = await axios.get<API<Node[]>>(
@@ -46,7 +46,7 @@ export const getAllNodes = async (
         params: {
           gateway: gatewayId,
         },
-      }
+      },
     );
 
     return data;
@@ -62,7 +62,7 @@ export const addNode = async (
   auth: User,
   name: string,
   address: string,
-  gateway_id: string
+  gateway_id: string,
 ): Promise<API<NodeInformation>> => {
   try {
     const { data } = await axios.post<API<NodeInformation>>(
@@ -77,7 +77,7 @@ export const addNode = async (
           Authorization: `Bearer ${auth.authentication_token}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     return data;
@@ -92,7 +92,7 @@ export const addNode = async (
 
 export const deleteNode = async (
   auth: User,
-  nodeId: string
+  nodeId: string,
 ): Promise<API<SuccessResponse>> => {
   try {
     const { data } = await axios.delete<API<SuccessResponse>>(
@@ -101,7 +101,7 @@ export const deleteNode = async (
         headers: {
           Authorization: `Bearer ${auth.authentication_token}`,
         },
-      }
+      },
     );
 
     return data;
@@ -123,7 +123,7 @@ export const updateNode = async (
   auth: User,
   name: string,
   address: string,
-  id: string
+  id: string,
 ): Promise<API<NodeUpdateResponse>> => {
   try {
     console.log("auth", auth);
@@ -138,7 +138,7 @@ export const updateNode = async (
           Authorization: `Bearer ${auth.authentication_token}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     return data;
@@ -159,7 +159,7 @@ export const getHistoryDevice = async (
     to: string;
   },
   offset: number,
-  limit: number
+  limit: number,
 ): Promise<API<HistoryDevice>> => {
   try {
     const { data } = await axios.get<API<HistoryDevice>>(
@@ -174,7 +174,7 @@ export const getHistoryDevice = async (
           to: date.to,
           offset: offset,
         },
-      }
+      },
     );
 
     return data;
@@ -195,7 +195,7 @@ export interface LatestValueResponse {
 }
 
 export const getAllLatestValue = async (
-  token: string
+  token: string,
 ): Promise<API<LatestValueResponse[]>> => {
   try {
     const { data } = await axios.get<API<LatestValueResponse[]>>(
@@ -204,7 +204,7 @@ export const getAllLatestValue = async (
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     return data;
@@ -224,7 +224,7 @@ export const getAllLatestValue = async (
 export const getAllLatestValueGeneral = async (): Promise<API<Node[]>> => {
   try {
     const { data } = await axios.get<API<Node[]>>(
-      `${import.meta.env.VITE_API_URL}/device`
+      `${import.meta.env.VITE_API_URL}/device`,
     );
 
     return data;

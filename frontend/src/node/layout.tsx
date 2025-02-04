@@ -32,7 +32,7 @@ export const NodeBaru = (props: {
       auth.user as User,
       rawData.name,
       rawData.address,
-      rawData.gateway_id
+      rawData.gateway_id,
     );
 
     if (response.body) {
@@ -108,7 +108,7 @@ export const EditInfromasiNode = (props: {
       auth.user as User,
       rawData.name,
       rawData.address,
-      props.id
+      props.id,
     );
 
     if (response.body) {
@@ -160,8 +160,8 @@ export const EditInfromasiNode = (props: {
 
 export const DeviceCard = (props: { item: Node }) => {
   if (
-    props.item.latest_device_value.length <= 0 ||
-    !props.item.latest_device_value[0].value
+    props.item.device_history.length <= 0 ||
+    !props.item.device_history[0].value
   )
     return (
       <div className="mb-2 p-2 bg-white flex gap-2 rounded border-2 border-solid border-white hover:border-blue-900">
@@ -181,15 +181,13 @@ export const DeviceCard = (props: { item: Node }) => {
       </div>
     );
 
-  const item_parsed = JSON.parse(props.item.latest_device_value[0].value || "");
-  const [header, body] = item_parsed.data.split("|");
-  const body_arr = body.split(",");
+  const item_parsed = JSON.parse(props.item.device_history[0].value || "");
   let res: any = {
+    ...item_parsed,
     timestamp: new Date(
-      props.item.latest_device_value[0].updatedAt
+      props.item.device_history[0].updatedAt,
     ).toLocaleString(),
   };
-  header.split("").forEach((v: any, i: number) => (res[v] = body_arr[i]));
 
   return (
     <div className="mb-2 p-2 bg-white flex gap-2 rounded border-2 border-solid border-white hover:border-blue-900">
@@ -207,7 +205,9 @@ export const DeviceCard = (props: { item: Node }) => {
         </div>
         <div className={`flex gap-2 flex-wrap`}>
           {res["1"] ? (
-            <div className={`${getISPULevel(res["1"])} bg-blue-100 py-2 px-4 mt-2 rounded`}>
+            <div
+              className={`${getISPULevel(res["1"])} bg-blue-100 py-2 px-4 mt-2 rounded`}
+            >
               <p className="text-xs">PM 1.0</p>
               <p className="text-base">
                 {res["1"]}
@@ -218,7 +218,9 @@ export const DeviceCard = (props: { item: Node }) => {
             <></>
           )}
           {res["2"] ? (
-            <div className={`${getISPULevel(res["2"])} bg-blue-100 py-2 px-4 mt-2 rounded`}>
+            <div
+              className={`${getISPULevel(res["2"])} bg-blue-100 py-2 px-4 mt-2 rounded`}
+            >
               <p className="text-xs">PM 2.5</p>
               <p className="text-base">
                 {res["2"]}
@@ -229,7 +231,9 @@ export const DeviceCard = (props: { item: Node }) => {
             <></>
           )}
           {res["0"] ? (
-            <div className={`${getISPULevel(res["0"])} bg-blue-100 py-2 px-4 mt-2 rounded`}>
+            <div
+              className={`${getISPULevel(res["0"])} bg-blue-100 py-2 px-4 mt-2 rounded`}
+            >
               <p className="text-xs">PM 10</p>
               <p className="text-base">
                 {res["0"]}
@@ -240,7 +244,9 @@ export const DeviceCard = (props: { item: Node }) => {
             <></>
           )}
           {res["3"] && (
-            <div className={`${getISPULevel(res["3"])} bg-blue-100 py-2 px-4 mt-2 rounded`}>
+            <div
+              className={`${getISPULevel(res["3"])} bg-blue-100 py-2 px-4 mt-2 rounded`}
+            >
               <p className="text-xs">PM 100</p>
               <p className="text-base">
                 {res["3"]}
@@ -291,11 +297,11 @@ export const DeviceCard = (props: { item: Node }) => {
 };
 
 function getISPULevel(value: number) {
-  if (value >= 301 ) return `!bg-black text-gray-100`
-  if (value > 200) return `bg-red-400 text-black`
-  if (value > 100) return `bg-yellow-400 text-black`
-  if (value > 50) return `bg-blue-400 text-black`
-  return `bg-green-400 text-black`
+  if (value >= 301) return `!bg-black text-gray-100`;
+  if (value > 200) return `bg-red-400 text-black`;
+  if (value > 100) return `bg-yellow-400 text-black`;
+  if (value > 50) return `bg-blue-400 text-black`;
+  return `bg-green-400 text-black`;
 }
 
 export const DeleteNode = (props: { nodeId: string; name: string }) => {
@@ -313,7 +319,7 @@ export const DeleteNode = (props: { nodeId: string; name: string }) => {
           setErrorView(
             <p className="bg-red-100 py-2 px-5 mt-2 rounded border border-red-900 text-center text-sm italic">
               {res.error[0]}
-            </p>
+            </p>,
           );
       });
   };

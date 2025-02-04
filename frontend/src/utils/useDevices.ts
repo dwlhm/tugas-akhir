@@ -39,16 +39,16 @@ export type UseProfilDevice = {
   name?: string;
   address?: string;
   createdAt?: string;
-  latest_device_value: LatestDeviceValue[];
+  device_history: LatestDeviceValue[];
 };
 
 export const useProfilDevice = async (
   id: string,
-  onChange: (data?: UseProfilDevice, error?: any) => void
+  onChange: (data?: UseProfilDevice, error?: any) => void,
 ) => {
   try {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_API_URL}/device/${id}`
+      `${import.meta.env.VITE_API_URL}/device/${id}`,
     );
 
     onChange(data.body, null);
@@ -59,11 +59,11 @@ export const useProfilDevice = async (
 
 export const useDeviceValue = async (
   id: string,
-  onChange: (data?: DeviceValue, error?: any) => void
+  onChange: (data?: DeviceValue, error?: any) => void,
 ) => {
   try {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_API_URL}/device/${id}/la`
+      `${import.meta.env.VITE_API_URL}/device/${id}/la`,
     );
 
     const item_parsed = JSON.parse(data.body.value);

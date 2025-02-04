@@ -42,26 +42,21 @@ function NodeDetail() {
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(100);
   useEffect(() => {
-    useProfilDevice(nodeId, (raw, error) => {
+    useProfilDevice(nodeId + "?len=10", (raw, error) => {
       if (raw) {
         setData(raw);
 
         setDataChart((prev) => {
-          if (!raw.latest_device_value[0].value) return prev;
-          if (
-            prev[prev.length - 1]?.timestamp !==
-            raw.latest_device_value[0].updatedAt
-          ) {
-            const item_parsed = JSON.parse(raw.latest_device_value[0].value);
-            const [header, body] = item_parsed.data.split("|");
-            const body_arr = body.split(",");
-            let res: any = {
-              timestamp: raw.latest_device_value[0].updatedAt,
-            };
-            header
-              .split("")
-              .forEach((v: any, i: number) => (res[v] = body_arr[i]));
-            return [...prev, res as DeviceValue];
+          if (!raw.device_history[0].value) return prev;
+          if (prev[0]?.timestamp !== raw.device_history[0].updatedAt) {
+            const data = raw.device_history.map((item) => {
+              const item_parsed = JSON.parse(item.value);
+              return {
+                ...item_parsed,
+                timestamp: item.updatedAt,
+              };
+            });
+            return [...prev, ...data];
           }
           return prev;
         });
@@ -72,20 +67,16 @@ function NodeDetail() {
         if (raw) {
           setData(raw);
           setDataChart((prev) => {
-            if (!raw.latest_device_value[0].value) return prev;
+            if (!raw.device_history[0].value) return prev;
             if (
               prev[prev.length - 1]?.timestamp !==
-              raw.latest_device_value[0].updatedAt
+              raw.device_history[0].updatedAt
             ) {
-              const item_parsed = JSON.parse(raw.latest_device_value[0].value);
-              const [header, body] = item_parsed.data.split("|");
-              const body_arr = body.split(",");
+              const item_parsed = JSON.parse(raw.device_history[0].value);
               let res: any = {
-                timestamp: raw.latest_device_value[0].updatedAt,
+                ...item_parsed,
+                timestamp: raw.device_history[0].updatedAt,
               };
-              header
-                .split("")
-                .forEach((v: any, i: number) => (res[v] = body_arr[i]));
               return [...prev, res as DeviceValue];
             }
             return prev;
@@ -290,7 +281,7 @@ function NodeDetail() {
                                   ? offset >
                                     Math.ceil(dataTable.total / limit) - 10
                                     ? i +
-                                    (Math.ceil(dataTable.total / limit) - 9)
+                                      (Math.ceil(dataTable.total / limit) - 9)
                                     : i + offset
                                   : i + 2;
                               return (
@@ -303,7 +294,7 @@ function NodeDetail() {
                               );
                             })}
                             {offset >
-                              Math.ceil(dataTable.total / limit) - 10 ? (
+                            Math.ceil(dataTable.total / limit) - 10 ? (
                               <></>
                             ) : (
                               <p className="m-1 inline-block">...</p>
