@@ -14,6 +14,13 @@ export interface Node {
   device_history: LatestDeviceValue[];
 }
 
+export interface Node2 {
+  id: string;
+  name: string;
+  address: string;
+  latest_device_value: LatestDeviceValue[];
+}
+
 export interface NodeInformation {
   id: string;
   name: string;
@@ -35,9 +42,9 @@ export interface HistoryDevice {
 export const getAllNodes = async (
   auth: User,
   gatewayId?: string,
-): Promise<API<Node[]>> => {
+): Promise<API<Node2[]>> => {
   try {
-    const { data } = await axios.get<API<Node[]>>(
+    const { data } = await axios.get<API<Node2[]>>(
       `${import.meta.env.VITE_API_URL}/device`,
       {
         headers: {

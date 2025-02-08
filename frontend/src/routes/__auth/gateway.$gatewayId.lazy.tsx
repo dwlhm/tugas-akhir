@@ -1,6 +1,10 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { BackButton, BasicButton } from "../../components/Elements";
-import { DeleteGateway, EditGateway, SeeCredentials } from "../../gateway/layout";
+import {
+  DeleteGateway,
+  EditGateway,
+  SeeCredentials,
+} from "../../gateway/layout";
 import React, { useEffect, useState } from "react";
 import {
   Gateway,
@@ -10,17 +14,10 @@ import {
 } from "../../gateway/api";
 import { useAuth } from "../../auth/context";
 import { usePopup } from "../../popup";
-import {
-  Cpu,
-  Edit2,
-  Eye,
-  MapPin,
-  PlusCircle,
-  Trash2,
-} from "react-feather";
+import { Cpu, Edit2, Eye, MapPin, PlusCircle, Trash2 } from "react-feather";
 import { QuickViewCard } from "../../components/Elements/Card/component";
 import { NodeBaru } from "../../node/layout";
-import { getAllNodes, Node } from "../../node/api";
+import { getAllNodes, Node2 } from "../../node/api";
 import { parseNodeData } from "../../node/lib";
 
 export const Route = createLazyFileRoute("/__auth/gateway/$gatewayId")({
@@ -32,7 +29,7 @@ function GatewayDetailView() {
   const { gatewayId } = Route.useParams();
   const popup = usePopup();
   const [profil, setProfil] = useState<Gateway | null>(null);
-  const [nodes, setNodes] = useState<Node[] | null>(null);
+  const [nodes, setNodes] = useState<Node2[] | null>(null);
 
   useEffect(() => {
     if (auth.user && auth.user.authentication_token && gatewayId)
@@ -62,7 +59,7 @@ function GatewayDetailView() {
       getAllGateway(auth.user.authentication_token).then((data) => {
         if (data.body)
           popup.setPopup(
-            <NodeBaru gateway={data.body} defaultGatewayId={profil.id} />
+            <NodeBaru gateway={data.body} defaultGatewayId={profil.id} />,
           );
       });
   };
@@ -74,7 +71,7 @@ function GatewayDetailView() {
       getMqttCredential(auth.user.authentication_token, gatewayId).then(
         (data) => {
           if (data.body) popup.setPopup(<SeeCredentials data={data.body} />);
-        }
+        },
       );
     }
   };
@@ -91,7 +88,7 @@ function GatewayDetailView() {
                     gatewayId={gatewayId}
                     name={profil.name as string}
                     address={profil.address as string}
-                  />
+                  />,
                 );
             }}
             className="bg-white border-white p-1"
@@ -106,13 +103,13 @@ function GatewayDetailView() {
                   <DeleteGateway
                     gatewayId={gatewayId}
                     name={profil.name as string}
-                  />
+                  />,
                 );
             }}
             className="bg-white border-red-900 p-1"
           >
             <Trash2 className="size-6 stroke-red-900 p-1 rounded" />
-            Hapus Gateway 
+            Hapus Gateway
           </BasicButton>
         </div>
       </div>
@@ -171,9 +168,10 @@ function GatewayDetailView() {
               }
             >
               {(() => {
-                const parsedData = item.latest_device_value.length > 0 ? parseNodeData(
-                  item.latest_device_value[0].value
-                ) : undefined;
+                const parsedData =
+                  item.latest_device_value.length > 0
+                    ? parseNodeData(item.latest_device_value[0].value)
+                    : undefined;
                 if (!parsedData)
                   return (
                     <div className="bg-red-100 py-2 px-5 mt-2 rounded border border-red-900 text-center text-sm italic">

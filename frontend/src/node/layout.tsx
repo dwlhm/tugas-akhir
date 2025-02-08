@@ -181,7 +181,20 @@ export const DeviceCard = (props: { item: Node }) => {
       </div>
     );
 
-  const item_parsed = JSON.parse(props.item.device_history[0].value || "");
+  let item_parsed = JSON.parse(props.item.device_history[0].value || "");
+  if (!item_parsed["1"]) {
+    let eFormat = {};
+    const devValueText = item_parsed.data.split("|");
+    const devValue = devValueText[1].split(",");
+    for (let i = 0; i < devValueText[0].length; i++) {
+      eFormat[devValueText[0].charAt(i)] = devValue[i];
+    }
+    item_parsed = {
+      ...item_parsed,
+      ...eFormat,
+    };
+  }
+  console.log("item_parsed", item_parsed);
   let res: any = {
     ...item_parsed,
     timestamp: new Date(

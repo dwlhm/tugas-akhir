@@ -1,6 +1,6 @@
 import { createLazyFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { getAllNodes, Node } from "../../node/api";
+import { getAllNodes, Node2 } from "../../node/api";
 import { DeviceCard, NodeBaru } from "../../node/layout";
 import { usePopup } from "../../popup";
 import { BasicButton } from "../../components/Elements";
@@ -15,14 +15,14 @@ function NodeLayout() {
   const { auth } = Route.useRouteContext();
   const { setPopup } = usePopup();
   const param = Route.useParams();
-  const [dataNode, setDataNode] = useState<Node[]>();
+  const [dataNode, setDataNode] = useState<Node2[]>();
   useEffect(() => {
     if (auth.user)
       getAllNodes(auth.user).then((data) => {
         if (data.body) setDataNode(data.body);
       });
 
-    let devicePolling = setInterval(() => {
+    const devicePolling = setInterval(() => {
       if (auth.user)
         getAllNodes(auth.user).then((data) => {
           if (data.body) setDataNode(data.body);
@@ -52,7 +52,12 @@ function NodeLayout() {
                 params={{ nodeId: item.id }}
                 key={`node.${item.id}`}
               >
-                <DeviceCard item={item} />
+                <DeviceCard
+                  item={{
+                    ...item,
+                    device_history: item.latest_device_value,
+                  }}
+                />
               </Link>
             );
           })}
@@ -67,7 +72,7 @@ function NodeLayout() {
 const addNodeFunc = (
   e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   setPopup: (el: JSX.Element) => void,
-  token: string
+  token: string,
 ) => {
   e.preventDefault();
 
