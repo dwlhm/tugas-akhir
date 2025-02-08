@@ -69,7 +69,8 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 const profil = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id: number = req.params["id"] as unknown as number;
-    const max_data: string = req.query.len;
+    const max_data = req.query.len;
+    console.log('max_data', max_data);
 
     const device = await Device.findByPk(device_id, {
       include: [
