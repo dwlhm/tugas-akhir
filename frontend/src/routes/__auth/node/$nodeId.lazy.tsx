@@ -48,14 +48,19 @@ function NodeDetail() {
 
         setDataChart((prev) => {
           if (!raw.device_history[0].value) return prev;
-          if (prev[0]?.timestamp !== raw.device_history[0].updatedAt) {
-            const data = raw.device_history.map((item) => {
-              const item_parsed = JSON.parse(item.value);
-              return {
-                ...item_parsed,
-                timestamp: item.updatedAt,
-              };
-            });
+          if (
+            prev[0]?.timestamp !==
+            raw.device_history[raw.device_history.length - 1].updatedAt
+          ) {
+            const data = raw.device_history
+              .map((item) => {
+                const item_parsed = JSON.parse(item.value);
+                return {
+                  ...item_parsed,
+                  timestamp: item.updatedAt,
+                };
+              })
+              .reverse();
             return [...prev, ...data];
           }
           return prev;
@@ -68,10 +73,7 @@ function NodeDetail() {
           setData(raw);
           setDataChart((prev) => {
             if (!raw.device_history[0].value) return prev;
-            if (
-              prev[prev.length - 1]?.timestamp !==
-              raw.device_history[0].updatedAt
-            ) {
+            if (prev[0]?.timestamp !== raw.device_history[0].updatedAt) {
               const item_parsed = JSON.parse(raw.device_history[0].value);
               let res: any = {
                 ...item_parsed,
@@ -281,7 +283,7 @@ function NodeDetail() {
                                   ? offset >
                                     Math.ceil(dataTable.total / limit) - 10
                                     ? i +
-                                      (Math.ceil(dataTable.total / limit) - 9)
+                                    (Math.ceil(dataTable.total / limit) - 9)
                                     : i + offset
                                   : i + 2;
                               return (
@@ -294,7 +296,7 @@ function NodeDetail() {
                               );
                             })}
                             {offset >
-                            Math.ceil(dataTable.total / limit) - 10 ? (
+                              Math.ceil(dataTable.total / limit) - 10 ? (
                               <></>
                             ) : (
                               <p className="m-1 inline-block">...</p>

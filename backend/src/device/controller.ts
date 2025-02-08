@@ -69,8 +69,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 const profil = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const device_id: number = req.params["id"] as unknown as number;
-    const max_data = req.query.len;
-    console.log('max_data', max_data);
+    const max_data = req.query.len || 1;
 
     const device = await Device.findByPk(device_id, {
       include: [
@@ -144,11 +143,11 @@ const get_all_devices = async (
     const gatewayId = req.query["gateway"];
     const devices = gatewayId
       ? await Device.findAll({
-          include: Latest_Device_Value,
-          where: {
-            gateway_id: gatewayId,
-          },
-        })
+        include: Latest_Device_Value,
+        where: {
+          gateway_id: gatewayId,
+        },
+      })
       : await Device.findAll({ include: Latest_Device_Value });
 
     res.status(200).json({
