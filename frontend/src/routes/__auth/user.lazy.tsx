@@ -38,8 +38,6 @@ function UserLayout() {
           e.preventDefault();
           if (auth.user && auth.user.authentication_token)
             popup.setPopup(<NewUser />);
-          // auth.logout();
-          // window.location.reload()
         }}
         className={`py-2 pr-10 pl-2 mb-2 bg-blue-300 hover:bg-blue-900 hover:text-blue-100 rounded text-gray-800 text-sm flex gap-4 items-center w-full max-w-64`}
       >
@@ -52,7 +50,6 @@ function UserLayout() {
         onClick={(e: React.FormEvent) => {
           e.preventDefault();
           auth.logout();
-          window.location.reload();
         }}
         className={`py-2 pr-10 pl-2 bg-red-300 hover:bg-red-900 hover:text-blue-100 rounded text-gray-800 text-sm flex gap-4 items-center w-full max-w-64`}
       >

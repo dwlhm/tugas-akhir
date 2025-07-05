@@ -104,6 +104,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
           authentication_token: "",
           isAuthenticated: false,
         });
+        window.location.reload();
       }
     }
   };

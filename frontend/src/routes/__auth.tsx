@@ -32,7 +32,6 @@ const isMenuActive = (location: string, path: string): string => {
 
 function AuthLayout() {
   const location = useLocation();
-  const { auth } = Route.useRouteContext();
   const popup = usePopup();
   const [menu, setMenu] = useState<boolean>(false);
 
