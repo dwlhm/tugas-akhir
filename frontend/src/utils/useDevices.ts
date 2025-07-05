@@ -25,9 +25,6 @@ export type DeviceValue = {
 export const useDevices = async (onChange: (item: any, error: any) => void) => {
   try {
     const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/device`);
-
-    console.log("DARTA 1", data);
-
     if (data) onChange(data, null);
   } catch (error) {
     onChange(null, error);

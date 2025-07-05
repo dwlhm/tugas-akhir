@@ -10,6 +10,7 @@ import { ChevronRight, Menu, X } from "react-feather";
 import { usePopup } from "../popup";
 import { BasicButton } from "../components/Elements";
 import React, { useState } from "react";
+import { KeteranganISPU } from "../components/Elements/ISPU/KeteranganISPU";
 
 export const Route = createFileRoute("/__auth")({
   beforeLoad: ({ context, location }) => {
@@ -111,29 +112,32 @@ function AuthLayout() {
                 </Link>
               </nav>
             </div>
-            <Link
-              className={`bg-blue-100 p-5 rounded border-2 border-solid border-blue-100 hover:border-blue-900 ${!menu ? "block" : "hidden"} sm:block`}
-              to="/user"
-              onClick={() => setMenu((last) => !last)}
-            >
-              <div className="flex gap-4">
-                <div>
-                  <div className="bg-blue-200 p-1 rounded">
-                    <User className="size-5 stroke-blue-900" />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-poppins text-blue-900 font-semibold">
-                    {auth.user?.name}
-                  </p>
-                  <p className="text-poppins text-blue-900 text-sm">
-                    {auth.user?.email?.length || 0 >= 13
-                      ? `${auth.user?.email?.slice(0, 13)} ..`
-                      : auth.user?.email}
-                  </p>
-                </div>
-              </div>
-            </Link>
+            <div>
+              <KeteranganISPU />
+                            {/* <Link */}
+              {/*   className={`bg-blue-100 p-5 rounded border-2 border-solid border-blue-100 hover:border-blue-900 ${!menu ? "block" : "hidden"} sm:block`} */}
+              {/*   to="/user" */}
+              {/*   onClick={() => setMenu((last) => !last)} */}
+              {/* > */}
+              {/*   <div className="flex gap-4"> */}
+              {/*     <div> */}
+              {/*       <div className="bg-blue-200 p-1 rounded"> */}
+              {/*         <User className="size-5 stroke-blue-900" /> */}
+              {/*       </div> */}
+              {/*     </div> */}
+              {/*     <div> */}
+              {/*       <p className="text-poppins text-blue-900 font-semibold"> */}
+              {/*         {auth.user?.name} */}
+              {/*       </p> */}
+              {/*       <p className="text-poppins text-blue-900 text-sm"> */}
+              {/*         {auth.user?.email?.length || 0 >= 13 */}
+              {/*           ? `${auth.user?.email?.slice(0, 13)} ..` */}
+              {/*           : auth.user?.email} */}
+              {/*       </p> */}
+              {/*     </div> */}
+              {/*   </div> */}
+              {/* </Link> */}
+            </div>
           </div>
         </nav>
         <div
@@ -180,3 +184,6 @@ function AuthLayout() {
     </>
   );
 }
+
+
+
