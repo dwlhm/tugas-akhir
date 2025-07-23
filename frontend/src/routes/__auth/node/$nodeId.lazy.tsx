@@ -47,6 +47,7 @@ function NodeDetail() {
         setData(raw);
 
         setDataChart((prev) => {
+          if (raw.device_history.length === 0) return prev;
           if (!raw.device_history[0].value) return prev;
           if (
             prev[0]?.timestamp !==
@@ -75,7 +76,7 @@ function NodeDetail() {
             if (!raw.device_history[0].value) return prev;
             if (prev[0]?.timestamp !== raw.device_history[0].updatedAt) {
               const item_parsed = JSON.parse(raw.device_history[0].value);
-              let res: any = {
+              const res: any = {
                 ...item_parsed,
                 timestamp: raw.device_history[0].updatedAt,
               };
@@ -110,7 +111,6 @@ function NodeDetail() {
         limit,
       ).then((res) => {
         if (res.body) {
-          console.log(res.body);
           setDataTable(res.body);
         }
       });
@@ -168,8 +168,8 @@ function NodeDetail() {
             <MapContainer
               className="detail"
               center={[
-                Number(dataChart[dataChart.length - 1]?.l),
-                Number(dataChart[dataChart.length - 1]?.o),
+                Number(dataChart[dataChart.length - 1]?.l || 0),
+                Number(dataChart[dataChart.length - 1]?.o || 0),
               ]}
               zoom={50}
               scrollWheelZoom={true}
@@ -180,8 +180,8 @@ function NodeDetail() {
               />
               <Marker
                 position={[
-                  Number(dataChart[dataChart.length - 1]?.l),
-                  Number(dataChart[dataChart.length - 1]?.o),
+                  Number(dataChart[dataChart.length - 1]?.l || 0),
+                  Number(dataChart[dataChart.length - 1]?.o || 0),
                 ]}
               >
                 <Popup>
@@ -288,6 +288,7 @@ function NodeDetail() {
                                   : i + 2;
                               return (
                                 <button
+                                  key={`data.table.${i}`}
                                   onClick={() => setOffset(num - 1)}
                                   className={`bg-blue-100 rounded py-1 px-3 text-sm m-1 border ${offset + 1 == num ? "border-blue-500" : "border-blue-100"} hover:border-blue-900`}
                                 >
