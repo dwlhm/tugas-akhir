@@ -68,6 +68,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var chartPm10: DynamicLineChart
     private lateinit var chartPm100: DynamicLineChart
     private var dataUpdateTime: Float = 0.0f
+    private lateinit var textView: TextView
 
     var active = false
 
@@ -130,6 +131,8 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         chartPm10 = DynamicLineChart(findViewById(R.id.chart_pm10), this)
         chartPm100 = DynamicLineChart(findViewById(R.id.chart_pm100), this)
 
+        textView = findViewById(R.id.textView)
+
     }
 
 
@@ -139,6 +142,12 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         active = true
 
+        updateValue()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        active = true
         updateValue()
     }
 
@@ -372,6 +381,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         textView.setTextColor(getColor(R.color.red))
     }
     private fun deviceOnline(textView: TextView, value: String) {
+        textView.visibility = View.VISIBLE
         textView.text = value
         textView.setTextColor(getColor(R.color.white))
     }
