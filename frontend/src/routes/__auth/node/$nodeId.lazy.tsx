@@ -225,7 +225,7 @@ function NodeDetail() {
               <ValueByGraph item={dataChart} title="PM 1.0" dataKey="1" />
               <ValueByGraph item={dataChart} title="PM 2.5" dataKey="2" />
               <ValueByGraph item={dataChart} title="PM 10" dataKey="0" />
-              <ValueByGraph item={dataChart} title="PM 100" dataKey="3" />
+              {/* <ValueByGraph item={dataChart} title="PM 100" dataKey="3" /> */}
               <ValueByGraph item={dataChart} title="Suhu" dataKey="t" />
               <ValueByGraph
                 item={dataChart}
@@ -336,14 +336,14 @@ function TableData(props: { data: HistoryDevice }) {
   return (
     <table className="border-collapse w-full min-w-96">
       <thead>
-        <tr className="grid grid-cols-10 w-full">
+        <tr className="grid grid-cols-9 w-full">
           <th className="px-3 py-2 bg-blue-100 text-sm rounded-tl col-span-3">
             Waktu
           </th>
           <th className="px-3 py-2 bg-blue-100 text-sm">PM 1.0</th>
           <th className="px-3 py-2 bg-blue-100 text-sm">PM 2.5</th>
           <th className="px-3 py-2 bg-blue-100 text-sm">PM 10</th>
-          <th className="px-3 py-2 bg-blue-100 text-sm">PM 100</th>
+          {/* <th className="px-3 py-2 bg-blue-100 text-sm">PM 100</th> */}
           <th className="px-3 py-2 bg-blue-100 text-sm">Suhu</th>
           <th className="px-3 py-2 bg-blue-100 text-sm rounded-tr col-span-2">
             Kelembaban Udara
@@ -359,7 +359,7 @@ function TableData(props: { data: HistoryDevice }) {
             return (
               <tr
                 key={`data.table.${index}`}
-                className="grid grid-cols-10 w-full"
+                className="grid grid-cols-9 w-full"
               >
                 <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100 col-span-3">
                   {new Date(item.updatedAt || 0).toLocaleString()}
@@ -373,9 +373,9 @@ function TableData(props: { data: HistoryDevice }) {
                 <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
                   {data["0"]}
                 </td>
-                <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
+                {/* <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
                   {data["3"] || 0}
-                </td>
+                </td> */}
                 <td className="p-3 bg-white text-center border-b border-solid border-b-blue-100">
                   {data["t"]}
                 </td>

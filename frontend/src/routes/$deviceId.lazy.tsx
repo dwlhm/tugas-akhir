@@ -90,7 +90,7 @@ function Detail() {
           <ValueByGraph item={data} title="PM 1.0" dataKey="1" />
           <ValueByGraph item={data} title="PM 2.5" dataKey="2" />
           <ValueByGraph item={data} title="PM 10" dataKey="0" />
-          <ValueByGraph item={data} title="PM 100" dataKey="3" />
+          {/* <ValueByGraph item={data} title="PM 100" dataKey="3" /> */}
         </div>
       </div>
     </div>
