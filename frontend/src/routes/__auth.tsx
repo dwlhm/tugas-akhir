@@ -45,7 +45,7 @@ function AuthLayout() {
     <>
       <div className="flex flex-col sm:flex-row min-h-screen bg-gray-100">
         <nav
-          className={`rounded p-5 w-full sm:w-64 flex flex-col justify-between sticky top-0 bottom-0 left-0 ${!menu ? "h-screen" : "h-full"} sm:h-screen z-[10000]`}
+          className={`rounded p-5 w-full sm:w-64 flex flex-col justify-between sticky top-0 bottom-0 left-0 ${!menu ? "h-screen" : "h-full"} sm:h-screen z-1ß0`}
         >
           <div className="rounded bg-white p-2 h-full border-4 box-shadow flex justify-between flex-col">
             <div>

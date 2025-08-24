@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { DeviceValue } from "../utils";
 import { BarChart2 } from "react-feather";
+import { useState } from "react";
 
 export function ValueByGraph(props: {
   title: string;
@@ -40,3 +41,47 @@ export function ValueByGraph(props: {
     </div>
   );
 }
+
+export const TooltipComp = ({ children, content }: { children: React.ReactNode; content: React.ReactNode }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setPosition({
+      x: rect.left + rect.width / 2,
+      y: rect.bottom + 10
+    });
+    setIsVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsVisible(false);
+  };
+
+  return (
+    <div className="relative inline-block">
+      <div
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="cursor-help"
+      >
+        {children}
+      </div>
+      {isVisible && (
+        <div
+          className="fixed z-50 px-4 py-3 text-sm text-white bg-gray-900 rounded-lg shadow-xl w-80 z-10"
+          style={{
+            left: `${position.x - 160}px`, // 160px is half of w-80 (320px)
+            top: `${position.y}px`   // Position below the element
+          }}
+        >
+          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
+          <div className="leading-relaxed">
+            {content}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

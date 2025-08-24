@@ -14,51 +14,10 @@ import { useAuth, User } from "../auth/context";
 import { Gateway } from "../gateway/api";
 import { getPM10Level, getPM25Level } from "./lib";
 import { Info } from "../components/icons/info";
+import { PM10Card, PM1Card, PM25Card } from "./cards";
 
 // Tooltip component
-const Tooltip = ({ children, content }: { children: React.ReactNode; content: React.ReactNode }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseEnter = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setPosition({
-      x: rect.left + rect.width / 2,
-      y: rect.bottom + 10
-    });
-    setIsVisible(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsVisible(false);
-  };
-
-  return (
-    <div className="relative inline-block">
-      <div
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        className="cursor-help"
-      >
-        {children}
-      </div>
-      {isVisible && (
-        <div
-          className="fixed z-50 px-4 py-3 text-sm text-white bg-gray-900 rounded-lg shadow-xl w-80"
-          style={{
-            left: `${position.x - 160}px`, // 160px is half of w-80 (320px)
-            top: `${position.y}px`   // Position below the element
-          }}
-        >
-          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
-          <div className="leading-relaxed">
-            {content}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
 
 export const NodeBaru = (props: {
   gateway: Gateway[];
@@ -263,162 +222,62 @@ export const DeviceCard = (props: { item: Node }) => {
           </p>
         </div>
         <div className={`flex gap-2 flex-wrap`}>
-          {res["1"] ? (
+          {res["1"] ? <PM1Card value={res["1"]} /> : <></>}
+          {res["2"] ? <PM25Card value={res["2"]} /> : <></>}
+          {res["0"] ? <PM10Card value={res["0"]} /> : <></>}
+          {res["3"] && (
             <div
-              className={`${getISPULevel(res["1"])} bg-blue-100 py-2 px-4 mt-2 rounded`}
+              className={`${getISPULevel(res["3"])} bg-blue-100 py-2 px-4 mt-2 rounded`}
             >
-              <p className="text-xs">PM 1.0</p>
+              <p className="text-xs">PM 100</p>
               <p className="text-base">
-                {res["1"]}
+                {res["3"]}
                 <span className="text-sm ml-2">μg/m³</span>
               </p>
             </div>
-          ) : (
-            <></>
           )}
-          {res["2"] ? (
-            <PM25Card value={res["2"]} />
-          ): (
-              <></>
+          {res["h"] && (
+            <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
+              <p className="text-xs">Humidity</p>
+              <p className="text-base">
+                {res["h"]}
+                <span className="text-sm ml-2">%</span>
+              </p>
+            </div>
           )}
-        {res["0"] ? <PM10Card value={res["0"]} /> : <></>}
-        {res["3"] && (
-          <div
-            className={`${getISPULevel(res["3"])} bg-blue-100 py-2 px-4 mt-2 rounded`}
-          >
-            <p className="text-xs">PM 100</p>
-            <p className="text-base">
-              {res["3"]}
-              <span className="text-sm ml-2">μg/m³</span>
-            </p>
-          </div>
-        )}
-        {res["h"] && (
-          <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
-            <p className="text-xs">Humidity</p>
-            <p className="text-base">
-              {res["h"]}
-              <span className="text-sm ml-2">%</span>
-            </p>
-          </div>
-        )}
-        {res["t"] && (
-          <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
-            <p className="text-xs">Suhu</p>
-            <p className="text-base">
-              {res["t"]}
-              <span className="text-sm ml-2">℃</span>
-            </p>
-          </div>
-        )}
-        {res["v"] && (
-          <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
-            <p className="text-xs">Kecepatan Angin</p>
-            <p className="text-base">
-              {res["v"]}
-              <span className="text-sm ml-2">m/s</span>
-            </p>
-          </div>
-        )}
-        {res["a"] && (
-          <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
-            <p className="text-xs">Arah Angin</p>
-            <p className="text-base">
-              {res["a"]}
-              <span className="text-sm ml-2">°</span>
-            </p>
-          </div>
-        )}
+          {res["t"] && (
+            <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
+              <p className="text-xs">Suhu</p>
+              <p className="text-base">
+                {res["t"]}
+                <span className="text-sm ml-2">℃</span>
+              </p>
+            </div>
+          )}
+          {res["v"] && (
+            <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
+              <p className="text-xs">Kecepatan Angin</p>
+              <p className="text-base">
+                {res["v"]}
+                <span className="text-sm ml-2">m/s</span>
+              </p>
+            </div>
+          )}
+          {res["a"] && (
+            <div className="bg-blue-100 py-2 px-4 mt-2 rounded">
+              <p className="text-xs">Arah Angin</p>
+              <p className="text-base">
+                {res["a"]}
+                <span className="text-sm ml-2">°</span>
+              </p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </div >
   );
 };
 
-function PM25Card({ value }: { value: string }) {
-  const { level, color, text } = getPM25Level(value);
-
-  console.log(level, color, text, 'level, color, text PM 2.5', value);
-
-  const getTooltipContent = (value: string) => {
-
-    return (
-      <div className="space-y-2">
-        <div className="text-center font-semibold text-blue-200">📋 Panduan PM25</div>
-        <div className={`space-y-1 ${text} ${color} p-2 rounded`}>
-          <div className={`${text} font-medium`}>Saat ini: {value} μg/m³</div>
-          <div className={`${text} font-bold`}>Status: {level}</div>
-        </div>
-        <div className="space-y-1 mt-4">
-          <div className="text-white font-semibold">Kriteria:</div>
-          <div className="text-gray-900 bg-gray-300 p-1 rounded">• PM25 {'>'} 250.5 μg/m³ = <span className="text-gray-900 font-semibold">Berbahaya</span></div>
-          <div className="text-red-900 bg-red-100 p-1 rounded">• PM25 150.5-250.4 µg/m³ = <span className="text-red-900 font-semibold">Sangat Tidak Sehat</span></div>
-          <div className="text-blue-900 bg-blue-100 p-1 rounded">• PM25 55.5-150.4 µg/m³ = <span className="text-blue-900 font-semibold">Tidak Sehat</span></div>
-          <div className="text-yellow-900 bg-yellow-100 p-1 rounded">• PM25 15.6-55.4 µg/m³ = <span className="text-yellow-900 font-semibold">Sedang</span></div>
-          <div className="text-green-900 bg-green-100 p-1 rounded">• PM25 0-15.5 µg/m³ = <span className="text-green-900 font-semibold">Baik</span></div>
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div
-      className={`${color} bg-blue-100 py-2 px-4 mt-2 rounded`}
-    >
-      <p className="text-xs">PM 2.5</p>
-      <p className="text-base">
-        {value}
-        <span className="text-sm ml-2">μg/m³</span>
-      </p>
-      <Tooltip content={getTooltipContent(value)}>
-        <div className={`text-xs flex items-center gap-1 mt-1 font-semibold ${text} cursor-help`}>
-          <Info className="size-3 text-black" /> {level}
-        </div>
-      </Tooltip>
-    </div>
-  )
-}
-
-function PM10Card({ value }: { value: number }) {
-
-  const { level, color, text } = getPM10Level(value);
-
-  const getTooltipContent = (value: number) => {
-    return (
-      <div className="space-y-2">
-        <div className="text-center font-semibold text-blue-200">📋 Panduan PM10</div>
-
-        <div className={`space-y-1 ${text} ${color} p-2 rounded`}>
-          <div className={`${text} font-medium`}>Saat ini: {value} μg/m³</div>
-          <div className={`${text} font-bold`}>Status: {level}</div>
-        </div>
-
-        <div className="space-y-1 mt-4">
-          <div className="text-white font-semibold">Kriteria:</div>
-          <div className="text-red-900 bg-red-100 p-1 rounded">• PM10 {'>'} 75 μg/m³ = <span className="text-red-900 font-semibold">Tidak Aman</span></div>
-          <div className="text-green-900 bg-green-100 p-1 rounded">• PM10 ≤ 75 μg/m³ = <span className="text-green-900 font-semibold">Aman</span></div>
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div
-      className={`${color} bg-blue-100 py-2 px-4 mt-2 rounded`}
-    >
-      <p className="text-xs">PM 10</p>
-      <p className="text-base">
-        {value}
-        <span className="text-sm ml-2">μg/m³</span>
-      </p>
-      <Tooltip content={getTooltipContent(value)}>
-        <div className={`text-xs flex items-center gap-1 mt-1 font-semibold ${text} cursor-help`}>
-          <Info className="size-3 text-black" /> {level}
-        </div>
-      </Tooltip>
-    </div>
-  )
-}
 
 function getISPULevel(value: number) {
   if (value >= 301) return `!bg-black text-gray-100`;

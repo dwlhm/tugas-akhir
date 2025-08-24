@@ -19,7 +19,7 @@ export function PopupProvider<T>({ children }: PropsWithChildren) {
 
   const setPopup = (item: JSX.Element) => {
     setEl(
-      <div className="fixed inset-0 flex justify-center items-center">
+      <div className="fixed inset-0 flex justify-center items-center z-[10000]">
         <div
           className="absolute inset-0 bg-black/50 z-0"
           onClick={() => setEl(<></>)}
