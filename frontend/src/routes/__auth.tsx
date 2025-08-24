@@ -10,6 +10,7 @@ import { ChevronRight, Menu, X } from "react-feather";
 import { usePopup } from "../popup";
 import { BasicButton } from "../components/Elements";
 import React, { useState } from "react";
+import { RulesExplanationButton } from "../components/Elements";
 // import { KeteranganISPU } from "../components/Elements/ISPU/KeteranganISPU";
 
 export const Route = createFileRoute("/__auth")({
@@ -112,6 +113,7 @@ function AuthLayout() {
               </nav>
             </div>
             <div>
+              <RulesExplanationButton />
               {/* <KeteranganISPU /> */}
                             {/* <Link */}
               {/*   className={`bg-blue-100 p-5 rounded border-2 border-solid border-blue-100 hover:border-blue-900 ${!menu ? "block" : "hidden"} sm:block`} */}
