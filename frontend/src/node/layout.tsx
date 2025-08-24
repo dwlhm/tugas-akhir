@@ -12,8 +12,6 @@ import { usePopup } from "../popup";
 import React, { useState } from "react";
 import { useAuth, User } from "../auth/context";
 import { Gateway } from "../gateway/api";
-import { getPM10Level, getPM25Level } from "./lib";
-import { Info } from "../components/icons/info";
 import { PM10Card, PM1Card, PM25Card } from "./cards";
 
 // Tooltip component
